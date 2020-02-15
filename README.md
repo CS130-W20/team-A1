@@ -13,3 +13,10 @@ Explain how to run your application
 - anything else
 
 
+
+## --- Development
+#### To start selenium server. 
+`python3 queryapi.py`
+Then hit this url with postman
+`http://127.0.0.1:5000/query/?query=<enterHere>`
+
