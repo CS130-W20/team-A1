@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify
+from flask import request, jsonify,render_template
 from query import get_query_from_goog, close_goog
 
 app = flask.Flask(__name__)
@@ -7,6 +7,7 @@ app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
+    return render_template("home.html")
     return ''
 
 @app.route('/query/', methods=['GET'])
