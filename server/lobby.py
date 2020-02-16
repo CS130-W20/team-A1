@@ -12,7 +12,7 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def index():
-    return "Hey"
+    return render_template('static/react_front_end/public/index.html')
 
 
 if __name__ == '__main__':
