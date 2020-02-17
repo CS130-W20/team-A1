@@ -1,8 +1,10 @@
 import flask
 from flask import request, jsonify,render_template
 from query import get_query_from_goog, close_goog
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
+CORS(app)
 app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
@@ -23,4 +25,4 @@ def get_query():
     return jsonify(answers)
 
 # go to http://127.0.0.1:5000/query/?query=k to test
-app.run() 
+app.run(port=8000) 
