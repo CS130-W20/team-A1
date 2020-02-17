@@ -23,7 +23,7 @@ class Searchbox extends React.Component {
         .then((data) => {
             const received = JSON.stringify(data);
             console.log('Data received: ', received)
-            this.setState({answers: received,
+            this.setState({answers: received.data,
                            showAnswers: true
                         })
 
@@ -47,6 +47,17 @@ class Searchbox extends React.Component {
     // Guide: Prompter can grab answers form searchbox
 
     render() {
+        // Below now working right yet ----
+        let items;
+        if (this.state.showAnswers) {
+            items = this.state.answers.map((item => {
+                return <li key={item}>{item}</li>;
+            }))
+        } else {
+            items = <li>text</li>
+        }
+        // Above not working right yet ----
+
         return (
         <div>
             <p>This data here searchbox 2.0</p>
@@ -57,7 +68,6 @@ class Searchbox extends React.Component {
                 </input>
             </form>
             <button className="button search-button" onClick={this.onFormSubmit}>Clickme</button>
-            
         </div>
         )
     }
