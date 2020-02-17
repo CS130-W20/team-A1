@@ -18,10 +18,11 @@ class Searchbox extends React.Component {
         console.log('query is: ', this.state.query)
         event.preventDefault();
         const query = {'query': this.state.query}
-        const url = '127.0.0.1:8000/query/';
-        axios.get(url, {params: query})
+        // const url = '127.0.0.1:8000/query/';
+        axios.get("/query/", {params: query})
         .then((data) => {
             const received = JSON.stringify(data);
+            console.log('Data received: ', received)
             this.setState({answers: received,
                            showAnswers: true
                         })
@@ -48,7 +49,7 @@ class Searchbox extends React.Component {
     render() {
         return (
         <div>
-            <p>This data here searchbox</p>
+            <p>This data here searchbox 2.0</p>
             <form className="form" id="searchForm">
                 <input type="text" className="input" placeholder="Type query here"
                 value={this.state.query}
