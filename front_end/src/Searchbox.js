@@ -9,21 +9,21 @@ class Searchbox extends React.Component {
             answers: [],
             showAnswers:false,
         }
-        this.handleClick = this.handleClick.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
+        this.handleChange =this.handleChange.bind(this)
     }
 
     onFormSubmit(event) {
         // submits the given state to server and receives the answers
+        console.log('query is: ', this.state.query)
         event.preventDefault();
         const query = {'query': this.state.query}
-        const url = '/query/';
-
+        const url = '127.0.0.1:8000/query/';
         axios.get(url, {params: query})
         .then((data) => {
-            const received = JSON.stringify(data.answers);
+            const received = JSON.stringify(data);
             this.setState({answers: received,
-                           showAnswers: True
+                           showAnswers: true
                         })
 
         })
@@ -33,22 +33,29 @@ class Searchbox extends React.Component {
                 this.setState({answers: ['errors only']})
             }
         })
-
-
     }
     
-    handleClick(terms) {
-        // This will set the state as the user types
-        console.log('typed in terms');
-        // This will call the endpoint 
-        this.setState({data:terms})
+    handleChange(event){
+        event.preventDefault();
+        console.log('Handle change called')
+        this.setState({query: event.target.value})
     }
 
     // Render the searchterms in side
+    // TODO: Will need to use map() to render the list of answers, each of <item> type
+    // Guide: Prompter can grab answers form searchbox
+
     render() {
         return (
         <div>
-            <h1>this.data</h1>
+            <p>This data here searchbox</p>
+            <form className="form" id="searchForm">
+                <input type="text" className="input" placeholder="Type query here"
+                value={this.state.query}
+                onChange={this.handleChange}>
+                </input>
+            </form>
+            <button className="button search-button" onClick={this.onFormSubmit}>Clickme</button>
             
         </div>
         )

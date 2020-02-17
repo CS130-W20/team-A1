@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import Searchbox from './Searchbox'
 
 function App() {
   return (
@@ -15,9 +16,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Start Gaming
+          Start Gamingg
         </a>
       </header>
+      <div className="searchbox">
+      <Searchbox></Searchbox>
+      </div>
     </div>
   );
 }
