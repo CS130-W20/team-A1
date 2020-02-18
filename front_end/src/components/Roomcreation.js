@@ -2,10 +2,15 @@ import React, { Component } from "react";
 import io from 'socket.io-client'
 const socket = io('http://localhost:5000');
 
+
 socket.on('message', function (message) {
   console.log(message);
 });
 
+
+socket.on('lobby_created', function (message) {
+  console.log(message);
+});
 export class Roomcreation extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +25,8 @@ export class Roomcreation extends Component {
   handleCREATE_Submit(e) {
     let data = {"room": "meow1",
             "username": "omar"};
-    socket.emit("join", data);
+    socket.emit("create_room", data);
+
   }
   handleJOIN_Submit(e) {
     let data = {"room": "meow2",
