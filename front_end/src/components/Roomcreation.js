@@ -1,8 +1,24 @@
 import React, { Component } from "react";
 
 export class Roomcreation extends Component {
-  handleCREATE_Submit(e) {}
-  handleJOIN_Submit(e) {}
+  constructor(props) {
+    super(props);
+    this.state = {
+      roomname: "Empty"
+    };
+
+    this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
+    this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
+  }
+
+  handleCREATE_Submit(e) {
+    const Roomname = e.target.roomnumber_create.value;
+    this.setState({ roomname: Roomname });
+  }
+  handleJOIN_Submit(e) {
+    const Roomname = e.target.roomnumber_join.value;
+    this.setState({ roomname: Roomname });
+  }
 
   buttonStyle = {
     color: "blue",
@@ -16,13 +32,13 @@ export class Roomcreation extends Component {
       <div style={this.buttonStyle}>
         <form onSubmit={this.handleCREATE_Submit}>
           <label htmlFor="username">Enter a Room Name</label> <br />
-          <input id="username" name="roomnumber" type="text" /> <r />
+          <input name="roomnumber_create" type="text" /> <r />
           <button>Create Room</button>
         </form>
 
         <form onSubmit={this.handleJOIN_Submit}>
           <label htmlFor="username">Enter a Room Name</label> <br />
-          <input id="username" name="roomnumber" type="text" /> <r />
+          <input name="roomnumber_join" type="text" /> <r />
           <button>Join Room</button>
         </form>
       </div>
