@@ -30,7 +30,7 @@ def on_join(data):
         game_rooms.append(room)
     print(game_rooms)
     print(rooms())
-    send("hey whats up", room="room1")
+    send("hey whats up", room=room)
 
 @app.route("/")
 def index():

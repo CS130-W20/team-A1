@@ -1,4 +1,10 @@
 import React, { Component } from "react";
+import io from 'socket.io-client'
+const socket = io('http://localhost:5000');
+
+socket.on('message', function (message) {
+  console.log(message);
+});
 
 export class Roomcreation extends Component {
   constructor(props) {
@@ -12,12 +18,14 @@ export class Roomcreation extends Component {
   }
 
   handleCREATE_Submit(e) {
-    const Roomname = e.target.roomnumber_create.value;
-    this.setState({ roomname: Roomname });
+    let data = {"room": "meow1",
+            "username": "omar"};
+    socket.emit("join", data);
   }
   handleJOIN_Submit(e) {
-    const Roomname = e.target.roomnumber_join.value;
-    this.setState({ roomname: Roomname });
+    let data = {"room": "meow2",
+            "username": "joey"};
+    socket.emit("join", data);
   }
 
   buttonStyle = {
@@ -30,17 +38,13 @@ export class Roomcreation extends Component {
   render() {
     return (
       <div style={this.buttonStyle}>
-        <form onSubmit={this.handleCREATE_Submit}>
           <label htmlFor="username">Enter a Room Name</label> <br />
           <input name="roomnumber_create" type="text" /> <r />
-          <button>Create Room</button>
-        </form>
+          <button onClick={this.handleCREATE_Submit}>Create Room</button>
 
-        <form onSubmit={this.handleJOIN_Submit}>
           <label htmlFor="username">Enter a Room Name</label> <br />
           <input name="roomnumber_join" type="text" /> <r />
-          <button>Join Room</button>
-        </form>
+          <button onClick={this.handleJOIN_Submit}>Join Room</button>
       </div>
     );
   }
