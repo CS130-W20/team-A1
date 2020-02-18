@@ -15,6 +15,7 @@ export class Roomcreation extends Component {
 
     this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
     this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
+    this.handleLEAVE_Submit = this.handleLEAVE_Submit.bind(this);
   }
 
   handleCREATE_Submit(e) {
@@ -26,6 +27,13 @@ export class Roomcreation extends Component {
     let data = {"room": "meow2",
             "username": "joey"};
     socket.emit("join", data);
+  }
+  handleLEAVE_Submit(e) {
+      let data = {
+          "room": "meow1",
+          "username": "omar"
+      };
+      socket.emit("leave", data)
   }
 
   buttonStyle = {
@@ -44,7 +52,7 @@ export class Roomcreation extends Component {
 
           <label htmlFor="username">Enter a Room Name</label> <br />
           <input name="roomnumber_join" type="text" /> <r />
-          <button onClick={this.handleJOIN_Submit}>Join Room</button>
+          <button onClick={this.handleLEAVE_Submit}>Leave Room</button>
       </div>
     );
   }

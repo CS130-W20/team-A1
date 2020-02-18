@@ -30,7 +30,19 @@ def on_join(data):
         game_rooms.append(room)
     print(game_rooms)
     print(rooms())
-    send("hey whats up", room=room)
+    send('{0} has joined room {1}'.format(username, room), room=room)
+
+@socketio.on('leave')
+def on_leave(data):
+    print(data)
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    if room in game_rooms:
+        game_rooms.remove(room)
+    print(game_rooms)
+    print(rooms())
+    send('{0} has joined room {1}'.format(username,room), room=room)
 
 @app.route("/")
 def index():
