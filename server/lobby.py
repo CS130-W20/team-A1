@@ -1,15 +1,36 @@
 import os
 
 from flask import request, jsonify
+from flask import session
+from flask_socketio import rooms
 
 from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask_socketio import send, emit
 from collections import defaultdict
 import requests
 
+game_rooms = []
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-socketio = SocketIO(app)
+socketio = SocketIO(app,cors_allowed_origins='*')
+
+@socketio.on('my event')
+def handle_my_custom_event(json):
+    print('received json: ' + str(json))
+
+
+@socketio.on('join')
+def on_join(data):
+    print(data)
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    if room not in game_rooms:
+        game_rooms.append(room)
+    print(game_rooms)
+    print(rooms())
+    send("hey whats up", room="room1")
 
 @app.route("/")
 def index():
@@ -30,7 +51,6 @@ def get_query():
 
 
 if __name__ == '__main__':
-	socketio.run(app)
-	
+	socketio.run(app,debug=True)
 	
 	
