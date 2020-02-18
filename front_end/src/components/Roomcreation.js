@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import io from 'socket.io-client'
 const socket = io('http://localhost:5000');
 
+
 socket.on('message', function (message) {
   console.log(message);
 });
@@ -25,6 +26,7 @@ export class Roomcreation extends Component {
     let data = {"room": "meow1",
             "username": "omar"};
     socket.emit("create_room", data);
+
   }
   handleJOIN_Submit(e) {
     let data = {"room": "meow2",

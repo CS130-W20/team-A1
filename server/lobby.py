@@ -27,7 +27,6 @@ def on_create(data):
     print(data)
     username = data['username']
     room = data['room']
-
     lobby_num = random.randint(50,8000)
     lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
     if lobby not in game_rooms:
@@ -43,6 +42,7 @@ def on_create(data):
         print(rooms())
         emit('lobby_created', game_rooms[lobby], room=lobby)
     
+
 
 @app.route("/")
 def index():
