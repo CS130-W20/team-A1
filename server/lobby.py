@@ -23,7 +23,7 @@ def handle_my_custom_event(json):
 
 
 @socketio.on('create_room')
-def on_join(data):
+def on_create(data):
     print(data)
     username = data['username']
     room = data['room']
