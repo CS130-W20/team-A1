@@ -1,28 +1,21 @@
 import React from "react";
 import "./App.css";
-import Searchbox from "./Searchbox";
-import Roomcreation from "./components/Roomcreation";
+import Gameroom from "./components/Gameroom";
+import Frontpage from "./components/Frontpage";
+import Login from "./components/Login";
+import Playgame from "./components/Playgame";
+import { Route, NavLink, HashRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
+    <HashRouter>
       <body className="App-body">
-        <p>Welcome to the World Of HI-FI</p>
-        <p>Fun Token = {window.token} </p>
-        <a
-          className="App-link"
-          href="https://google.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Start Gaming
-        </a>
-        <div className="searchbox">
-          <Searchbox></Searchbox>
-        </div>
-        <Roomcreation className="Roombuttons" />
+        <Route exact path="/" component={Frontpage} />
+        <Route exact path="/Gameroom" component={Gameroom} />
+        <Route exact path="/Login" component={Login} />
+        <Route path="/Playgame/:role" component={Playgame} />
       </body>
-    </div>
+    </HashRouter>
   );
 }
 
