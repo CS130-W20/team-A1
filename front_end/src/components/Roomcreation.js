@@ -62,9 +62,7 @@ export class Roomcreation extends Component {
         margin: "10px"
     };
 
-    this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
-    this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
-  }
+  
 
   handleCREATE_Submit(e) {
     let data = { room: "meow1", username: "omar" };
