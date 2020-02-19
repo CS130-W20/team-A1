@@ -25,7 +25,6 @@ def handle_my_custom_event(json):
 #for one room.
 @socketio.on('create_room')
 def on_create(data):
-    print(data)
     username = data['username']
     room = data['room']
     lobby_num = random.randint(50,8000)
@@ -42,6 +41,18 @@ def on_create(data):
         print(game_rooms)
         print(rooms())
         emit('lobby_created', game_rooms[lobby], room=lobby)
+
+#for one room.
+@socketio.on('join_room')
+def on_join(data):
+    print(data)
+    username = data['username']
+    room = data['room']
+    if room in game_rooms:
+        join_room(lobby)
+        print(game_rooms)
+        print(rooms())
+        emit("player_joined", game_rooms[room], room=room)
    
 #Should be fired when host clicks to leave room. Still needs
 #to get actual data, not dummy data, from front end.
