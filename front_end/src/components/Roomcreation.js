@@ -28,7 +28,16 @@ export class Roomcreation extends Component {
         this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
         this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
         this.handleDESTROY_Submit = this.handleDESTROY_Submit.bind(this);
+        this.updateInput = this.updateInput.bind(this);
+
+
     }
+
+    updateInput(evt){
+      this.state={roomname: evt.target.value};   
+    }
+   
+ 
 
     handleCREATE_Submit(e) {
         let data = {
@@ -39,9 +48,10 @@ export class Roomcreation extends Component {
 
     }
     handleJOIN_Submit(e) {
+      console.log(this.state.roomname)
         let data = {
 
-            "room": "meow2",
+            "room": this.state.roomname,
             "username": "joey"
         };
         socket.emit("join_room", data);
@@ -70,7 +80,7 @@ export class Roomcreation extends Component {
       <div style={this.buttonStyle}>
         <button onClick={this.handleCREATE_Submit}>Create Room</button>
         <label htmlFor="username">Enter a Room Name</label> <br />
-        <input name="roomnumber_join" type="text" /> <r />
+        <input name="roomnumber_join" type="text" onChange={this.updateInput}/> <r />
         <button onClick={this.handleJOIN_Submit}>Join Room</button>
       </div>
     );
