@@ -12,7 +12,19 @@ export class Roomcreation1 extends Component {
     this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
     this.handleDESTROY_Submit = this.handleDESTROY_Submit.bind(this);
     this.updateInput = this.updateInput.bind(this);
+    this.props.socket.on("lobby_created", function(message) {
+      console.log(message);
+    });
+    this.props.socket.on('lobby_destroyed', function (message) {
+      console.log(message);
+    });
+    this.props.socket.on('player_joined', function (message) {
+      console.log("player " + message + " has joined");
+    });
   }
+
+  
+  
 
   updateInput(evt){
     this.state={roomname: evt.target.value};   
@@ -52,6 +64,7 @@ export class Roomcreation1 extends Component {
     padding: "10px",
     margin: "10px"
   };
+  
 
   render() {
     return (
