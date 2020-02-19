@@ -40,6 +40,7 @@ export class Roomcreation extends Component {
     }
     handleJOIN_Submit(e) {
         let data = {
+
             "room": "meow2",
             "username": "joey"
         };
@@ -63,22 +64,6 @@ export class Roomcreation extends Component {
     };
 
   
-
-  handleCREATE_Submit(e) {
-    let data = { room: "meow1", username: "omar" };
-    socket.emit("create_room", data);
-  }
-  handleJOIN_Submit(e) {
-    let data = { room: "meow2", username: "joey" };
-    socket.emit("join", data);
-  }
-
-  buttonStyle = {
-    color: "blue",
-    backgroundColor: "grey",
-    padding: "10px",
-    margin: "10px"
-  };
 
   render() {
     return (
