@@ -60,17 +60,19 @@ def on_destroy(data):
     for key in game_rooms:
         if game_rooms[key]['host'] == username:
             room = key
+            emit('lobby_destroyed', game_rooms[room], room=game_rooms[room]['room_name'])
             leave_room(game_rooms[room]['room_name'])
             print(game_rooms)
             print(rooms())
             found = True
-            emit('lobby_destroyed', game_rooms[room], room=game_rooms[room]['room_name'])
-            print('emit has happened')
             break
+    
 
     #Remove the game from the list if it exits.
     if found:
         del game_rooms[room]
+        
+
     
 @app.route("/")
 def index():
