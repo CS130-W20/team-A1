@@ -21,10 +21,10 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 def handle_my_custom_event(json):
     print('received json: ' + str(json))
 
-
+#Need to add that each person can only be host
+#for one room.
 @socketio.on('create_room')
 def on_create(data):
-    print(data)
     username = data['username']
     room = data['room']
     lobby_num = random.randint(50,8000)
@@ -41,9 +41,50 @@ def on_create(data):
         print(game_rooms)
         print(rooms())
         emit('lobby_created', game_rooms[lobby], room=lobby)
+
+#for one room.
+@socketio.on('join_room')
+def on_join(data):
+    print(data)
+    username = data['username']
+    room = data['room']
+    if room in game_rooms:
+        join_room(lobby)
+        print(game_rooms)
+        print(rooms())
+        emit("player_joined", game_rooms[room], room=room)
+   
+#Should be fired when host clicks to leave room. Still needs
+#to get actual data, not dummy data, from front end.
+@socketio.on('destroy_room')
+def on_destroy(data):
+    print(data)
+    username = data['username']
+    room = data['room']
+    #Need so that we only delete a room if one exists.
+    found = False
+    #This loop should be replaced by using the socket
+    #to get the actual lobby name from the client and just indexing
+    #with that. Putting loop in to test deletion of dummy
+    #room that has been created. Note that this loop, while it
+    #will be removed, assumes there is only one room for each host.
+    for key in game_rooms:
+        if game_rooms[key]['host'] == username:
+            room = key
+            emit('lobby_destroyed', game_rooms[room], room=game_rooms[room]['room_name'])
+            leave_room(game_rooms[room]['room_name'])
+            print(game_rooms)
+            print(rooms())
+            found = True
+            break
     
 
+    #Remove the game from the list if it exits.
+    if found:
+        del game_rooms[room]
+        
 
+    
 @app.route("/")
 def index():
     return render_template('index.html',token="Hello This is Salek")
@@ -64,5 +105,3 @@ def get_query():
 
 if __name__ == '__main__':
 	socketio.run(app,debug=True)
-	
-	
