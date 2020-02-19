@@ -39,8 +39,6 @@ export class Roomcreation extends Component {
   render() {
     return (
       <div style={this.buttonStyle}>
-        <label htmlFor="username">Enter a Room Name</label> <br />
-        <input name="roomnumber_create" type="text" /> <r />
         <button onClick={this.handleCREATE_Submit}>Create Room</button>
         <label htmlFor="username">Enter a Room Name</label> <br />
         <input name="roomnumber_join" type="text" /> <r />
