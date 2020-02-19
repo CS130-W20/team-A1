@@ -50,7 +50,6 @@ export class Roomcreation extends Component {
     handleJOIN_Submit(e) {
       console.log(this.state.roomname)
         let data = {
-
             "room": this.state.roomname,
             "username": "joey"
         };
