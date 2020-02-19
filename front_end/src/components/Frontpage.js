@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-
-import { Route, NavLink, HashRouter } from "react-router-dom";
+import { Route, NavLink, HashRouter, Link } from "react-router-dom";
 
 class Frontpage extends Component {
   render() {
     return (
       <div id="frontpage">
         <h1>Welcome to the World Of HI-FI</h1>
-        <NavLink to="/Login">Login To Start</NavLink>
+        <Link to="/Login">Login To Start</Link>
       </div>
     );
   }

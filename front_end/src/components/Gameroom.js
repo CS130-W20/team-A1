@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Route, NavLink, HashRouter, Link, useHistory } from "react-router-dom";
 import Roomcreation from "./Roomcreation";
-
+var mysocket;
 export class Gameroom extends Component {
   state = {
     ifowner: false
   };
-
+  // componentDidMount() {
+  //   mysocket = this.props.location.state.mysocket;
+  //   mysocket.on("lobby_created", function(message) {
+  //     console.log(message);
+  //   });
+  // }
   playrReadyHandle = () => {
     window.location.hash = "#/Playgame/player";
   };
@@ -34,7 +39,7 @@ export class Gameroom extends Component {
           <button>Home Go</button>
         </Link>
         <button onClick={this.playrReadyHandle}>I'm Ready</button>
-        <Roomcreation className="Roombuttons" />
+        <Roomcreation className="Roombuttons" socketio={mysocket} />
       </div>
     );
   }
