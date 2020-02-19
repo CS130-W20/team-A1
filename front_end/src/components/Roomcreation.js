@@ -52,9 +52,10 @@ export class Roomcreation1 extends Component {
         <input
           name="roomnumber_join"
           type="text"
-          onChange={this.handleJOIN_Submit}
+          onChange={this.updateInput}
         />{" "}
         <r />
+        <button onClick={this.handleJOIN_Submit}>Join Room</button>
       </div>
     );
   }
