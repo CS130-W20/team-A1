@@ -45,13 +45,12 @@ def on_create(data):
 #for one room.
 @socketio.on('join_room')
 def on_join(data):
-    print(data)
     username = data['username']
     room = data['room']
     if room in game_rooms:
-        join_room(lobby)
+        join_room(room)
+        game_rooms[room]["clients"].append(username)
         print(game_rooms)
-        print(rooms())
         emit("player_joined", game_rooms[room], room=room)
    
 #Should be fired when host clicks to leave room. Still needs
