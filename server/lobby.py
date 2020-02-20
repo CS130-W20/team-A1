@@ -123,9 +123,11 @@ def get_query():
         return "Error must add query param to request"
     # Submit request for query to AWS or Local API
     payload={'query':query}
-    answers = requests.get('http://18.206.137.249/query/', params=payload)
+    # answers = requests.get('http://3.85.238.64/query/', params=payload)
+    answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
     print('answers received: ', answers.json())
     return jsonify(answers.json())
+
 
 
 

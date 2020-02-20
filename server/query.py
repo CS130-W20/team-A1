@@ -36,3 +36,5 @@ def get_query_from_goog(query):
 def close_goog():
     elem.submit()
     driver.close()
+
+__all__ = ["get_query_from_goog"]
