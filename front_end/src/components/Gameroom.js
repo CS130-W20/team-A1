@@ -23,7 +23,6 @@ export class Gameroom extends Component {
           </NavLink>{" "}
           <r />
           <button onClick={this.ownerStartHandle}>Start Game</button>
-          <Roomcreation className="Roombuttons" />
         </div>
       );
     return (
