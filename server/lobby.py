@@ -25,6 +25,15 @@ def handle_my_custom_event(json):
 #for one room.
 @socketio.on('create_room')
 def on_create(data):
+    '''
+    This is the event the server is listening to for creating game rooms.
+    The lobby manager will generate a random lobby name for the player
+    requesting the creation. 
+    The lobby manager will save the instance of the lobby in the game_rooms data structure
+    @param data - a dict. containing the username of the player requesting the creation
+    @return - emits an event back to the front-end client, the front-end client should
+    be expecting 'lobby_created' with the details of the lobby sent through the socket
+    '''
     username = data['username']
     lobby_num = random.randint(50,8000)
     lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
@@ -44,6 +53,15 @@ def on_create(data):
 #for one room.
 @socketio.on('join_room')
 def on_join(data):
+    '''
+    This is the event the server is listening to for joining game rooms.
+    The lobby manager will attempt to join the game room if it exists and is not full
+    The lobby manager will update the instance of the lobby object in memory
+    @param data - a dict containing the username and lobby of the player requesting the deletion
+    @return - emits an event back to the front-end client, the front-end client should
+    be expecting 'player_suc_join' if successful
+
+    '''
     username = data['username']
     room = data['room']
     if room in game_rooms:
@@ -51,15 +69,21 @@ def on_join(data):
             join_room(room)
             game_rooms[room]["clients"].append(username)
             print(game_rooms)
-            emit("player_suc_join", username, room=room)
+            emit("player_suc_join", game_rooms[room], room=room)
     else:
         emit("player_error_join", "Room does not exist")
-
    
-#Should be fired when host clicks to leave room. Still needs
-#to get actual data, not dummy data, from front end.
+
 @socketio.on('destroy_room')
 def on_destroy(data):
+    '''
+    This is the event the server is listening to for destroying game rooms.
+    The lobby manager will attempt to destory the lobby instance if the player requesting is the host
+    @param data - a dict containing the username and lobby of the player requesting the join
+    @return - emits an event back to the front-end client, the front-end client should
+    be expecting 'lobby_destroyed' if successful
+
+    '''
     print(data)
     username = data['username']
     room = data['room']
@@ -106,4 +130,4 @@ def get_query():
 
 
 if __name__ == '__main__':
-	socketio.run(app,debug=True)
+    socketio.run(app,debug=True)
