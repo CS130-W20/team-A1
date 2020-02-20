@@ -47,10 +47,11 @@ def on_join(data):
     username = data['username']
     room = data['room']
     if room in game_rooms:
-        join_room(room)
-        game_rooms[room]["clients"].append(username)
-        print(game_rooms)
-        emit("player_joined", game_rooms[room], room=room)
+        if username not in game_rooms[room]["clients"]:
+            join_room(room)
+            game_rooms[room]["clients"].append(username)
+            print(game_rooms)
+            emit("player_joined", game_rooms[room], room=room)
    
 #Should be fired when host clicks to leave room. Still needs
 #to get actual data, not dummy data, from front end.
