@@ -14,15 +14,14 @@ var currentAnswer = [
 export class Player extends Component {
   state = {
     sentences: [
-      "Gold",
-      "Crimson",
-      "Hotpink",
-      "Blueviolet",
-      "Cornflowerblue",
-      "Skyblue",
-      "Lightblue",
-      "Aquamarine",
-      "Burlywood"
+      "My numb head is not working",
+      "My nap was too long to be a nap",
+      "My nose is big",
+      "My name is Ghandi",
+      "My nephew won the jackpot",
+      "My nee hurts",
+      "My number is everywhere",
+      "My new phone is not working"
     ]
   };
   getAnswers = answer => {

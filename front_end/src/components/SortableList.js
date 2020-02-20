@@ -28,14 +28,25 @@ export class SortableList extends Component {
     var listItems = items.map((item, i) => {
       console.log("id:" + i + "object:" + item);
       return (
-        <SortableItem
-          key={i}
-          onSortItems={this.onSortItems}
-          items={items}
-          sortId={i}
-        >
-          {item}
-        </SortableItem>
+        <div>
+          <SortableItem
+            key={i}
+            onSortItems={this.onSortItems}
+            items={items}
+            sortId={i}
+          >
+            <div
+              style={{
+                backgroundColor: "#4c8c92",
+                border: "2px solid blue",
+                padding: "5px",
+                margin: "3px"
+              }}
+            >
+              {item}
+            </div>
+          </SortableItem>
+        </div>
       );
     });
     records = items.map((item, i) => [item, i]);
@@ -47,7 +58,8 @@ export class SortableList extends Component {
         style={{
           listStyleType: "upper-roman",
           backgroundColor: "cyan",
-          color: "#9f0606"
+          color: "#9f0606",
+          textAlign: "center"
         }}
         className="sortable-list"
       >
