@@ -117,6 +117,9 @@ def index():
 
 @app.route('/query/', methods=['GET'])
 def get_query():
+    """
+    Proxy endpoint used to ping hosted internal QueryAPI server
+    """
     if 'query' in request.args:
         query = str(request.args['query'])
     else:
