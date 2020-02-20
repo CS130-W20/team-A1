@@ -2,10 +2,25 @@ import React, { Component } from "react";
 import Player from "./Player";
 import Prompter from "./Prompter";
 import ReactDOM from "react-dom";
-import Countdown from "react-countdown-now";
-import { Redirect } from "react-router-dom";
 
 export class Playgame extends Component {
+  // tick() {
+  //   this.setState(state => ({
+  //     round_num: state.round_num + 1
+  //   }));
+  // }
+  // interval = 0;
+  // timesRun = 0;
+  // componentDidMount() {
+  //   this.interval = setInterval(() => {
+  //     this.timesRun += 1;
+  //     if (this.timesRun === 1) {
+  //       clearInterval(this.interval);
+  //     }
+  //     this.tick();
+  //   }, 10000);
+  // }
+
   state = {
     clients: [
       { id: 1, role: "non-prompter", name: "Joker1" },
@@ -21,43 +36,6 @@ export class Playgame extends Component {
   extractParam() {
     console.log("My role is" + this.props.match.params.role);
   }
-  Completionist = () => {
-    return (
-      <Redirect
-        to={{
-          pathname: "/Roundend",
-          state: {
-            m: {
-              result: 1,
-              round_num: this.state.round_num,
-              role: this.state.role
-            }
-          }
-        }}
-      />
-    );
-  };
-  // Renderer callback with condition
-  renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      // Render a completed state
-      return <this.Completionist />;
-    } else {
-      // Render a countdown
-      return (
-        <p
-          style={{
-            color: "white",
-            backgroundColor: "grey",
-            width: "100px",
-            textAlign: "center"
-          }}
-        >
-          {minutes}:{seconds}
-        </p>
-      );
-    }
-  };
 
   render() {
     if (this.state.role == "player") {
@@ -67,9 +45,10 @@ export class Playgame extends Component {
             Round {this.state.round_num}/5
           </h1>
 
-          <Countdown date={Date.now() + 10000} renderer={this.renderer} />
-
-          <Player clients={this.state.clients} />
+          <Player
+            clients={this.state.clients}
+            round_num={this.state.round_num}
+          />
         </div>
       );
     } else {
@@ -78,9 +57,10 @@ export class Playgame extends Component {
           <h1 style={{ margin: "5px", padding: "5px" }}>
             Round {this.state.round_num}/5
           </h1>
-
-          <Countdown date={Date.now() + 10000} renderer={this.renderer} />
-          <Prompter clients={this.state.clients} />
+          <Prompter
+            clients={this.state.clients}
+            round_num={this.state.round_num}
+          />
         </div>
       );
     }
