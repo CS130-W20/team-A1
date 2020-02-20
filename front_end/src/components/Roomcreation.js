@@ -23,9 +23,7 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("lobby_destroyed", message => {
       console.log(message);
     });
-    this.props.socket.on("player_joined", message => {
-      console.log("player " + message + " has joined");
-    });
+    
   }
 
   updateInput(evt) {

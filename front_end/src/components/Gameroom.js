@@ -1,17 +1,26 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Route, NavLink, HashRouter, Link, useHistory } from "react-router-dom";
+import SocketContext from "./Context";
 
-export class Gameroom extends Component {
+export class Gameroom1 extends Component {
+  constructor(props){
+    super(props);
+     this.props.socket.on("player_joined", function(message) {
+      console.log(message);
+    });
+  }
+
   Message = this.props.location.state.m;
   Ifowner = this.Message.ifowner;
-
+ 
   playrReadyHandle = () => {
     window.location.hash = "#/Playgame/player";
   };
   ownerStartHandle = () => {
     window.location.hash = "#/Playgame/owner";
   };
+  
   render() {
     console.log("The ownership is: " + this.Message.ifowner);
     const playerstyle = {
@@ -99,5 +108,9 @@ export class Gameroom extends Component {
     );
   }
 }
-
+const Gameroom = props => (
+  <SocketContext.Consumer>
+    {socket => <Gameroom1 {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 export default Gameroom;
