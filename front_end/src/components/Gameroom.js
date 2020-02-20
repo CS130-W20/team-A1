@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Route, NavLink, HashRouter, Link, useHistory } from "react-router-dom";
-import Roomcreation from "./Roomcreation";
 
 export class Gameroom extends Component {
   state = {
@@ -34,7 +33,6 @@ export class Gameroom extends Component {
           <button>Home Go</button>
         </Link>
         <button onClick={this.playrReadyHandle}>I'm Ready</button>
-        <Roomcreation className="Roombuttons" />
       </div>
     );
   }

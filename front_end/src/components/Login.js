@@ -19,7 +19,7 @@ export class Login1 extends Component {
       <div>
         <h1>Awesome Login Page is coming !</h1>
         <ul className="enterRoom">
-          <Link to="/Gameroom">Game Room</Link>;
+          <Link to="/Landing">Game Room</Link>;
         </ul>
       </div>
     );
