@@ -51,7 +51,9 @@ def on_join(data):
             join_room(room)
             game_rooms[room]["clients"].append(username)
             print(game_rooms)
-            emit("player_joined", game_rooms[room], room=room)
+            emit("player_suc_join", username, room=room)
+    else:
+        emit("player_error_join", "Room does not exist")
    
 #Should be fired when host clicks to leave room. Still needs
 #to get actual data, not dummy data, from front end.
