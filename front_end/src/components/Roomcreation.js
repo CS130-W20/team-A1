@@ -34,7 +34,7 @@ export class Roomcreation1 extends Component {
 
   handleCREATE_Submit(e) {
       let data = {
-          "username": "omar"
+          "username": this.props.socket.id
       };
       this.props.socket.emit("create_room", data);
 
@@ -43,7 +43,7 @@ export class Roomcreation1 extends Component {
     console.log(this.state.roomname)
     let data = {
           "room": this.state.roomname,
-          "username": "joey"
+          "username": this.props.socket.id
       };
       this.props.socket.emit("join_room", data);
     }
@@ -64,7 +64,7 @@ export class Roomcreation1 extends Component {
     padding: "10px",
     margin: "10px"
   };
-  
+
 
   render() {
     return (
@@ -89,18 +89,3 @@ const Roomcreation = props => (
 );
 export default Roomcreation;
 
-// socket.on("message", function(message) {
-//   console.log(message);
-// });
-
-// socket.on("lobby_created", function(message) {
-//   console.log(message);
-// });
-
-// socket.on("lobby_destroyed", function(message) {
-//   console.log(message);
-// });
-
-// socket.on("player_joined", function(message) {
-//   console.log("player " + message + " has joined");
-// });
