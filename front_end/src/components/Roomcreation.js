@@ -11,22 +11,43 @@ export class Roomcreation1 extends Component {
     this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
     this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
     this.handleDESTROY_Submit = this.handleDESTROY_Submit.bind(this);
+    this.updateInput = this.updateInput.bind(this);
+    this.props.socket.on("lobby_created", function(message) {
+      console.log(message);
+    });
+    this.props.socket.on('lobby_destroyed', function (message) {
+      console.log(message);
+    });
+    this.props.socket.on('player_joined', function (message) {
+      console.log("player " + message + " has joined");
+    });
   }
 
+  
+  
+
+  updateInput(evt){
+    this.state={roomname: evt.target.value};   
+  }
+   
+ 
+
   handleCREATE_Submit(e) {
-    let data = {
-      room: "meow1",
-      username: "omar"
-    };
-    this.props.socket.emit("create_room", data);
+      let data = {
+          "username": this.props.socket.id
+      };
+      this.props.socket.emit("create_room", data);
+
   }
   handleJOIN_Submit(e) {
+    console.log(this.state.roomname)
     let data = {
-      room: "meow2",
-      username: "joey"
-    };
-    this.props.socket.emit("join_room", data);
-  }
+          "room": this.state.roomname,
+          "username": this.props.socket.id
+      };
+      this.props.socket.emit("join_room", data);
+    }
+        
   //Currently only works for omar username, testcase until front end form submission
   //to server is set up (so server can get name of lobby to leave.)
   handleDESTROY_Submit(e) {
@@ -43,6 +64,7 @@ export class Roomcreation1 extends Component {
     padding: "10px",
     margin: "10px"
   };
+
 
   render() {
     return (
@@ -67,18 +89,3 @@ const Roomcreation = props => (
 );
 export default Roomcreation;
 
-// socket.on("message", function(message) {
-//   console.log(message);
-// });
-
-// socket.on("lobby_created", function(message) {
-//   console.log(message);
-// });
-
-// socket.on("lobby_destroyed", function(message) {
-//   console.log(message);
-// });
-
-// socket.on("player_joined", function(message) {
-//   console.log("player " + message + " has joined");
-// });
