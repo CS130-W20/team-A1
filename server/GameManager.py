@@ -35,6 +35,8 @@ class GameManager:
         self.real_answers = None
         self.query = None
         self.scores = {}
+        self.current_answers = {}
+
 
     def get_prompter(self):
         """ Returns current prompter to lobby.
@@ -63,6 +65,21 @@ class GameManager:
     def get_total_scores(self):
         """Returns current running total scores for all players to lobby."""
         return self.scores
+
+    def get_current_answers(self):
+        """Returns current answers stored for each respondent to lobby."""
+        return self.current_answers
+
+    def add_new_answer(self, answer):
+        """" Adds a new answer that has been received by the client to the list of current_answers.
+
+        Parameters:
+            answer -- Dict with player name string as key and value as list of answers, in order.
+        """
+        self.current_answers.update(answer)
+        if len(self.current_answers) > 3:
+            print("This is bad! Should not add more than 3 answers to the current answers for a game!")
+
 
     def get_suggestions(self, query):
         """ Gets a dictionary of google suggestions, order scrambled, for each player.
@@ -114,7 +131,6 @@ class GameManager:
         Returns:
             round_scores -- A dict of client name (Strings) keys to int scores for that client on this round.
         """
-
         round_scores = {}
         #Get score for each respondent, and add it to their total.
         for i in self.respondents:
@@ -137,4 +153,6 @@ class GameManager:
         self.prompter = self.respondents[0]
         self.respondents = self.respondents[1:3]
         self.respondents.append(new_respondent)
+        self.current_answers = {}
+        self.query = ""
 
