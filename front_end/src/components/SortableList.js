@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { sortable } from "react-sortable";
-
+var records;
 class Item extends React.Component {
   render() {
     return <li {...this.props}>{this.props.children}</li>;
@@ -19,10 +19,14 @@ export class SortableList extends Component {
       items: items
     });
   };
+  updatePlayer(neworder) {
+    this.props.answerupdate(neworder);
+  }
 
   render() {
     const { items } = this.state;
     var listItems = items.map((item, i) => {
+      console.log("id:" + i + "object:" + item);
       return (
         <SortableItem
           key={i}
@@ -34,8 +38,22 @@ export class SortableList extends Component {
         </SortableItem>
       );
     });
+    records = items.map((item, i) => [item, i]);
+    console.log("THE RECORDS ARE: \n" + records);
+    this.updatePlayer(records);
 
-    return <ul className="sortable-list">{listItems}</ul>;
+    return (
+      <ul
+        style={{
+          listStyleType: "upper-roman",
+          backgroundColor: "cyan",
+          color: "#9f0606"
+        }}
+        className="sortable-list"
+      >
+        {listItems}
+      </ul>
+    );
   }
 }
 

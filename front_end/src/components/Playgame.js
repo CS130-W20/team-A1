@@ -13,7 +13,7 @@ export class Playgame extends Component {
     round_num: 1,
     room_id: 0,
     playerid: 1111,
-    role: "prompter"
+    role: "player"
   };
   extractParam() {
     console.log("My role is" + this.props.match.params.role);

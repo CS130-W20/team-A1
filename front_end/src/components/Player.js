@@ -1,5 +1,16 @@
 import React, { Component } from "react";
 import SortableList from "./SortableList";
+var currentAnswer = [
+  ["Gold", 1],
+  ["Crimson", 2],
+  ["Hotpink", 3],
+  ["Blueviolet", 4],
+  ["Cornflowerblue", 5],
+  ["Skyblue", 6],
+  [("Lightblue", 7)],
+  ["Aquamarine", 8],
+  ["Burlywood", 0]
+];
 export class Player extends Component {
   state = {
     sentences: [
@@ -14,13 +25,19 @@ export class Player extends Component {
       "Burlywood"
     ]
   };
+  getAnswers = answer => {
+    currentAnswer = answer;
+    console.log("New current answer is:\n" + currentAnswer);
+  };
 
   render() {
     return (
       <div>
         <h1>You are a player, please sort the list!</h1>
-
-        <SortableList items={this.state.sentences} />
+        <SortableList
+          items={this.state.sentences}
+          answerupdate={this.getAnswers}
+        />
       </div>
     );
   }
