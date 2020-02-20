@@ -22,7 +22,7 @@ Then hit this url with postman
 
 
 ### Directory Structure: Front End
-package-lock.json
+```
 ├── package.json
 ├── public
 │   ├── favicon.ico
@@ -60,9 +60,11 @@ package-lock.json
 │   ├── index.css
 │   └── index.js
 └── yarn.lock
+```
 
 ## Directory structure backend:
 server
+```
 ├── GameManager.py
 ├── GameManager.pyc
 ├── __init__.html
@@ -92,5 +94,5 @@ server
 │   └── index.html
 ├── test_query.py
 └── testreadme.md
-
+```
 
