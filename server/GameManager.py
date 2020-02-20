@@ -84,7 +84,7 @@ class GameManager:
         self.real_answers = answers
         dup_answers = {}
         for i in range(0,MAX_RESPONDERS):
-            dup_answers[self.respondents[i]] = random.sample(self.real_answers, len(self.real_answers)
+            dup_answers[self.respondents[i]] = random.sample(self.real_answers, len(self.real_answers))
         return dup_answers
 
     def get_score(self, answer):
