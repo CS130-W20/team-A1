@@ -7,7 +7,8 @@ export class Roomcreation1 extends Component {
     super(props);
     this.state = {
       roomname: "Empty",
-      redirect: null
+      redirect: null,
+      ifWrongRoomName: false
     };
 
     this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
@@ -17,6 +18,7 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("lobby_created", message => {
       Message = message;
       Message["ifowner"] = true;
+      this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
       console.log(Message);
     });
@@ -25,11 +27,16 @@ export class Roomcreation1 extends Component {
     });
     this.props.socket.on("player_error_join", message => {
       console.log(message);
+      this.setState({ ifWrongRoomName: true });
     });
     this.props.socket.on("player_suc_join", message => {
+      Message = message;
+      Message["ifowner"] = false;
+      this.setState({ ifWrongRoomName: false });
+      this.setState({ redirect: "/Gameroom" });
+
       console.log(message);
     });
-
   }
 
   updateInput(evt) {
@@ -69,7 +76,7 @@ export class Roomcreation1 extends Component {
   };
 
   render() {
-    if (this.state.redirect) {
+    if (this.state.redirect && !this.ifWrongRoomName) {
       return (
         <Redirect
           to={{
@@ -83,13 +90,17 @@ export class Roomcreation1 extends Component {
       <div style={this.buttonStyle}>
         <button onClick={this.handleCREATE_Submit}>Create Room</button>
         <br />
-        <label htmlFor="username"></label> <br />
+        <h4>Enter Room Name:</h4>
+        {!this.state.ifWrongRoomName ? (
+          <p></p>
+        ) : (
+          <h2>Invalid Room Name , Try Again!</h2>
+        )}
         <input
           name="roomnumber_join"
           type="text"
           onChange={this.updateInput}
-        />{" "}
-        <r />
+        ></input>
         <button placeholder="room number" onClick={this.handleJOIN_Submit}>
           Join Room
         </button>
