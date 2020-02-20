@@ -29,7 +29,7 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("player_suc_join", message => {
       console.log(message);
     });
-    
+
   }
 
   updateInput(evt) {

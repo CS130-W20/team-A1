@@ -7,6 +7,7 @@ export class Gameroom1 extends Component {
   constructor(props){
     super(props);
      this.props.socket.on("player_suc_join", function(message) {
+
       console.log(message);
     });
   }
