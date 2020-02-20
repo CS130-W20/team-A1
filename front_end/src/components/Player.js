@@ -16,7 +16,7 @@ export class Player extends Component {
     sentences: [
       "My numb head is not working",
       "My nap was too long to be a nap",
-      "My nose is big",
+      "My night was good",
       "My name is Ghandi",
       "My nephew won the jackpot",
       "My nee hurts",

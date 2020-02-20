@@ -1,53 +1,52 @@
 import React, { Component } from "react";
 import SocketContext from "./Context";
-
+import { Route, HashRouter, Link, Redirect } from "react-router-dom";
+var Message;
 export class Roomcreation1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      roomname: "Empty"
+      roomname: "Empty",
+      redirect: null
     };
 
     this.handleCREATE_Submit = this.handleCREATE_Submit.bind(this);
     this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
     this.handleDESTROY_Submit = this.handleDESTROY_Submit.bind(this);
     this.updateInput = this.updateInput.bind(this);
-    this.props.socket.on("lobby_created", function(message) {
+    this.props.socket.on("lobby_created", message => {
+      Message = message;
+      Message["ifowner"] = true;
+      this.setState({ redirect: "/Gameroom" });
+      console.log(Message);
+    });
+    this.props.socket.on("lobby_destroyed", message => {
       console.log(message);
     });
-    this.props.socket.on('lobby_destroyed', function (message) {
-      console.log(message);
-    });
-    this.props.socket.on('player_joined', function (message) {
+    this.props.socket.on("player_joined", message => {
       console.log("player " + message + " has joined");
     });
   }
 
-  
-  
-
-  updateInput(evt){
-    this.state={roomname: evt.target.value};   
+  updateInput(evt) {
+    this.state = { roomname: evt.target.value };
   }
-   
- 
 
   handleCREATE_Submit(e) {
-      let data = {
-          "username": this.props.socket.id
-      };
-      this.props.socket.emit("create_room", data);
-
+    let data = {
+      username: this.props.socket.id
+    };
+    this.props.socket.emit("create_room", data);
   }
   handleJOIN_Submit(e) {
-    console.log(this.state.roomname)
+    console.log(this.state.roomname);
     let data = {
-          "room": this.state.roomname,
-          "username": this.props.socket.id
-      };
-      this.props.socket.emit("join_room", data);
-    }
-        
+      room: this.state.roomname,
+      username: this.props.socket.id
+    };
+    this.props.socket.emit("join_room", data);
+  }
+
   //Currently only works for omar username, testcase until front end form submission
   //to server is set up (so server can get name of lobby to leave.)
   handleDESTROY_Submit(e) {
@@ -65,19 +64,31 @@ export class Roomcreation1 extends Component {
     margin: "10px"
   };
 
-
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: this.state.redirect,
+            state: { m: Message }
+          }}
+        />
+      );
+    }
     return (
       <div style={this.buttonStyle}>
         <button onClick={this.handleCREATE_Submit}>Create Room</button>
-        <label htmlFor="username">Enter a Room Name</label> <br />
+        <br />
+        <label htmlFor="username"></label> <br />
         <input
           name="roomnumber_join"
           type="text"
           onChange={this.updateInput}
         />{" "}
         <r />
-        <button onClick={this.handleJOIN_Submit}>Join Room</button>
+        <button placeholder="room number" onClick={this.handleJOIN_Submit}>
+          Join Room
+        </button>
       </div>
     );
   }
@@ -88,4 +99,3 @@ const Roomcreation = props => (
   </SocketContext.Consumer>
 );
 export default Roomcreation;
-
