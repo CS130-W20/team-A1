@@ -7,36 +7,110 @@ import { Playerwait } from "./Playerwait";
 export class Gameroom1 extends Component {
   constructor(props) {
     super(props);
+    this.eventlistener = this.eventlistener.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.state = {
+      myId: this.props.socket.id,
+      ifready: false,
+      Message: this.props.location.state.m,
+      Ifowner: this.props.location.state.m.ifowner,
+      player1: {
+        ifexists: this.player_size(0) ? true : false,
+        id: this.player_size(0) ? this.props.location.state.m.clients[0].id : 0,
+        name: this.player_size(0)
+          ? this.props.location.state.m.clients[0].id
+          : "",
+        status: this.player_size(0)
+          ? this.props.location.state.m.clients[0].status
+          : ""
+      },
+      player2: {
+        ifexists: this.player_size(1) ? true : false,
+        id: this.player_size(1) ? this.props.location.state.m.clients[1].id : 0,
+        name: this.player_size(1)
+          ? this.props.location.state.m.clients[1].id
+          : "",
+        status: this.player_size(1)
+          ? this.props.location.state.m.clients[1].status
+          : ""
+      },
+      player3: {
+        ifexists: this.player_size(2) ? true : false,
+        id: this.player_size(2) ? this.props.location.state.m.clients[2].id : 0,
+        name: this.player_size(2)
+          ? this.props.location.state.m.clients[2].id
+          : "",
+        status: this.player_size(2)
+          ? this.props.location.state.m.clients[2].status
+          : ""
+      }
+    };
   }
-
-  state = {
-    myId: 0,
-    ifready: false,
-    Message: this.props.location.state.m,
-    Ifowner: this.props.location.state.m.ifowner,
-    player1: { ifexists: false, id: 1 },
-    player2: { ifexists: false, id: 2 },
-    player3: { ifexists: false, id: 3 }
-  };
+  player_size(size) {
+    return this.props.location.state.m.clients.length > size;
+  }
   componentDidMount() {
-    this.props.socket.on("player_status_changed", function(message) {
-      console.log("Player status changed: " + message);
+    this.eventlistener();
+  }
+  eventlistener = () => {
+    this.props.socket.on("player_status_changed", message => {
+      if (message.id != this.state.myId) {
+        if (message.id == this.state.player1.id) {
+          this.change_client_status(1, message.status);
+        } else if (message.id == this.state.player2.id) {
+          this.change_client_status(2, message.status);
+        } else if (message.id == this.state.player3.id) {
+          this.change_client_status(3, message.status);
+        }
+      }
     });
-    this.props.socket.on("player_suc_join", function(message) {
+
+    this.props.socket.on("player_suc_join", message => {
       console.log("New Player Joined: " + message);
     });
-    this.props.socket.on("player_left", function(message) {
+    this.props.socket.on("player_left", message => {
       console.log("A player left, his ID is " + message);
+      if (message.id != this.props.socket.id) {
+        if (message.id == this.state.player1.id) {
+          this.RemoveUser(1);
+        } else if (message.id == this.state.player2.id) {
+          this.RemoveUser(2);
+        } else if (message.id == this.state.player3.id) {
+          this.RemoveUser(3);
+        }
+      }
     });
-  }
-
-  playrReadyHandle = () => {
-    //window.location.hash = "#/Playgame/player";
   };
   ownerStartHandle = () => {
     window.location.hash = "#/Playgame/owner";
   };
-
+  RemoveUser = useNum => {
+    if (useNum == 1) {
+      this.setState({
+        player1: { ifexists: false, id: 0, name: "", status: "" }
+      });
+    } else if (useNum == 2) {
+      this.setState({
+        player2: { ifexists: false, id: 0, name: "", status: "" }
+      });
+    } else if (useNum == 3) {
+      this.setState({
+        player3: { ifexists: false, id: 0, name: "", status: "" }
+      });
+    }
+  };
+  change_client_status = (useNum, Status) => {
+    var clientStatus;
+    if (useNum == 1) {
+      clientStatus = { ...this.state.player1 };
+    } else if (useNum == 2) {
+      clientStatus = { ...this.state.player1 };
+    } else if (useNum == 3) {
+      clientStatus = { ...this.state.player1 };
+    }
+    clientStatus.status = Status;
+    this.setState({ clientStatus });
+  };
   ToggleReady = () => {
     this.setState({
       ifready: !this.state.ifready
@@ -57,13 +131,13 @@ export class Gameroom1 extends Component {
       id: this.state.myId
     };
     this.props.socket.emit("player_left_room", data);
+
+    window.location.hash = "#/Landing";
   };
 
   render() {
     //console.log("The ownership is: " + this.Message.ifowner);
     if (this.state.ifready) {
-      console.log("player ready!!!");
-      this.playrReadyHandle();
     }
     const style = !this.state.ifready
       ? {
@@ -121,21 +195,21 @@ export class Gameroom1 extends Component {
           </div>
           <Playerwait
             id={1}
-            name={"Joey"}
-            status={"Ready"}
-            ifPlayerExists={false}
+            name={this.state.player1.name}
+            status={this.state.player1.status}
+            ifPlayerExists={this.state.player1.ifexists}
           />
           <Playerwait
             id={2}
-            name={"Jon"}
-            status={"Waiting"}
-            ifPlayerExists={false}
+            name={this.state.player2.name}
+            status={this.state.player2.status}
+            ifPlayerExists={this.state.player2.ifexists}
           />
           <Playerwait
             id={3}
-            name={"Omar"}
-            status={"Ready"}
-            ifPlayerExists={true}
+            name={this.state.player3.name}
+            status={this.state.player3.status}
+            ifPlayerExists={this.state.player3.ifexists}
           />
         </div>
       );
@@ -182,21 +256,21 @@ export class Gameroom1 extends Component {
         </div>
         <Playerwait
           id={1}
-          name={"Joey"}
-          status={"Ready"}
-          ifPlayerExists={false}
+          name={this.state.player1.name}
+          status={this.state.player1.status}
+          ifPlayerExists={this.state.player1.ifexists}
         />
         <Playerwait
           id={2}
-          name={"Jon"}
-          status={"Waiting"}
-          ifPlayerExists={false}
+          name={this.state.player2.name}
+          status={this.state.player2.status}
+          ifPlayerExists={this.state.player2.ifexists}
         />
         <Playerwait
           id={3}
-          name={"Omar"}
-          status={"Ready"}
-          ifPlayerExists={true}
+          name={this.state.player3.name}
+          status={this.state.player3.status}
+          ifPlayerExists={this.state.player3.ifexists}
         />
       </div>
     );

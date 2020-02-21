@@ -71,7 +71,6 @@ export class Player extends Component {
             textAlign: "center"
           }}
         >
-          <h1>Round Num is: {this.state.roundNo}</h1>
           {minutes}:{seconds}
         </p>
       );

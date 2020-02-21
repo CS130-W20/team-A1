@@ -49,7 +49,6 @@ export class Prompter extends Component {
           }}
         >
           {minutes}:{seconds}
-          <h1>Round Num is: {this.state.roundNo}</h1>
         </p>
       );
     }
