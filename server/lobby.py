@@ -178,10 +178,19 @@ def on_new_round(data):
     
 @app.route("/")
 def index():
+    """
+    Returns the / landing page index.html
+    """
     return render_template('index.html',token="Hello This is Salek")
 
 @app.route('/query/', methods=['GET'])
 def get_query():
+    """
+    RESTful GET method with Query (string) on request argument in URL
+    Return JSON answers list with extracted google suggestions
+    @ImplicitParam request.args<String>
+    @Returns: JSON object of List of extracted answers
+    """
     if 'query' in request.args:
         query = str(request.args['query'])
     else:
