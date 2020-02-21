@@ -1,6 +1,7 @@
 import pytest
 from query import get_query_from_goog
 from lobby import get_query, app
+from GameManager import GameManager
 import urllib.request
 
 def test_query_internal():
@@ -51,6 +52,16 @@ def test_query_proxy(client):
     datalist= datastr.split(",")
     print('datarr: ', len(datalist))
     assert(len(datalist)>4)
+
+
+
+def test_GameManagerInputs():
+    """
+    Tests GameManager input data prompter and respondents and GET abilities of those props
+    """
+    gameManager = GameManager("Jonathan", ["Omar", "Joey", "Salekh"])
+    assert(str==type(gameManager.get_prompter()[0]))
+    assert(list==type(gameManager.get_respondents()))
 
 
 
