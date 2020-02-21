@@ -184,10 +184,10 @@ export class Gameroom1 extends Component {
             id="currentUser"
             style={{
               backgroundColor: "grey",
-              height: "70px",
-              width: "200px",
-              padding: "30px",
-              margin: "30px"
+              height: "110px",
+              width: "210px",
+              padding: "10px",
+              margin: "10px"
             }}
           >
             <p style={{ color: "white" }}>My Name: Eminem</p>
