@@ -13,6 +13,7 @@ import requests
 import GameManager
 
 MAX_PLAYERS = 4
+player_names = ["kitten warrior", "kitten farmer", "kittens123", "kitten", "I like cats", "Catman123", "boxed kittens"]
 
 lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling", "Haradrim", "Hobbit", "Maiar", "Orc", "Quenya", "Rohirrim", "Sindarin"]
 game_rooms = {}
@@ -80,8 +81,7 @@ def on_join(data):
                 game_rooms[room]['status'].update({username: 'Not Ready'})
                 print(game_rooms)
                 emit("player_suc_join", game_rooms[room], room=room)
-                newPlayer={"id":1,"name":"player","status":"Not Ready"}
-                emit("new_player_join", newPlayer, room=room)
+                emit("new_player_join", {"id": username, "name": random.choice(player_names), "status": "Not Ready"})
     else:
         emit("player_error_join", "Room does not exist")
 
