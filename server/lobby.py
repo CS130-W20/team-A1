@@ -47,7 +47,7 @@ def on_create(data):
         game_rooms[lobby] = {
             "room_name": lobby,
             "host": username,
-            "clients": [username],
+            "clients": [],
             "status": {},
             "game": None
         }
@@ -80,8 +80,9 @@ def on_join(data):
                 game_rooms[room]["clients"].append(username)
                 game_rooms[room]['status'].update({username: 'Not Ready'})
                 print(game_rooms)
+                #msg={"status":'Not Ready',"room_name":room,'clients':[{},{},{}]}
                 emit("player_suc_join", game_rooms[room], room=room)
-                emit("new_player_join", {"id": username, "name": random.choice(player_names), "status": "Not Ready"})
+                emit("new_player_join", {"id": username, "name": random.choice(player_names), "status": game_rooms[room]['status'][username]})
     else:
         emit("player_error_join", "Room does not exist")
 

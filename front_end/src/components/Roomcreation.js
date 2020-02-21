@@ -18,6 +18,11 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("lobby_created", message => {
       Message = message;
       Message["ifowner"] = true;
+
+      // Message["clients"] = Message["clients"].filter(client => {
+      //   alert("processing client" + client.id);
+      //   return client.id !== this.props.socket.id;
+      // });
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
       console.log(Message);
