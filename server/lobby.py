@@ -10,6 +10,7 @@ from collections import defaultdict
 import random
 
 import requests
+import GameManager
 
 MAX_PLAYERS = 4
 
