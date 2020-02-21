@@ -1,6 +1,7 @@
 #### Testing cases
 
 ### 1. Internal Query Testing
+We have unit tests that test the internal QueryApi that is not exposed to the user. We test the endpoint with GET request and verify that we are able to extract good meaningful data with valid GET request urls with Selenium. 
 `test_query_internal`
 * Test query internal
 * Expects parsed response returned upon query (string) entered into internal API
@@ -29,3 +30,6 @@
 * Checks to see that repondents are same as keys in query object
 * Checks to see that query object contains unique answers for each participant 
 * If all the cases pass then we are able to receive data from the gameManager `get_suggestions(query)` method and that data is valid.
+
+## 4. (Future) Socket io testing (explained inside report)
+## 5. (Future) React component testing (explained inside report)

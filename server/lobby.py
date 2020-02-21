@@ -171,6 +171,7 @@ def index():
 def get_query():
     """
     Proxy endpoint used to ping hosted internal QueryAPI server
+    Takes in request argument through the url.
     """
     if 'query' in request.args:
         query = str(request.args['query'])

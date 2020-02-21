@@ -1,11 +1,20 @@
 # Sample Project Title
-Briefly describe your project here.
+Autocorrectly Game
 
 ## Directory Structure
-Explain how the code is organized
-
+Explanations on how the code is structures can be seen in our report part C
 ## Installation/Run instructions
-Explain how to run your application
+#### First install dependencies
+`npm install` from front_end/package.json and fron /package.json
+#### Then install requirements for python dependencies
+`pip3 install flask flask-socketio requests`
+#### To build react app
+`npm run build`
+#### To start python server(flask)
+`python3 server/queryapi.py` (QueryAPI Internal)
+`python3 lobby.py` (Lobby Server)
+Then go to the local host server emitting from `lobby`. 
+
 
 ## Relevant Links 
 - Documentation link
@@ -15,9 +24,9 @@ Explain how to run your application
 
 
 ## --- Development
-#### To start selenium server. 
+#### To start selenium server and test it...
 `python3 queryapi.py`
-Then hit this url with postman
+Then hit this url with postman (local)
 `http://127.0.0.1:5000/query/?query=<enterHere>`
 
 
