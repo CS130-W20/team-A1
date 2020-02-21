@@ -65,6 +65,27 @@ def test_GameManagerInputs():
 
 
 
+def test_GameManagerQueryGet():
+    """
+    Here we test the GameManager get_suggestions method
+    We expect to see four answers (response from server) that are shuffled
+    If they are not shuffled answers we will throw an error.
+    """
+    gameManager = GameManager("Jonathan", ["Omar", "Joey", "Salekh"])
+
+    q = gameManager.get_suggestions("dogfish")
+    # Check that the keys() of answers received correspond to the respondents
+    assert(sorted(q.keys()) == sorted(gameManager.get_respondents()))
+
+    
+    print('q: ', q)
+    print('keys : ', q.keys())
+    print('respondents: ', gameManager.get_respondents())
+
+    p1, p2, p3 = q.keys()
+    # Check to see if suggestions are shuffled:
+    assert(q[p1] != q[p2] != q[p3])
+
 
 
 
