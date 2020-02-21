@@ -10,6 +10,9 @@ from collections import defaultdict
 import random
 
 import requests
+import GameManager
+
+MAX_PLAYERS = 4
 
 lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling", "Haradrim", "Hobbit", "Maiar", "Orc", "Quenya", "Rohirrim", "Sindarin"]
 game_rooms = {}
@@ -43,9 +46,9 @@ def on_create(data):
         game_rooms[lobby] = {
             "room_name": lobby,
             "host": username,
-            "prompter": username,
             "clients": [username],
-            "round_num": 0
+            "status": {},
+            "game": None
         }
         join_room(lobby)
         print(game_rooms)
@@ -68,29 +71,38 @@ def on_join(data):
     room = data['room']
     if room in game_rooms:
         if username not in game_rooms[room]["clients"]:
-            join_room(room)
-            game_rooms[room]["clients"].append(username)
-            print(game_rooms)
-            emit("player_suc_join", game_rooms[room], room=room)
+            num_players = len(game_rooms[room]['clients'])
+            if num_players >= MAX_PLAYERS:
+                emit("player_error_join", "Too many players", room=room)
+            else:
+                join_room(room)
+                game_rooms[room]["clients"].append(username)
+                status.update({username: 'Not Ready'})
+                print(game_rooms)
+                emit("player_suc_join", game_rooms[room], room=room)
     else:
         emit("player_error_join", "Room does not exist")
 
 
 @socketio.on("player_ready")
 def on_playerReady(data):
+    username = data['id']
     room = data['room_name']
     print('PLAYER STATUS CHANGED RECEIVED')
-    emit("player_status_changed", "player_info:player, status:ready", room=room)
+    game_rooms[room]['status'][username] = 'Ready'
+    emit("player_status_changed", "{id:{0}, 'room':{1}}".format(username, room), room=room)
     #This function needs to tell everyone in the same room with the player, 
     # who just sent message saying he's ready, about this player's status change
     #for everyplayer in the same room :
-    #  emit("player_status_changed")
+    if all(value == 'ready' for value in game_rooms[room]['status']):
+        game_rooms[room]['game'] = GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
+        emit("game_ready", room=room)
     #Note: *****If All the players in that room is ready , send a "you can start" the game message to the room owner!!
     #Like: emit("you_may_start")
     #To the player+owner send a json containing all the info about the player who sent this message , in addition, send the owner a string message saying "Clear"
     
 @socketio.on("player_UNDOready")
-def on_playerOnready(data):
+def on_playerUnready(data):
     room = data['room_name']
     print('PLAYER STATUS CHANGED RECEIVED')
     emit("player_status_changed", "player_info:player, status:not-ready", room=room)
@@ -99,6 +111,7 @@ def on_playerOnready(data):
     #Like: emit("you_may_start")
       #To the player+owner send a json containing all the info about the player who sent this message 
       #To the player+owner send a json containing all the info about the player who sent this message , in addition, send the owner a string message saying "Noclear"
+
 @socketio.on("player_left_room")
 def on_playerLeft(data):
     id = data['id']
