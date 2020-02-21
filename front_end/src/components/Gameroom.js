@@ -7,16 +7,28 @@ import { Playerwait } from "./Playerwait";
 export class Gameroom1 extends Component {
   constructor(props) {
     super(props);
+  }
+
+  state = {
+    myId: 0,
+    ifready: false,
+    Message: this.props.location.state.m,
+    Ifowner: this.props.location.state.m.ifowner,
+    player1: { ifexists: false, id: 1 },
+    player2: { ifexists: false, id: 2 },
+    player3: { ifexists: false, id: 3 }
+  };
+  componentDidMount() {
+    this.props.socket.on("player_status_changed", function(message) {
+      console.log("Player status changed: " + message);
+    });
     this.props.socket.on("player_suc_join", function(message) {
-      console.log(message);
+      console.log("New Player Joined: " + message);
+    });
+    this.props.socket.on("player_left", function(message) {
+      console.log("A player left, his ID is " + message);
     });
   }
-  state = {
-    ifready: false
-  };
-
-  Message = this.props.location.state.m;
-  Ifowner = this.Message.ifowner;
 
   playrReadyHandle = () => {
     //window.location.hash = "#/Playgame/player";
@@ -29,6 +41,22 @@ export class Gameroom1 extends Component {
     this.setState({
       ifready: !this.state.ifready
     });
+    const data = {
+      room_name: this.state.Message.room_name,
+      id: this.state.myId
+    };
+    if (this.state.ifready) {
+      this.props.socket.emit("player_ready", data);
+    } else {
+      this.props.socket.emit("player_UNDOready", data);
+    }
+  };
+  LeaveRoomHandle = () => {
+    const data = {
+      room_name: this.state.Message.room_name,
+      id: this.state.myId
+    };
+    this.props.socket.emit("player_left_room", data);
   };
 
   render() {
@@ -53,10 +81,10 @@ export class Gameroom1 extends Component {
           margin: "10px"
         };
 
-    if (this.Ifowner)
+    if (this.state.Ifowner)
       return (
         <div>
-          <h1> Room name: {this.Message.room_name}</h1>
+          <h1> Room name: {this.state.Message.room_name}</h1>
           <h3>You own the room </h3>
           <div
             id="buttons_own"
@@ -73,6 +101,7 @@ export class Gameroom1 extends Component {
             </NavLink>
             <br />
             <button onClick={this.ownerStartHandle}>Start Game</button>
+            <button onClick={this.LeaveRoomHandle}>Leave Room</button>
             <button onClick={this.ToggleReady} style={style}>
               {!this.state.ifready ? "Get Ready" : "Not Ready"}
             </button>
@@ -118,7 +147,7 @@ export class Gameroom1 extends Component {
 
     return (
       <div id="gameRoom_player">
-        <h1>Room name: {this.Message.room_name}</h1>
+        <h1>Room name: {this.state.Message.room_name}</h1>
         <h3>Happy Gaming</h3>
         <div
           id="buttons"
@@ -133,7 +162,7 @@ export class Gameroom1 extends Component {
           <Link to="/">
             <button>Home</button>
           </Link>
-
+          <button onClick={this.LeaveRoomHandle}>Leave Room</button>
           <button onClick={this.ToggleReady} style={style}>
             {!this.state.ifready ? "Get Ready" : "Not Ready"}
           </button>

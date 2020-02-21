@@ -2,12 +2,11 @@ import React, { Component } from "react";
 
 export class Playerwait extends Component {
   state = {
-    ifPlayerExists: true
+    ifPlayerExists: this.props.ifPlayerExists
   };
-  componentWillUpdate() {
-    return () => {
-      this.setState({ ifPlayerExists: this.props.ifPlayerExists });
-    };
+
+  componentWillReceiveProps() {
+    this.setState({ ifPlayerExists: this.props.ifPlayerExists });
   }
   playerstyle = {
     boxSizing: "border-box",
