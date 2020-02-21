@@ -54,6 +54,7 @@ export class Gameroom1 extends Component {
   }
   eventlistener = () => {
     this.props.socket.on("player_status_changed", message => {
+      console.log("Gamer status change received!");
       if (message.id != this.state.myId) {
         if (message.id == this.state.player1.id) {
           this.change_client_status(1, message.status);
@@ -65,11 +66,20 @@ export class Gameroom1 extends Component {
       }
     });
 
-    this.props.socket.on("player_suc_join", message => {
-      console.log("New Player Joined: " + message);
+    this.props.socket.on("new_player_join", player => {
+      console.log("New Player Joined with id: " + player.id);
+      this.newUserWelcome(player);
+    });
+
+    this.props.socket.on("enter_game", message => {
+      if (this.state.ifowner) {
+        this.ownerStartHandle();
+      } else {
+        this.playerStartHandle();
+      }
     });
     this.props.socket.on("player_left", message => {
-      console.log("A player left, his ID is " + message);
+      console.log("A player left, his ID is " + message.id);
       if (message.id != this.props.socket.id) {
         if (message.id == this.state.player1.id) {
           this.RemoveUser(1);
@@ -83,6 +93,9 @@ export class Gameroom1 extends Component {
   };
   ownerStartHandle = () => {
     window.location.hash = "#/Playgame/owner";
+  };
+  playerStartHandle = () => {
+    window.location.hash = "#/Playgame/player";
   };
   RemoveUser = useNum => {
     if (useNum == 1) {
@@ -108,6 +121,7 @@ export class Gameroom1 extends Component {
     } else if (useNum == 3) {
       clientStatus = { ...this.state.player1 };
     }
+    console.log("client status has changed! " + Status);
     clientStatus.status = Status;
     this.setState({ clientStatus });
   };
@@ -133,6 +147,28 @@ export class Gameroom1 extends Component {
     this.props.socket.emit("player_left_room", data);
 
     window.location.hash = "#/Landing";
+  };
+  startPermission = () => {
+    const data = {
+      room_name: this.state.Message.room_name,
+      id: this.state.myId
+    };
+    this.props.socket.emit("start_game", data);
+  };
+  newUserWelcome = player => {
+    var newplayer = {
+      ifexists: true,
+      id: player.id,
+      name: player.name,
+      status: player.status
+    };
+    if (!this.state.player1.ifexists) {
+      this.setState({ player1: newplayer });
+    } else if (!this.state.player2.ifexists) {
+      this.setState({ player2: newplayer });
+    } else if (!this.state.player3.ifexists) {
+      this.setState({ player3: newplayer });
+    }
   };
 
   render() {
@@ -174,7 +210,7 @@ export class Gameroom1 extends Component {
               Home
             </NavLink>
             <br />
-            <button onClick={this.ownerStartHandle}>Start Game</button>
+            <button onClick={this.startPermission}>Start Game</button>
             <button onClick={this.LeaveRoomHandle}>Leave Room</button>
             <button onClick={this.ToggleReady} style={style}>
               {!this.state.ifready ? "Get Ready" : "Not Ready"}

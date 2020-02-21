@@ -80,6 +80,8 @@ def on_join(data):
                 game_rooms[room]['status'].update({username: 'Not Ready'})
                 print(game_rooms)
                 emit("player_suc_join", game_rooms[room], room=room)
+                newPlayer={"id":1,"name":"player","status":"Not Ready"}
+                emit("new_player_join", newPlayer, room=room)
     else:
         emit("player_error_join", "Room does not exist")
 
@@ -88,9 +90,8 @@ def on_join(data):
 def on_playerReady(data):
     username = data['id']
     room = data['room_name']
-    print('PLAYER STATUS CHANGED RECEIVED')
     game_rooms[room]['status'][username] = 'Ready'
-    emit("player_status_changed", "{id:{0}, 'room':{1}}".format(username, room), room=room)
+    emit("player_status_changed", "{id:{0}, 'room_name':{1},'status':{2}}".format(username, room, "Ready"), room=room)
     #This function needs to tell everyone in the same room with the player, 
     # who just sent message saying he's ready, about this player's status change
     #for everyplayer in the same room :
@@ -104,26 +105,23 @@ def on_playerReady(data):
 @socketio.on("player_UNDOready")
 def on_playerUnready(data):
     room = data['room_name']
-    print('PLAYER STATUS CHANGED RECEIVED')
-    emit("player_status_changed", "player_info:player, status:not-ready", room=room)
-    #Do the same thing as the above function , but just tell the status change is from ready to unready
-    #Note: *****If All the players in that room were ready previously, now send a "you cannot start!" message to the owner
-    #Like: emit("you_may_start")
-      #To the player+owner send a json containing all the info about the player who sent this message 
-      #To the player+owner send a json containing all the info about the player who sent this message , in addition, send the owner a string message saying "Noclear"
+    username = data['id']
+    game_rooms[room]['status'][username] = 'Not Ready'
+    emit("player_status_changed", "{id:{0}, 'room_name':{1},'status':{2}}".format(username, room,"Not Ready"), room=room)
+    emit("game_not_ready",room=room)
+
 
 @socketio.on("player_left_room")
 def on_playerLeft(data):
     id = data['id']
     room = data['room_name']
-    print("PLAYER LEAVING, HIS ID IS",id)
     emit("player_left", {"player_id":id}, room=room)
 
 
-@socketio.on("game_started")
+@socketio.on("start_game")
 def on_gameStarted(data):
     room = data['room_name']
-    emit("player_status_changed", "player_info:player, status:not-ready", room=room)
+    emit("enter_game", "go", room=room)
     #send all the users in the room(including the owner) a message containing{}
 
 
