@@ -14,6 +14,7 @@ import GameManager
 
 MAX_PLAYERS = 4
 
+player_names = ["kitten warrior", "kitten farmer", "kittens123", "kitten", "I like cats", "Catman123", "boxed kittens"]
 lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling", "Haradrim", "Hobbit", "Maiar", "Orc", "Quenya", "Rohirrim", "Sindarin"]
 game_rooms = {}
 app = Flask(__name__)
@@ -80,6 +81,7 @@ def on_join(data):
                 game_rooms[room]['status'].update({username: 'Not Ready'})
                 print(game_rooms)
                 emit("player_suc_join", game_rooms[room], room=room)
+                emit("new_player_join", {"id": username, "name": random.choice(player_names),"status": "Not Ready"})
     else:
         emit("player_error_join", "Room does not exist")
 
@@ -167,23 +169,6 @@ def on_destroy(data):
 @app.route("/")
 def index():
     return render_template('index.html',token="Hello This is Salek")
-
-@app.route('/query/', methods=['GET'])
-def get_query():
-    """
-    Proxy endpoint used to ping hosted internal QueryAPI server
-    """
-    if 'query' in request.args:
-        query = str(request.args['query'])
-    else:
-        return "Error must add query param to request"
-    # Submit request for query to AWS or Local API
-    payload={'query':query}
-    # answers = requests.get('http://3.85.238.64/query/', params=payload)
-    answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
-    print('answers received: ', answers.json())
-    return jsonify(answers.json())
-
 
 
 
