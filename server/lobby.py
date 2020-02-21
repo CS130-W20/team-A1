@@ -77,7 +77,7 @@ def on_join(data):
             else:
                 join_room(room)
                 game_rooms[room]["clients"].append(username)
-                status.update({username: 'Not Ready'})
+                game_room[room]['status'].update({username: 'Not Ready'})
                 print(game_rooms)
                 emit("player_suc_join", game_rooms[room], room=room)
     else:
