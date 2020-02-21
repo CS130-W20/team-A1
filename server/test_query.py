@@ -77,13 +77,8 @@ def test_GameManagerQueryGet():
     # Check that the keys() of answers received correspond to the respondents
     assert(sorted(q.keys()) == sorted(gameManager.get_respondents()))
 
-    
-    print('q: ', q)
-    print('keys : ', q.keys())
-    print('respondents: ', gameManager.get_respondents())
-
-    p1, p2, p3 = q.keys()
     # Check to see if suggestions are shuffled:
+    p1, p2, p3 = q.keys()
     assert(q[p1] != q[p2] != q[p3])
 
 
