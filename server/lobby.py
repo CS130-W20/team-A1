@@ -82,7 +82,7 @@ def on_join(data):
                 print(game_rooms)
                 #msg={"status":'Not Ready',"room_name":room,'clients':[{},{},{}]}
                 emit("player_suc_join", game_rooms[room], room=room)
-                emit("new_player_join", {"id": username, "name": random.choice(player_names), "status": game_rooms[room]['status'][username]})
+                emit("new_player_join", {"id": username, "name": random.choice(player_names), "status": game_rooms[room]['status'][username]},room=room)
     else:
         emit("player_error_join", "Room does not exist")
 
@@ -92,7 +92,7 @@ def on_playerReady(data):
     username = data['id']
     room = data['room_name']
     game_rooms[room]['status'][username] = 'Ready'
-    emit("player_status_changed", "{id:{0}, 'room_name':{1},'status':{2}}".format(username, room, "Ready"), room=room)
+    emit("player_status_changed", {'id':username, 'room_name':room,'status':"Ready"}, room=room)
     #This function needs to tell everyone in the same room with the player, 
     # who just sent message saying he's ready, about this player's status change
     #for everyplayer in the same room :
@@ -108,7 +108,7 @@ def on_playerUnready(data):
     room = data['room_name']
     username = data['id']
     game_rooms[room]['status'][username] = 'Not Ready'
-    emit("player_status_changed", "{id:{0}, 'room_name':{1},'status':{2}}".format(username, room,"Not Ready"), room=room)
+    emit("player_status_changed", {'id':username, 'room_name':room,'status':"Not-Ready"}, room=room)
     emit("game_not_ready",room=room)
 
 

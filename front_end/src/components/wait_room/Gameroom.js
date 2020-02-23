@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Route, NavLink, HashRouter, Link, useHistory } from "react-router-dom";
-import SocketContext from "./Context";
+import SocketContext from "../pre_game/Context";
 import { Playerwait } from "./Playerwait";
-
+import Gameroom_view from "./Gameroom_view";
+var state_dummy = true;
 export class Gameroom1 extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +15,7 @@ export class Gameroom1 extends Component {
       ifready: false,
       Message: this.props.location.state.m,
       Ifowner: this.props.location.state.m.ifowner,
+
       player1: {
         ifexists: this.player_size(0) ? true : false,
         id: this.player_size(0) ? this.props.location.state.m.clients[0].id : 0,
@@ -46,6 +48,7 @@ export class Gameroom1 extends Component {
       }
     };
   }
+
   player_size(size) {
     return this.props.location.state.m.clients.length > size;
   }
@@ -54,13 +57,21 @@ export class Gameroom1 extends Component {
   }
   eventlistener = () => {
     this.props.socket.on("player_status_changed", message => {
-      console.log("Gamer status change received!");
+      console.log(
+        "Gamer " +
+          message.id +
+          "'s status change received, new status is:" +
+          message.status
+      );
       if (message.id != this.state.myId) {
         if (message.id == this.state.player1.id) {
+          console.log("The status changed gamer is player" + 1);
           this.change_client_status(1, message.status);
         } else if (message.id == this.state.player2.id) {
+          console.log("The status changed gamer is player" + 2);
           this.change_client_status(2, message.status);
         } else if (message.id == this.state.player3.id) {
+          console.log("The status changed gamer is player" + 3);
           this.change_client_status(3, message.status);
         }
       }
@@ -68,7 +79,9 @@ export class Gameroom1 extends Component {
 
     this.props.socket.on("new_player_join", player => {
       console.log("New Player Joined with id: " + player.id);
-      this.newUserWelcome(player);
+      if (player.id != this.state.myId) {
+        this.newUserWelcome(player);
+      }
     });
 
     this.props.socket.on("enter_game", message => {
@@ -113,32 +126,42 @@ export class Gameroom1 extends Component {
     }
   };
   change_client_status = (useNum, Status) => {
-    var clientStatus;
     if (useNum == 1) {
-      clientStatus = { ...this.state.player1 };
+      var updated_player1 = { ...this.state.player1 };
+      updated_player1.status = Status;
+      this.setState({ player1: updated_player1 });
     } else if (useNum == 2) {
-      clientStatus = { ...this.state.player1 };
+      var updated_player2 = { ...this.state.player2 };
+      updated_player2.status = Status;
+      this.setState({ player2: updated_player2 });
     } else if (useNum == 3) {
-      clientStatus = { ...this.state.player1 };
+      var updated_player3 = { ...this.state.player3 };
+      updated_player3.status = Status;
+      this.setState({ player3: updated_player3 });
     }
-    console.log("client status has changed! " + Status);
-    clientStatus.status = Status;
-    this.setState({ clientStatus });
+    //console.log("client status has changed! " + Status);
   };
   ToggleReady = () => {
-    this.setState({
-      ifready: !this.state.ifready
-    });
-    const data = {
-      room_name: this.state.Message.room_name,
-      id: this.state.myId
-    };
-    if (this.state.ifready) {
-      this.props.socket.emit("player_ready", data);
-    } else {
-      this.props.socket.emit("player_UNDOready", data);
-    }
+    this.setState(
+      {
+        ifready: !this.state.ifready
+      },
+      () => {
+        const data = {
+          room_name: this.state.Message.room_name,
+          id: this.state.myId
+        };
+        if (this.state.ifready) {
+          this.props.socket.emit("player_ready", data);
+          console.log("my status has changed! " + "READY!");
+        } else {
+          this.props.socket.emit("player_UNDOready", data);
+          console.log("my status has changed! " + "NO READY!");
+        }
+      }
+    );
   };
+
   LeaveRoomHandle = () => {
     const data = {
       room_name: this.state.Message.room_name,
@@ -148,7 +171,7 @@ export class Gameroom1 extends Component {
 
     window.location.hash = "#/Landing";
   };
-  startPermission = () => {
+  RequestStartPermission = () => {
     const data = {
       room_name: this.state.Message.room_name,
       id: this.state.myId
@@ -172,143 +195,13 @@ export class Gameroom1 extends Component {
   };
 
   render() {
-    //console.log("The ownership is: " + this.Message.ifowner);
-    if (this.state.ifready) {
-    }
-    const style = !this.state.ifready
-      ? {
-          backgroundColor: "red",
-          color: "white",
-          width: "90px",
-          height: "30px",
-          margin: "10px"
-        }
-      : {
-          backgroundColor: "green",
-          color: "white",
-          width: "90px",
-          height: "30px",
-          margin: "10px"
-        };
-
-    if (this.state.Ifowner)
-      return (
-        <div>
-          <h1> Room name: {this.state.Message.room_name}</h1>
-          <h3>You own the room </h3>
-          <div
-            id="buttons_own"
-            style={{
-              backgroundColor: "grey",
-              height: "70px",
-              width: "200px",
-              padding: "30px",
-              margin: "30px"
-            }}
-          >
-            <NavLink exact to="/">
-              Home
-            </NavLink>
-            <br />
-            <button onClick={this.startPermission}>Start Game</button>
-            <button onClick={this.LeaveRoomHandle}>Leave Room</button>
-            <button onClick={this.ToggleReady} style={style}>
-              {!this.state.ifready ? "Get Ready" : "Not Ready"}
-            </button>
-          </div>
-          <div
-            id="currentUser"
-            style={{
-              backgroundColor: "grey",
-              height: "110px",
-              width: "210px",
-              padding: "10px",
-              margin: "10px"
-            }}
-          >
-            <p style={{ color: "white" }}>My Name: Eminem</p>
-            <p style={{ color: "white" }}>Drop Down Menu</p>
-          </div>
-          <Playerwait
-            id={1}
-            name={this.state.player1.name}
-            status={this.state.player1.status}
-            ifPlayerExists={this.state.player1.ifexists}
-          />
-          <Playerwait
-            id={2}
-            name={this.state.player2.name}
-            status={this.state.player2.status}
-            ifPlayerExists={this.state.player2.ifexists}
-          />
-          <Playerwait
-            id={3}
-            name={this.state.player3.name}
-            status={this.state.player3.status}
-            ifPlayerExists={this.state.player3.ifexists}
-          />
-        </div>
-      );
-
-    console.log(
-      "We are at the Game room messge is: \n" +
-        this.props.location.state.m.room_name
-    );
-
     return (
-      <div id="gameRoom_player">
-        <h1>Room name: {this.state.Message.room_name}</h1>
-        <h3>Happy Gaming</h3>
-        <div
-          id="buttons"
-          style={{
-            backgroundColor: "grey",
-            height: "70px",
-            width: "200px",
-            padding: "30px",
-            margin: "30px"
-          }}
-        >
-          <Link to="/">
-            <button>Home</button>
-          </Link>
-          <button onClick={this.LeaveRoomHandle}>Leave Room</button>
-          <button onClick={this.ToggleReady} style={style}>
-            {!this.state.ifready ? "Get Ready" : "Not Ready"}
-          </button>
-        </div>
-        <div
-          id="currentUser1"
-          style={{
-            backgroundColor: "grey",
-            height: "70px",
-            width: "200px",
-            padding: "30px",
-            margin: "30px"
-          }}
-        >
-          <p style={{ color: "white" }}>My Name: Eminem</p>
-          <p style={{ color: "white" }}>Drop Down Menu</p>
-        </div>
-        <Playerwait
-          id={1}
-          name={this.state.player1.name}
-          status={this.state.player1.status}
-          ifPlayerExists={this.state.player1.ifexists}
-        />
-        <Playerwait
-          id={2}
-          name={this.state.player2.name}
-          status={this.state.player2.status}
-          ifPlayerExists={this.state.player2.ifexists}
-        />
-        <Playerwait
-          id={3}
-          name={this.state.player3.name}
-          status={this.state.player3.status}
-          ifPlayerExists={this.state.player3.ifexists}
-        />
-      </div>
+      <Gameroom_view
+        {...this.state}
+        LeaveRoomHandle={this.LeaveRoomHandle}
+        startPermission={this.RequestStartPermission}
+        ToggleReady={this.ToggleReady}
+      />
     );
   }
 }
