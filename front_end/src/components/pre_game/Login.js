@@ -8,10 +8,10 @@ export class Login1 extends Component {
       room: "meow1",
       username: "omar"
     };
-    this.props.socket.emit("create_room", data);
-    this.props.socket.on("lobby_created", function(message) {
-      console.log(message);
-    });
+    // this.props.socket.emit("create_room", data);
+    // this.props.socket.on("lobby_created", function(message) {
+    //   console.log(message);
+    // });
   }
 
   render() {

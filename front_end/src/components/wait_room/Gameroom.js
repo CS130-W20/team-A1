@@ -62,6 +62,7 @@ export class Gameroom1 extends Component {
           message.id +
           "'s status change received, new status is:" +
           message.status
+        //Ready ; Not-Ready
       );
       if (message.id != this.state.myId) {
         if (message.id == this.state.player1.id) {
@@ -84,7 +85,20 @@ export class Gameroom1 extends Component {
       }
     });
 
+    this.props.socket.on("if_all_ready", message => {
+      if (message == "Yes") {
+        //Enable to start game button
+      } else if (message == "No") {
+        //
+      } else {
+        console.log(
+          "The message received from the if_all_ready end point is invalid\n"
+        );
+      }
+    });
+    //Receives who the prompter is to
     this.props.socket.on("enter_game", message => {
+      prompter_id = message.prompter;
       if (this.state.ifowner) {
         this.ownerStartHandle();
       } else {
@@ -148,7 +162,7 @@ export class Gameroom1 extends Component {
       },
       () => {
         const data = {
-          room_name: this.state.Message.room_name,
+          room: this.state.Message.room_name,
           id: this.state.myId
         };
         if (this.state.ifready) {
@@ -171,9 +185,9 @@ export class Gameroom1 extends Component {
 
     window.location.hash = "#/Landing";
   };
-  RequestStartPermission = () => {
+  startGame = () => {
     const data = {
-      room_name: this.state.Message.room_name,
+      room: this.state.Message.room_name,
       id: this.state.myId
     };
     this.props.socket.emit("start_game", data);
@@ -199,7 +213,7 @@ export class Gameroom1 extends Component {
       <Gameroom_view
         {...this.state}
         LeaveRoomHandle={this.LeaveRoomHandle}
-        startPermission={this.RequestStartPermission}
+        startPermission={this.startGame}
         ToggleReady={this.ToggleReady}
       />
     );

@@ -19,14 +19,29 @@ export class Roomcreation1 extends Component {
       Message = message;
       Message["ifowner"] = true;
 
-      // Message["clients"] = Message["clients"].filter(client => {
+      // Message["users"] = Message["users"].filter(client => {
       //   alert("processing client" + client.id);
       //   return client.id !== this.props.socket.id;
       // });
+      {
+        users: [
+          {
+            id: "123",
+            name: "Joey",
+            room_name: "Chicken",
+            status: "Ready" //"Not-Ready"
+          },
+          {},
+          {},
+          {}
+        ];
+      }
+
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
       console.log(Message);
     });
+    //Missing: room error created !
     this.props.socket.on("lobby_destroyed", message => {
       console.log(message);
     });
@@ -40,6 +55,20 @@ export class Roomcreation1 extends Component {
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
 
+      {
+        users: [
+          {
+            id: "123",
+            name: "Joey",
+            room_name: "Chicken",
+            status: "Ready" //"Not-Ready"
+          },
+          {},
+          {},
+          {}
+        ];
+      }
+
       console.log(message);
     });
   }
@@ -50,7 +79,7 @@ export class Roomcreation1 extends Component {
 
   handleCREATE_Submit(e) {
     let data = {
-      username: this.props.socket.id
+      id: this.props.socket.id
     };
     this.props.socket.emit("create_room", data);
   }
@@ -58,7 +87,7 @@ export class Roomcreation1 extends Component {
     console.log(this.state.roomname);
     let data = {
       room: this.state.roomname,
-      username: this.props.socket.id
+      id: this.props.socket.id
     };
     this.props.socket.emit("join_room", data);
   }
