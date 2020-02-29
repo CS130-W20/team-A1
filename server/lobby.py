@@ -121,6 +121,9 @@ def on_playerLeft(data):
 
 @socketio.on("start_game")
 def on_gameStarted(data):
+    """
+    @param {data}
+    """
     room = data['room_name']
     emit("enter_game", "go", room=room)
     #send all the users in the room(including the owner) a message containing{}
@@ -162,7 +165,6 @@ def on_destroy(data):
         del game_rooms[room]
         
 
-    
 @app.route("/")
 def index():
     return render_template('index.html',token="Hello This is Salek")
@@ -179,10 +181,32 @@ def get_query():
         return "Error must add query param to request"
     # Submit request for query to AWS or Local API
     payload={'query':query}
-    # answers = requests.get('http://3.85.238.64/query/', params=payload)
-    answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
+    answers = requests.get('http://3.85.238.64/query/', params=payload)
+    # answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
     print('answers received: ', answers.json())
     return jsonify(answers.json())
+
+
+# Login route
+# If login fails then send them back to the slash...
+@app.route('/login', methods=['GET','POST'])
+def do_admin_login():
+    if request.method == 'POST':
+        print('method post')
+        print('request: ', request)
+        print('request type: ', type(request))
+        print('request form: ', request.form)
+        print('request form keys: ', request.form.keys())
+        return jsonify({"hello": "hello"})
+    if request.form['password'] == "password" and request.form['username'] == "admin@ucla.edu":
+        session['logged_in'] = True
+        print('Session logged in: ', request.form)
+        # Send back to front end.
+    else:
+        flash('wrong password!')
+    return index() # returns back to index
+
+    # If you are logged in 
 
 
 
