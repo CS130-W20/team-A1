@@ -29,7 +29,7 @@ export class Login1 extends Component {
     event.preventDefault();
     console.log('Handling submit: ', event)
     console.log('state: ', this.state)
-    obj = {}
+    let obj = {}
     obj.username = this.state.email
     obj.password = this.state.password
 
@@ -38,7 +38,10 @@ export class Login1 extends Component {
         method: 'POST',
         url: '/login',
         data: obj,
-      })
+        headers: {
+          'Content-Type': 'application/json',
+        }
+        })
     // axios.post('/login', JSON.stringify({
     //   username: this.state.email,
     //   password: this.state.password
