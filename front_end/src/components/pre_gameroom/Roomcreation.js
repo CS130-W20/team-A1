@@ -18,25 +18,10 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("lobby_created", message => {
       Message = message;
       Message["ifowner"] = true;
-
-      // Message["users"] = Message["users"].filter(client => {
-      //   alert("processing client" + client.id);
-      //   return client.id !== this.props.socket.id;
-      // });
-      {
-        users: [
-          {
-            id: "123",
-            name: "Joey",
-            room_name: "Chicken",
-            status: "Ready" //"Not-Ready"
-          },
-          {},
-          {},
-          {}
-        ];
-      }
-
+      Message["room"] = message["users"][0].room;
+      Message["users"] = Message["users"].filter(client => {
+        return client.id !== this.props.socket.id;
+      });
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
       console.log(Message);
@@ -52,22 +37,11 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("player_suc_join", message => {
       Message = message;
       Message["ifowner"] = false;
+      Message["users"] = Message["users"].filter(client => {
+        return client.id !== this.props.socket.id;
+      });
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
-
-      {
-        users: [
-          {
-            id: "123",
-            name: "Joey",
-            room_name: "Chicken",
-            status: "Ready" //"Not-Ready"
-          },
-          {},
-          {},
-          {}
-        ];
-      }
 
       console.log(message);
     });

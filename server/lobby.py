@@ -40,21 +40,35 @@ def on_create(data):
     @return - emits an event back to the front-end client, the front-end client should
     be expecting 'lobby_created' with the details of the lobby sent through the socket
     '''
-    username = data['username']
+    id = data['id']
     lobby_num = random.randint(50,8000)
     lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
     if lobby not in game_rooms:
         game_rooms[lobby] = {
             "room_name": lobby,
-            "host": username,
+            "host": id,
             "clients": [],
             "status": {},
             "game": None
         }
+        #I put the _ to avoid possible name conflicts in the global name space
+        #Missing: plz replace these values with actual values from the db
+        name_ ="jack"
+        room_ =lobby
+        status_ ='Ready'
+
+        Message={
+            "users":[{
+                'id':id,
+                'name':name_,
+                'room':room_,
+                'status':status_
+            }]
+        }
         join_room(lobby)
         print(game_rooms)
         print(rooms())
-        emit('lobby_created', game_rooms[lobby], room=lobby)
+        emit('lobby_created', Message, room=lobby)
 
 #for one room.
 @socketio.on('join_room')
@@ -68,21 +82,33 @@ def on_join(data):
     be expecting 'player_suc_join' if successful
 
     '''
-    username = data['username']
+    id = data['id']
     room = data['room']
     if room in game_rooms:
-        if username not in game_rooms[room]["clients"]:
+        if id not in game_rooms[room]["clients"]:
             num_players = len(game_rooms[room]['clients'])
             if num_players >= MAX_PLAYERS:
                 emit("player_error_join", "Too many players", room=room)
             else:
                 join_room(room)
-                game_rooms[room]["clients"].append(username)
-                game_rooms[room]['status'].update({username: 'Not Ready'})
+                game_rooms[room]["clients"].append(id)
+                game_rooms[room]['status'].update({id: 'Not Ready'})
                 print(game_rooms)
-                #msg={"status":'Not Ready',"room_name":room,'clients':[{},{},{}]}
-                emit("player_suc_join", game_rooms[room], room=room)
-                emit("new_player_join", {"id": username, "name": random.choice(player_names), "status": game_rooms[room]['status'][username]},room=room)
+                #We have to build a list of users in the room to return to the new joiner
+                users=[]
+                for i in game_rooms[room]["clients"]: 
+                     users.append({'id':i, 'name':'', 'room':room, 'status':''})
+                for user in users:
+                    user['status']=game_rooms[room]['status'][user['id']]
+                # user1 ={'id':id, 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
+                # user2 ={'id':"2", 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
+                # user3 ={'id':"3", 'name':random.choice(player_names), 'room':room, 'status':'Ready'}
+                # user4 = {'id':"4", 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
+                Message={'users':users}
+                #Note: this is for the user who is joining the room 
+                emit("player_suc_join", Message, room=room)
+                #Note: this message is meant for other users already  in the room
+                emit("new_player_join", {"id": id, "name": random.choice(player_names), "status": game_rooms[room]['status'][id]},room=room)
     else:
         emit("player_error_join", "Room does not exist")
 
@@ -90,39 +116,43 @@ def on_join(data):
 @socketio.on("player_ready")
 def on_playerReady(data):
     username = data['id']
-    room = data['room_name']
+    room = data['room']
     game_rooms[room]['status'][username] = 'Ready'
-    emit("player_status_changed", {'id':username, 'room_name':room,'status':"Ready"}, room=room)
+    emit("player_status_changed", {'id':username, 'status':"Ready"}, room=room)
     #This function needs to tell everyone in the same room with the player, 
     # who just sent message saying he's ready, about this player's status change
     #for everyplayer in the same room :
     if all(value == 'ready' for value in game_rooms[room]['status']):
         game_rooms[room]['game'] = GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
-        emit("game_ready", room=room)
+        emit("if_all_ready", "Yes",room=room)
     #Note: *****If All the players in that room is ready , send a "you can start" the game message to the room owner!!
     #Like: emit("you_may_start")
     #To the player+owner send a json containing all the info about the player who sent this message , in addition, send the owner a string message saying "Clear"
     
 @socketio.on("player_UNDOready")
 def on_playerUnready(data):
-    room = data['room_name']
+    room = data['room']
     username = data['id']
     game_rooms[room]['status'][username] = 'Not Ready'
-    emit("player_status_changed", {'id':username, 'room_name':room,'status':"Not-Ready"}, room=room)
-    emit("game_not_ready",room=room)
+    emit("player_status_changed", {'id':username, 'status':"Not-Ready"}, room=room)
+    emit("if_all_ready", "No",room=room)
+
 
 
 @socketio.on("player_left_room")
 def on_playerLeft(data):
     id = data['id']
-    room = data['room_name']
+    room = data['room']
     emit("player_left", {"player_id":id}, room=room)
 
 
 @socketio.on("start_game")
 def on_gameStarted(data):
-    room = data['room_name']
-    emit("enter_game", "go", room=room)
+    room = data['room']
+    id = data['id']
+    prompter_id ="2"
+    Message =  {'prompter': prompter_id}
+    emit("enter_game", Message, room=room)
     #send all the users in the room(including the owner) a message containing{}
 
 

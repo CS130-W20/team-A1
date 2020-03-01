@@ -37,17 +37,17 @@ export class Otherplayers extends Component {
     if (this.props.Ifowner)
       return (
         <div>
-          <h1> Room name: {this.props.Message.room_name}</h1>
+          <h1> Room name: {this.props.Message.room}</h1>
           <h2>Player name:{this.props.myId}</h2>
           <h3>You own the room </h3>
           <div
             id="buttons_own"
             style={{
               backgroundColor: "grey",
-              height: "70px",
+              height: "200px",
               width: "200px",
-              padding: "30px",
-              margin: "30px"
+              padding: "40px",
+              margin: "40px"
             }}
           >
             <NavLink exact to="/">
@@ -97,17 +97,17 @@ export class Otherplayers extends Component {
 
     return (
       <div id="gameRoom_player">
-        <h1>Room name: {this.props.Message.room_name}</h1>
+        <h1>Room name: {this.props.Message.room}</h1>
         <h2>Player name:{this.props.myId}</h2>
         <h3>Happy Gaming</h3>
         <div
           id="buttons"
           style={{
             backgroundColor: "grey",
-            height: "70px",
+            height: "200px",
             width: "200px",
-            padding: "30px",
-            margin: "30px"
+            padding: "40px",
+            margin: "40px"
           }}
         >
           <Link to="/">
@@ -122,7 +122,7 @@ export class Otherplayers extends Component {
           id="currentUser1"
           style={{
             backgroundColor: "grey",
-            height: "70px",
+            height: "200px",
             width: "200px",
             padding: "30px",
             margin: "30px"

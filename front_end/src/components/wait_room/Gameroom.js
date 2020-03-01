@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import { Route, NavLink, HashRouter, Link, useHistory } from "react-router-dom";
-import SocketContext from "../pre_game/Context";
+import SocketContext from "../pre_gameroom/Context";
 import { Playerwait } from "./Playerwait";
 import Gameroom_view from "./Gameroom_view";
-var state_dummy = true;
+
 export class Gameroom1 extends Component {
   constructor(props) {
     super(props);
@@ -18,39 +18,39 @@ export class Gameroom1 extends Component {
 
       player1: {
         ifexists: this.player_size(0) ? true : false,
-        id: this.player_size(0) ? this.props.location.state.m.clients[0].id : 0,
+        id: this.player_size(0) ? this.props.location.state.m.users[0].id : 0,
         name: this.player_size(0)
-          ? this.props.location.state.m.clients[0].id
+          ? this.props.location.state.m.users[0].name
           : "",
         status: this.player_size(0)
-          ? this.props.location.state.m.clients[0].status
+          ? this.props.location.state.m.users[0].status
           : ""
       },
       player2: {
         ifexists: this.player_size(1) ? true : false,
-        id: this.player_size(1) ? this.props.location.state.m.clients[1].id : 0,
+        id: this.player_size(1) ? this.props.location.state.m.users[1].id : 0,
         name: this.player_size(1)
-          ? this.props.location.state.m.clients[1].id
+          ? this.props.location.state.m.users[1].name
           : "",
         status: this.player_size(1)
-          ? this.props.location.state.m.clients[1].status
+          ? this.props.location.state.m.users[1].status
           : ""
       },
       player3: {
         ifexists: this.player_size(2) ? true : false,
-        id: this.player_size(2) ? this.props.location.state.m.clients[2].id : 0,
+        id: this.player_size(2) ? this.props.location.state.m.users[2].id : 0,
         name: this.player_size(2)
-          ? this.props.location.state.m.clients[2].id
+          ? this.props.location.state.m.users[2].name
           : "",
         status: this.player_size(2)
-          ? this.props.location.state.m.clients[2].status
+          ? this.props.location.state.m.users[2].status
           : ""
       }
     };
   }
 
   player_size(size) {
-    return this.props.location.state.m.clients.length > size;
+    return this.props.location.state.m.users.length > size;
   }
   componentDidMount() {
     this.eventlistener();
@@ -64,14 +64,15 @@ export class Gameroom1 extends Component {
           message.status
         //Ready ; Not-Ready
       );
-      if (message.id != this.state.myId) {
-        if (message.id == this.state.player1.id) {
+      var player_id = message.id;
+      if (player_id != this.state.myId) {
+        if (player_id == this.state.player1.id) {
           console.log("The status changed gamer is player" + 1);
           this.change_client_status(1, message.status);
-        } else if (message.id == this.state.player2.id) {
+        } else if (player_id == this.state.player2.id) {
           console.log("The status changed gamer is player" + 2);
           this.change_client_status(2, message.status);
-        } else if (message.id == this.state.player3.id) {
+        } else if (player_id == this.state.player3.id) {
           console.log("The status changed gamer is player" + 3);
           this.change_client_status(3, message.status);
         }
@@ -88,8 +89,9 @@ export class Gameroom1 extends Component {
     this.props.socket.on("if_all_ready", message => {
       if (message == "Yes") {
         //Enable to start game button
+        console.log("All the players are ready in the room");
       } else if (message == "No") {
-        //
+        console.log("NOT All the players are ready in the room");
       } else {
         console.log(
           "The message received from the if_all_ready end point is invalid\n"
@@ -98,7 +100,8 @@ export class Gameroom1 extends Component {
     });
     //Receives who the prompter is to
     this.props.socket.on("enter_game", message => {
-      prompter_id = message.prompter;
+      var prompter_id = message.prompter;
+      console.log("The prompter in this round has ID: " + prompter_id);
       if (this.state.ifowner) {
         this.ownerStartHandle();
       } else {
@@ -162,7 +165,7 @@ export class Gameroom1 extends Component {
       },
       () => {
         const data = {
-          room: this.state.Message.room_name,
+          room: this.state.Message.room,
           id: this.state.myId
         };
         if (this.state.ifready) {
@@ -178,7 +181,7 @@ export class Gameroom1 extends Component {
 
   LeaveRoomHandle = () => {
     const data = {
-      room_name: this.state.Message.room_name,
+      room: this.state.Message.room,
       id: this.state.myId
     };
     this.props.socket.emit("player_left_room", data);
@@ -187,7 +190,7 @@ export class Gameroom1 extends Component {
   };
   startGame = () => {
     const data = {
-      room: this.state.Message.room_name,
+      room: this.state.Message.room,
       id: this.state.myId
     };
     this.props.socket.emit("start_game", data);

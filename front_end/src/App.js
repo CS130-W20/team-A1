@@ -1,14 +1,14 @@
 import React from "react";
 import "./App.css";
 import Gameroom from "./components/wait_room/Gameroom";
-import Frontpage from "./components/pre_game/Frontpage";
-import Login from "./components/pre_game/Login";
+import Frontpage from "./components/pre_gameroom/Frontpage";
+import Login from "./components/pre_gameroom/Login";
 import Playgame from "./components/game_room/Playgame";
-import Landing from "./components/pre_game/Landing";
+import Landing from "./components/pre_gameroom/Landing";
 import { Roundend } from "./components/game_room/Roundend";
 import { Route, NavLink, HashRouter } from "react-router-dom";
 import io from "socket.io-client";
-import SocketContext from "./components/pre_game/Context";
+import SocketContext from "./components/pre_gameroom/Context";
 const socket = io("http://localhost:5000");
 
 function App() {
