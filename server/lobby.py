@@ -122,27 +122,27 @@ def on_join(data):
 
 @socketio.on("player_ready")
 def on_playerReady(data):
-    username = data['id']
+    id = data['id']
     room = data['room']
-    game_rooms[room]['status'][username] = 'Ready'
-    emit("player_status_changed", {'id':username, 'status':"Ready"}, room=room)
+    game_rooms[room]['status'][id] = 'Ready'
+    emit("player_status_changed", {'id':id, 'status':"Ready"}, room=room)
     #This function needs to tell everyone in the same room with the player, 
     # who just sent message saying he's ready, about this player's status change
     #for everyplayer in the same room :
-    if all(value == 'ready' for value in game_rooms[room]['status']):
-        game_rooms[room]['game'] = GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
-        emit("if_all_ready", "Yes",room=room)
-    #Note: *****If All the players in that room is ready , send a "you can start" the game message to the room owner!!
-    #Like: emit("you_may_start")
-    #To the player+owner send a json containing all the info about the player who sent this message , in addition, send the owner a string message saying "Clear"
+    if all(value == 'Ready' for value in game_rooms[room]['status'].values()):
+        emit("if_all_ready", "Yes", room=room)
     
 @socketio.on("player_UNDOready")
 def on_playerUnready(data):
     room = data['room']
-    username = data['id']
-    game_rooms[room]['status'][username] = 'Not Ready'
-    emit("player_status_changed", {'id':username, 'status':"Not-Ready"}, room=room)
-    emit("if_all_ready", "No",room=room)
+    id = data['id']
+    unreadied = False
+    if all(value == 'Ready' for value in game_rooms[room]['status'].values()):
+        unreadied = True
+    game_rooms[room]['status'][id] = 'Not-Ready'
+    emit("player_status_changed", {'id':id, 'status':"Not-Ready"}, room=room)
+    if unreadied:
+        emit("if_all_ready", "No",room=room)
 
 
 
@@ -157,7 +157,9 @@ def on_playerLeft(data):
 def on_gameStarted(data):
     room = data['room']
     id = data['id']
-    prompter_id ="2"
+    #Add a new GameManager to the current room.
+    game_rooms[room]['game'] = GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
+    prompter_id = game_rooms[room]['host']
     Message =  {'prompter': prompter_id}
     emit("enter_game", Message, room=room)
     #send all the users in the room(including the owner) a message containing{}
