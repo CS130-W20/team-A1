@@ -202,7 +202,7 @@ def on_submitAnswer(data):
     room = data['room']
     answers = data['answers']
     id = data['id']
-    game = data[room]['game']
+    game = game_rooms[room]['game']
     new_answer = {id: answers}
     game.add_new_answer(new_answer)
 

@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 import Gameroom from "./components/wait_room/Gameroom";
-import Frontpage from "./components/pre_gameroom/Frontpage";
-import Login from "./components/pre_gameroom/Login";
+import Frontpage from "./components/pre_login/Frontpage";
+import Login from "./components/pre_login/Login";
 import Playgame from "./components/game_room/Playgame";
 import Landing from "./components/pre_gameroom/Landing";
 import { Roundend } from "./components/game_room/Roundend";
@@ -21,7 +21,7 @@ function App() {
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Landing" component={Landing} />
           <Route exact path="/Roundend" component={Roundend} />
-          <Route path="/Playgame/:role" component={Playgame} />
+          <Route path="/Playgame" component={Playgame} />
         </body>
       </HashRouter>
     </SocketContext.Provider>

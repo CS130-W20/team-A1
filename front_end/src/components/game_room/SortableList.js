@@ -49,7 +49,7 @@ export class SortableList extends Component {
         </div>
       );
     });
-    records = items.map((item, i) => [item, i]);
+    records = items.map((item, i) => [item]);
     console.log("THE RECORDS ARE: \n" + records);
     this.updatePlayer(records);
 

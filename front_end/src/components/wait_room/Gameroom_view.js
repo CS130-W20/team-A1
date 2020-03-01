@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link, NavLink, Redirect } from "react-router-dom";
 import Playerwait from "./Playerwait";
+import { ButtonToolbar, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 export class Otherplayers extends Component {
   LeaveRoomHandle = this.props.LeaveRoomHandle;
   startPermission = this.props.startPermission;
@@ -43,9 +45,9 @@ export class Otherplayers extends Component {
           <div
             id="buttons_own"
             style={{
-              backgroundColor: "grey",
-              height: "200px",
-              width: "200px",
+              backgroundColor: "#f4897b",
+              height: "300px",
+              width: "300px",
               padding: "40px",
               margin: "40px"
             }}
@@ -53,13 +55,26 @@ export class Otherplayers extends Component {
             <NavLink exact to="/">
               Home
             </NavLink>
-
             <br />
-            <button onClick={this.startPermission}>Start Game</button>
-            <button onClick={this.LeaveRoomHandle}>Leave Room</button>
-            <button onClick={this.ToggleReady} style={toggle_style}>
+            <Button
+              variant={this.props.if_all_ready ? "success" : "secondary"}
+              size="lg"
+              disabled={!this.props.if_all_ready}
+              onClick={this.startPermission}
+            >
+              Start Game
+            </Button>{" "}
+            <Button variant="primary" size="lg" onClick={this.LeaveRoomHandle}>
+              Leave Room
+            </Button>{" "}
+            <Button
+              variant={!this.props.ifready ? "success" : "danger"}
+              size="lg"
+              onClick={this.ToggleReady}
+            >
+              {" "}
               {toggle_word}
-            </button>
+            </Button>
           </div>
           <div
             id="currentUser"
@@ -103,9 +118,9 @@ export class Otherplayers extends Component {
         <div
           id="buttons"
           style={{
-            backgroundColor: "grey",
-            height: "200px",
-            width: "200px",
+            backgroundColor: "#f4897b",
+            height: "300px",
+            width: "300px",
             padding: "40px",
             margin: "40px"
           }}
@@ -113,10 +128,19 @@ export class Otherplayers extends Component {
           <Link to="/">
             <button>Home</button>
           </Link>
-          <button onClick={this.LeaveRoomHandle}>Leave Room</button>
-          <button onClick={this.ToggleReady} style={toggle_style}>
+          <br />
+          <Button variant="primary" size="lg" onClick={this.LeaveRoomHandle}>
+            Leave Room
+          </Button>{" "}
+          <br />
+          <Button
+            variant={!this.props.ifready ? "success" : "danger"}
+            size="lg"
+            onClick={this.ToggleReady}
+          >
+            {" "}
             {toggle_word}
-          </button>
+          </Button>
         </div>
         <div
           id="currentUser1"

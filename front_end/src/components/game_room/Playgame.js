@@ -2,43 +2,24 @@ import React, { Component } from "react";
 import Player from "./Player";
 import Prompter from "./Prompter";
 import ReactDOM from "react-dom";
+import SocketContext from "../pre_gameroom/Context";
 
-export class Playgame extends Component {
-  // tick() {
-  //   this.setState(state => ({
-  //     round_num: state.round_num + 1
-  //   }));
-  // }
-  // interval = 0;
-  // timesRun = 0;
-  // componentDidMount() {
-  //   this.interval = setInterval(() => {
-  //     this.timesRun += 1;
-  //     if (this.timesRun === 1) {
-  //       clearInterval(this.interval);
-  //     }
-  //     this.tick();
-  //   }, 10000);
-  // }
-
+export class Playgame1 extends Component {
   state = {
     clients: [
       { id: 1, role: "non-prompter", name: "Joker1" },
       { id: 2, role: "non-prompter", name: "Joker2" },
       { id: 3, role: "non-prompter", name: "Joker3" }
     ],
-    roundover: false,
-    round_num: 1,
-    room_id: 0,
-    playerid: 1111,
-    role: "player"
+    if_round_over: false,
+    round_num: this.props.location.state.message.round_num,
+    room_id: this.props.location.state.message.room_id,
+    playerid: this.props.location.state.message.playerid,
+    role: this.props.location.state.message.role
   };
-  extractParam() {
-    console.log("My role is" + this.props.match.params.role);
-  }
 
   render() {
-    if (this.state.role == "player") {
+    if (this.state.role == "non-prompter") {
       return (
         <div>
           <h1 style={{ margin: "5px", padding: "5px" }}>
@@ -48,10 +29,13 @@ export class Playgame extends Component {
           <Player
             clients={this.state.clients}
             round_num={this.state.round_num}
+            if_round_over={this.state.if_round_over}
+            room={this.state.room_id}
+            myId={this.state.playerid}
           />
         </div>
       );
-    } else {
+    } else if (this.state.role == "prompter") {
       return (
         <div>
           <h1 style={{ margin: "5px", padding: "5px" }}>
@@ -60,12 +44,25 @@ export class Playgame extends Component {
           <Prompter
             clients={this.state.clients}
             round_num={this.state.round_num}
+            if_round_over={this.state.if_round_over}
+            room={this.state.room_id}
+            myId={this.state.playerid}
           />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h1>Incorrect role !!!</h1>
         </div>
       );
     }
   }
-  // <Player arg={player}
-  // />)
 }
+
+const Playgame = props => (
+  <SocketContext.Consumer>
+    {socket => <Playgame1 {...props} socket={socket} />}
+  </SocketContext.Consumer>
+);
 export default Playgame;

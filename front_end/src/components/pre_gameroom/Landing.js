@@ -56,9 +56,12 @@ const leaderboard = [
 export class Landing extends Component {
   render() {
     return (
-      <div>
+      <div style={{ padding: "50px", margin: "50px" }}>
         <hi>You are authorized , please select from below actions</hi>
         <Roomcreation className="Roombuttons" />
+        <Leaderboard
+          style={{ marginBottom: "100px", paddingBottom: "50px" }}
+        ></Leaderboard>
       </div>
     );
   }
