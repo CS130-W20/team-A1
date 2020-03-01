@@ -36,7 +36,7 @@ export class Player1 extends Component {
   }
   getAnswers = answer => {
     currentAnswer = answer;
-    console.log("New current answer is:\n" + currentAnswer);
+    // console.log("New current answer is:\n" + currentAnswer);
   };
   Completionist = () => {
     this.send_results_to_server();
@@ -53,7 +53,9 @@ export class Player1 extends Component {
   };
   receive_results_from_server = () => {
     this.props.socket.on("send_answers", message => {
-      console.log("Received results fom back end : " + JSON.stringify(message));
+      console.log(
+        "Received results from back end : " + JSON.stringify(message)
+      );
       var Message = {};
       Message = message;
       Message["round_num"] = this.state.roundNo;

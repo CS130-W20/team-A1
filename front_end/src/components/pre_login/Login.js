@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, NavLink, HashRouter, Link } from "react-router-dom";
-import SocketContext from "./Context";
+import SocketContext from "../pre_gameroom/Context";
 
 export class Login1 extends Component {
   componentDidMount() {
