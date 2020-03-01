@@ -56,25 +56,10 @@ const leaderboard = [
 export class Landing extends Component {
   render() {
     return (
-      // <div>
-      //   <div></div>
       <div>
         <hi>You are authorized , please select from below actions</hi>
         <Roomcreation className="Roombuttons" />
-        {/* {/* // ... other elements
-    
-        { ! props.gameState.started && */}
-        <g>
-          {/* // ... StartGame and Title */}
-          {/* <Leaderboard
-            currentPlayer={leaderboard[6]}
-            authenticate={signIn}
-            leaderboard={leaderboard}
-          /> */}
-        </g>
-        } */}
       </div>
-      // </div>
     );
   }
 }

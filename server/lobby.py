@@ -47,10 +47,11 @@ def on_create(data):
         game_rooms[lobby] = {
             "room_name": lobby,
             "host": id,
-            "clients": [],
-            "status": {},
+            "clients": [id],
+            "status": {id:'Not-Ready'},
             "game": None
         }
+
         #I put the _ to avoid possible name conflicts in the global name space
         #Missing: plz replace these values with actual values from the db
         name_ ="jack"
@@ -104,7 +105,8 @@ def on_join(data):
                 # user2 ={'id':"2", 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
                 # user3 ={'id':"3", 'name':random.choice(player_names), 'room':room, 'status':'Ready'}
                 # user4 = {'id':"4", 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
-                Message={'users':users}
+               
+                Message={'users':users,'owner_id':"123"}
                 #Note: this is for the user who is joining the room 
                 emit("player_suc_join", Message, room=room)
                 #Note: this message is meant for other users already  in the room
