@@ -13,7 +13,7 @@ import requests
 import GameManager
 
 MAX_PLAYERS = 4
-player_names = ["kitten warrior", "kitten farmer", "kittens123", "kitten", "I like cats", "Catman123", "boxed kittens"]
+player_names = ["kitten warrior", "kitten farmer", "best kitten", "kitten", "I like cats", "Catman", "boxed kittens"]
 
 lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling", "Haradrim", "Hobbit", "Maiar", "Orc", "Quenya", "Rohirrim", "Sindarin"]
 game_rooms = {}
@@ -44,28 +44,38 @@ def on_create(data):
     lobby_num = random.randint(50,8000)
     lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
     if lobby not in game_rooms:
+        player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
         game_rooms[lobby] = {
             "room_name": lobby,
             "host": id,
             "clients": [id],
-            "status": {id:'Not-Ready'},
+            "status": {id: 'Not-Ready'},
+            "names": {id: player_name},
             "game": None
         }
 
         #I put the _ to avoid possible name conflicts in the global name space
         #Missing: plz replace these values with actual values from the db
-        name_ ="jack"
-        room_ =lobby
-        status_ ='Ready'
-
-        Message={
-            "users":[{
-                'id':id,
-                'name':name_,
-                'room':room_,
-                'status':status_
-            }]
-        }
+        #name_ ="jack"
+        #room_ =lobby
+        #status_ ='Ready'
+       
+        #Ignore this. Leaving it in on the off chance my format
+        #doesn't work. But message should auto format the dictionary
+        #structures correctly.
+       # Message={
+            #"users":[{
+           #     'id':id,
+          #      'name':name_,
+         #       'room':room_,
+        #        'status':status_
+       #     }]
+      #  }
+        
+        #This section actually generates message.
+        users = [{'id':id, 'name':game_rooms[lobby]['names'][id], 'room':lobby, 'status':'Not-Ready'}]
+        Message={"users":users}
+        
         join_room(lobby)
         print(game_rooms)
         print(rooms())
@@ -92,25 +102,20 @@ def on_join(data):
                 emit("player_error_join", "Too many players", room=room)
             else:
                 join_room(room)
+                player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
                 game_rooms[room]["clients"].append(id)
-                game_rooms[room]['status'].update({id: 'Not Ready'})
+                game_rooms[room]['status'].update({id: 'Not-Ready'})
+                game_rooms[room]['names'].update({id: player_name})
                 print(game_rooms)
                 #We have to build a list of users in the room to return to the new joiner
                 users=[]
                 for i in game_rooms[room]["clients"]: 
-                     users.append({'id':i, 'name':'', 'room':room, 'status':''})
-                for user in users:
-                    user['status']=game_rooms[room]['status'][user['id']]
-                # user1 ={'id':id, 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
-                # user2 ={'id':"2", 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
-                # user3 ={'id':"3", 'name':random.choice(player_names), 'room':room, 'status':'Ready'}
-                # user4 = {'id':"4", 'name':random.choice(player_names), 'room':room, 'status':'Not-Ready'}
-               
-                Message={'users':users,'owner_id':"123"}
+                     users.append({'id':i, 'name':game_rooms[room]['names'][i], 'room':room, 'status':game_rooms[room]['names'][i]})
+                Message={'users':users, 'owner_id':game_rooms[room]['host']}
                 #Note: this is for the user who is joining the room 
                 emit("player_suc_join", Message, room=room)
                 #Note: this message is meant for other users already  in the room
-                emit("new_player_join", {"id": id, "name": random.choice(player_names), "status": game_rooms[room]['status'][id]},room=room)
+                emit("new_player_join", {"id":id, "name":player_name, "status":game_rooms[room]['status'][id]}, room=room)
     else:
         emit("player_error_join", "Room does not exist")
 
