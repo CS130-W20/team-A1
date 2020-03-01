@@ -8,11 +8,15 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_socketio import send, emit
 from collections import defaultdict
 import random
+from urllib.error import HTTPError, URLError
 
 import requests
 import GameManager
 
 MAX_PLAYERS = 4
+#If you are getting problems with this its also in GameManager.py
+MAX_RESPONDERS = 3
+MAX_ROUNDS = 4
 player_names = ["kitten warrior", "kitten farmer", "best kitten", "kitten", "I like cats", "Catman", "boxed kittens"]
 
 lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling", "Haradrim", "Hobbit", "Maiar", "Orc", "Quenya", "Rohirrim", "Sindarin"]
@@ -163,6 +167,90 @@ def on_gameStarted(data):
     Message =  {'prompter': prompter_id}
     emit("enter_game", Message, room=room)
     #send all the users in the room(including the owner) a message containing{}
+
+@socketio.on("submit_prompt")
+def on_submitPrompt(data):
+     """ 
+    This is the event the server listens to for getting the prompt from the prompter. It sends
+    the prompt to the game_manager, who gets the results and returns 3 shuffled versions to
+    display to the non-host clients.
+    @param data - Dict with a query field, containing string for query (i.e. 'how to'), and room field, containing string with name of room.
+    @return - emits the player key answer value dict of scrambled orders back to the client.
+    """
+    room = data['room']
+    prompt = data['prompt']
+    game = game_rooms[room]['game']
+    try:
+        suggestions = game.get_suggestions(prompt)
+    except (HTTPError, URLError) as e:
+        Message = {'prompter': game_rooms[room]['game'].get_prompter()}
+        emit("bad_prompt", Message, room=room)
+    else:
+        Message = suggestions
+        emit('display_suggestions', Message, room=room)
+
+@socketio.on('submit_answer')
+def on_submit(data):
+    """
+    This is the event the server listens to for getting an answer from one of the players. It sends the
+    answer to the game manager, who adds the answers to its list. It then checks if all answers
+    have been submitted, and if so, asks the game for the full score.
+    @param data - Dict with a room field, with a string of room name, and an answer field, a dict with a key of the username and value of their answer order.
+    @return - Emits a waiting message if this is not the final answer, or emits the a dict with a key for each username containing each person's scores.
+    """
+
+    room = data['room']
+    answers = data['answers']
+    id = data['id']
+    game = data[room]['game']
+    new_answer = {id: answers}
+    game.add_new_answer(new_answer)
+
+    #Check if this entry caused the answers to all be submitted.
+    all_answers = game.get_current_answers()
+    if len(all_answers) == MAX_RESPONDERS:
+        #Get the scores for players this round, total scores, and correct answer order.
+        correct_answers = game.get_real_answers()
+        round_scores = game.get_all_scores(all_answers)
+        total_scores = game.get_total_scores()
+        
+        #Create a list with the user results.
+        user_results = []
+        for i in game_rooms[room]['clients']:
+            user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
+        
+        #Get the game_status
+        game_over = not game.get_game_status()
+
+        #Make the message from these components.
+        Message = {'correct_answer':correct_answers, 'user_results':user_results, 'if_game_over':game_over}
+        emit('send_scores', Message, room=room)
+
+        if game_over:
+            #Reset the status of all players to not ready, let front end know they aren't ready,
+            #let front end know that all players are no longer ready.
+            for i in game_rooms[room]['clients']:
+                game_rooms[room]['status'][i] = 'Not-Ready'
+                emit("player_status_changed", {'id':i, 'status':"Not-Ready"}, room=room)
+            emit("if_all_ready", "No",room=room)
+
+            #Get rid of GameManager object.
+            game_rooms[room]['game'] = None
+
+@socketio.on("start_new_round")
+def on_newRound(data):
+    room = data['room']
+    id = data['id']
+    game = game_rooms[room]['game']
+
+    #Add the ready status for this player to the GameManager list.
+    game.add_new_ready_status({id:True})
+
+    ready_statuses = game.get_new_round_ready_status()
+    if len(ready_statuses) == 4:
+        game.update_round()
+        Message = {'prompter':game.get_prompter()}
+        emit('new_round_started', Message, room=room)
 
 
 @socketio.on('destroy_room')
