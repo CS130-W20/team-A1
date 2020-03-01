@@ -158,7 +158,7 @@ def on_gameStarted(data):
     room = data['room']
     id = data['id']
     #Add a new GameManager to the current room.
-    game_rooms[room]['game'] = GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
+    game_rooms[room]['game'] = GameManager.GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
     prompter_id = game_rooms[room]['host']
     Message =  {'prompter': prompter_id}
     emit("enter_game", Message, room=room)
