@@ -99,7 +99,7 @@ def on_join(data):
         if id not in game_rooms[room]["clients"]:
             num_players = len(game_rooms[room]['clients'])
             if num_players >= MAX_PLAYERS:
-                emit("player_error_join", "Too many players", room=room)
+                emit("player_error_join", "Full")
             else:
                 join_room(room)
                 player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
@@ -117,7 +117,7 @@ def on_join(data):
                 #Note: this message is meant for other users already  in the room
                 emit("new_player_join", {"id":id, "name":player_name, "status":game_rooms[room]['status'][id]}, room=room)
     else:
-        emit("player_error_join", "Room does not exist")
+        emit("player_error_join", "No-Room")
 
 
 @socketio.on("player_ready")
@@ -126,9 +126,6 @@ def on_playerReady(data):
     room = data['room']
     game_rooms[room]['status'][id] = 'Ready'
     emit("player_status_changed", {'id':id, 'status':"Ready"}, room=room)
-    #This function needs to tell everyone in the same room with the player, 
-    # who just sent message saying he's ready, about this player's status change
-    #for everyplayer in the same room :
     if all(value == 'Ready' for value in game_rooms[room]['status'].values()):
         emit("if_all_ready", "Yes", room=room)
     

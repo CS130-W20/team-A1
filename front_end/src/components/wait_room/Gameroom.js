@@ -13,6 +13,7 @@ export class Gameroom1 extends Component {
     this.state = {
       myId: this.props.socket.id,
       ifready: false,
+      if_all_ready: false,
       Message: this.props.location.state.m,
       Ifowner: this.props.location.state.m.ifowner,
 
@@ -89,8 +90,10 @@ export class Gameroom1 extends Component {
     this.props.socket.on("if_all_ready", message => {
       if (message == "Yes") {
         //Enable to start game button
+        this.setState({ if_all_ready: true });
         console.log("All the players are ready in the room");
       } else if (message == "No") {
+        this.setState({ if_all_ready: false });
         console.log("NOT All the players are ready in the room");
       } else {
         console.log(

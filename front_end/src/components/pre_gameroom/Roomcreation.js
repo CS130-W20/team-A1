@@ -31,16 +31,16 @@ export class Roomcreation1 extends Component {
       console.log(message);
     });
     this.props.socket.on("player_error_join", message => {
-      console.log(message);
       this.setState({ ifWrongRoomName: true });
     });
     this.props.socket.on("player_suc_join", message => {
       Message = message;
       Message["ifowner"] = false;
       Message["room"] = message["users"][0].room;
-      alert(
-        "player joined successfully! the message is: " + JSON.stringify(Message)
-      );
+      // alert(
+      //   "player joined successfully! the message is: " + JSON.stringify(Message)
+      // );
+
       Message["users"] = Message["users"].filter(client => {
         return client.id !== this.props.socket.id;
       });
