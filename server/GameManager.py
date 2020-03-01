@@ -35,6 +35,8 @@ class GameManager:
         self.real_answers = None
         self.query = None
         self.scores = {}
+        self.current_answers = {}
+        self.ready_for_new_round = {}
 
     def get_prompter(self):
         """ Returns current prompter to lobby.
@@ -43,6 +45,10 @@ class GameManager:
             String of current prompter name.
         """
         return self.prompter
+
+    def get_new_round_ready_status(self):
+        """ Returns current ready status dict for players, if they sent start new round request"""
+        return self.ready_for_new_round
 
     def get_respondents(self):
         """ Returns current respondents to lobby.
@@ -58,11 +64,39 @@ class GameManager:
         Returns:
             Boolean, true if game still occuring, false if game ended.
         """
-        return self.round < MAX_ROUNDS + 1
+        return self.round < MAX_ROUNDS
 
     def get_total_scores(self):
         """Returns current running total scores for all players to lobby."""
         return self.scores
+
+    def get_real_answers(self):
+        """Returns real answers stored for current round."""
+        return self.real_answers
+
+    def get_current_answers(self):
+        """Returns current answers stored for each respondent to lobby."""
+        return self.current_answers
+
+    def add_new_answer(self, answer):
+        """" Adds a new answer that has been received by the client to the list of current_answers.
+
+        Parameters:
+            answer -- Dict with player name string as key and value as list of answers, in order.
+        """
+        self.current_answers.update(answer)
+        if len(self.current_answers) > 3:
+            print("This is bad! Should not add more than 3 answers to the current answers for a game!")
+
+    def add_new_ready_status(self, ready_status):
+        """ Adds a new answer that has been received by the client to the list of current_answers.
+
+        Parameters:
+            ready_status -- Dict with player name string as key and value as ready_status.
+        """
+        self.ready_for_new_round.update(ready_status)
+        if len(self.ready_for_new_round) > 4:
+            print("This is bad! Should not add more than 4 ready ups for a new round!")
 
     def get_suggestions(self, query):
         """ Gets a dictionary of google suggestions, order scrambled, for each player.
@@ -128,6 +162,9 @@ class GameManager:
                     self.scores[i] = round_scores[i]
             else:
                 print("This should not happen!!!!! Only people in lobby should play this game!")
+
+        #Add the score of zero for the prompter to the scores for this round and return
+        round_scores[self.get_prompter()] = 0
         return round_scores
 
     def update_round(self):
@@ -137,4 +174,7 @@ class GameManager:
         self.prompter = self.respondents[0]
         self.respondents = self.respondents[1:3]
         self.respondents.append(new_respondent)
+        self.current_answers = {}
+        self.ready_for_new_round = {}
+        self.query = ""
 
