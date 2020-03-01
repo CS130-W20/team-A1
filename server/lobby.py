@@ -199,7 +199,7 @@ def on_submit(data):
     room = data['room']
     answers = data['answers']
     id = data['id']
-
+    print("Backend received answers from : ",id,"\n","answes:",answers)
     #Your original one:
     # game = data[room]['game']
     #Here you might have wanted the below one instead of the above one?

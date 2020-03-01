@@ -48,7 +48,7 @@ export class Player1 extends Component {
       answers: currentAnswer,
       id: this.state.myId
     };
-    alert("Sending answers to the server: " + JSON.stringify(data));
+    //alert("Sending answers to the server: " + JSON.stringify(data));
     this.props.socket.emit("submit_answer", data);
   };
   receive_results_from_server = () => {
