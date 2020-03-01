@@ -48,6 +48,7 @@ export class Player1 extends Component {
       answers: currentAnswer,
       id: this.state.myId
     };
+    alert("Sending answers to the server: " + JSON.stringify(data));
     this.props.socket.emit("submit_answer", data);
   };
   receive_results_from_server = () => {
@@ -59,13 +60,30 @@ export class Player1 extends Component {
       Message["role"] = this.state.role;
       this.redirect_to_result_page(Message);
     });
-
-    // {
-    //   result: 1,
-    //   round_num: this.state.roundNo,
-    //   role: this.state.role
-    // }
   };
+
+  receive_questions_from_server = () => {
+    // . {‘user1’:[List of suggestions in order], ‘user2’:[List of suggestions in order], ‘user3’:[List of suggestions in order], ‘prompter’ [List of real suggestions in order]}
+    this.props.socket.on("display_suggestions", message => {
+      alert("The questions received from the server is:", message);
+      // var my_questions =
+      // var my_questions = message[this.state.myId + ""];
+      // this.setState({ sentences: my_questions });
+    });
+  };
+
+  // user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
+
+  // #Get the game_status
+  // game_over = not game.get_game_status()
+
+  // #Make the message from these components.
+  // Message = {'correct_answer':correct_answers, 'user_results':user_results, 'if_game_over':game_over}
+  // {
+  //   result: 1,
+  //   round_num: this.state.roundNo,
+  //   role: this.state.role
+  // }
 
   redirect_to_result_page = Message => {
     return (
@@ -77,11 +95,17 @@ export class Player1 extends Component {
       />
     );
   };
+  // Completionist = () => {
+  //   this.send_results_to_server();
+  // };
   // Renderer callback with condition
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
-      return <this.Completionist />;
+      // return <this.Completionist />;
+      this.send_results_to_server();
+      this.setState({ if_round_over: true });
+      return <h1>Time Is Up, Your Response Is Being Processed</h1>;
     } else {
       // Render a countdown
       return (
@@ -100,16 +124,20 @@ export class Player1 extends Component {
   };
 
   render() {
-    return (
-      <div>
-        <h1>You are a player, please sort the list!</h1>
-        <Countdown date={Date.now() + 10000} renderer={this.renderer} />
-        <SortableList
-          items={this.state.sentences}
-          answerupdate={this.getAnswers}
-        />
-      </div>
-    );
+    if (this.state.if_round_over) {
+      return <Countdown date={Date.now() + 5000} renderer={this.renderer} />;
+    } else {
+      return (
+        <div>
+          <h1>You are a player, please sort the list!</h1>
+          <Countdown date={Date.now() + 5000} renderer={this.renderer} />
+          <SortableList
+            items={this.state.sentences}
+            answerupdate={this.getAnswers}
+          />
+        </div>
+      );
+    }
   }
 }
 

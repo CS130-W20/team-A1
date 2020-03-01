@@ -167,14 +167,14 @@ def on_gameStarted(data):
 
 @socketio.on("submit_prompt")
 def on_submitPrompt(data):
-     """ 
+    """ 
     This is the event the server listens to for getting the prompt from the prompter. It sends
     the prompt to the game_manager, who gets the results and returns 3 shuffled versions to
     display to the non-host clients.
     @param data - Dict with a query field, containing string for query (i.e. 'how to'), and room field, containing string with name of room.
     @return - emits the player key answer value dict of scrambled orders back to the client.
     """
-    room = data['room']
+    room =data['room']
     prompt = data['prompt']
     game = game_rooms[room]['game']
     try:
@@ -195,16 +195,36 @@ def on_submit(data):
     @param data - Dict with a room field, with a string of room name, and an answer field, a dict with a key of the username and value of their answer order.
     @return - Emits a waiting message if this is not the final answer, or emits the a dict with a key for each username containing each person's scores.
     """
-
+    
     room = data['room']
     answers = data['answers']
     id = data['id']
-    game = data[room]['game']
+
+    #Your original one:
+    # game = data[room]['game']
+    #Here you might have wanted the below one instead of the above one?
+    #Mine modified one:
+    game = game_rooms[room]['game']
+
     new_answer = {id: answers}
     game.add_new_answer(new_answer)
 
     #Check if this entry caused the answers to all be submitted.
     all_answers = game.get_current_answers()
+    #####################**************************************************************************************************#####################
+    #####################***************************************DUMMY CODE ONLY FOR TESTING********************************#####################
+    #####################******************************************SHOULD BE REMOVED***************************************#####################
+    #####################**************************************************************************************************#####################
+    # user_results=[]
+    # correct_answers= ["*******My number is everywhere******","My numb head is not working","My nap was too long to be a nap","My night was good","My name is Ghandi", "My nephew won the jackpot","My new phone is not working", "My nee hurts"]
+    # Message = {'correct_answer':correct_answers, 'user_results':user_results, 'if_game_over':False}
+    # emit('send_scores', Message, room=room)
+    #####################**************************************************************************************************#####################
+    #####################**************************************************************************************************#####################
+    #####################**************************************************************************************************#####################
+
+
+
     if len(all_answers) == MAX_RESPONDERS:
         #Get the scores for players this round, total scores, and correct answer order.
         correct_answers = game.get_real_answers()
@@ -221,6 +241,7 @@ def on_submit(data):
 
         #Make the message from these components.
         Message = {'correct_answer':correct_answers, 'user_results':user_results, 'if_game_over':game_over}
+        
         emit('send_scores', Message, room=room)
 
         if game_over:

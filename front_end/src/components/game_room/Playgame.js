@@ -30,6 +30,8 @@ export class Playgame1 extends Component {
             clients={this.state.clients}
             round_num={this.state.round_num}
             if_round_over={this.state.if_round_over}
+            room={this.state.room_id}
+            myId={this.state.playerid}
           />
         </div>
       );
@@ -43,6 +45,8 @@ export class Playgame1 extends Component {
             clients={this.state.clients}
             round_num={this.state.round_num}
             if_round_over={this.state.if_round_over}
+            room={this.state.room_id}
+            myId={this.state.playerid}
           />
         </div>
       );

@@ -227,7 +227,7 @@ export class Gameroom1 extends Component {
             state: {
               message: {
                 round_num: this.state.round_num,
-                room_id: 0,
+                room_id: this.state.Message.room,
                 playerid: this.state.myId,
                 role: this.state.Ifprompter ? "prompter" : "non-prompter"
               }

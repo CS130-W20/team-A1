@@ -11,26 +11,24 @@ export class Prompter1 extends Component {
     if_round_over: this.props.if_round_over
   };
 
-  Completionist = () => {
-    this.send_results_to_server();
+  // Completionist = () => {
+  //   this.send_results_to_server();
+  // };
+  componentDidMount() {
+    this.receive_results_from_server();
+  }
+  receive_results_from_server = () => {
+    this.props.socket.on("send_answers", message => {
+      console.log("Received results fom back end : " + JSON.stringify(message));
+      var Message = {};
+      Message = message;
+      Message["round_num"] = this.state.roundNo;
+      Message["role"] = this.state.role;
+      this.redirect_to_result_page(Message);
+    });
   };
 
-
-
-
-
-    receive_results_from_server = () => {
-      this.props.socket.on("send_answers", message => {
-        console.log("Received results fom back end : " + JSON.stringify(message));
-        var Message = {};
-        Message = message;
-        Message["round_num"] = this.state.roundNo;
-        Message["role"] = this.state.role;
-        this.redirect_to_result_page(Message);
-      });
-  
-
-  redirect_to_result_page = (Message) => {
+  redirect_to_result_page = Message => {
     return (
       <Redirect
         to={{
@@ -40,11 +38,30 @@ export class Prompter1 extends Component {
       />
     );
   };
+  // Completionist = () => {
+  //   return (
+  //     <Redirect
+  //       to={{
+  //         pathname: "/Roundend",
+  //         state: {
+  //           m: {
+  //             result: 1,
+  //             round_num: this.state.roundNo,
+  //             role: this.state.role
+  //           }
+  //         }
+  //       }}
+  //     />
+  //   );
+  // };
+
   // Renderer callback with condition
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
-      return <this.Completionist />;
+      // return <this.Completionist />;
+      // this.send_results_to_server();
+      return <h1>Time Is Up, Peers' Responses Are Being Processed</h1>;
     } else {
       // Render a countdown
       return (
@@ -65,7 +82,7 @@ export class Prompter1 extends Component {
     return (
       <div className="searchbox">
         <h1>You are the prompter, please create a prompt!</h1>
-        {/* <Countdown date={Date.now() + 10000} renderer={this.renderer} /> */}
+        <Countdown date={Date.now() + 1000000} renderer={this.renderer} />
         <Searchbox></Searchbox>
       </div>
     );
