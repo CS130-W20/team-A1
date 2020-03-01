@@ -11,11 +11,14 @@ export class Gameroom1 extends Component {
     this.eventlistener = this.eventlistener.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.state = {
-      myId: this.props.socket.id,
       ifready: false,
       if_all_ready: false,
-      Message: this.props.location.state.m,
+      Ifprompter: false,
       Ifowner: this.props.location.state.m.ifowner,
+      redirect: null,
+      round_num: 1,
+      myId: this.props.socket.id,
+      Message: this.props.location.state.m,
 
       player1: {
         ifexists: this.player_size(0) ? true : false,
@@ -68,20 +71,16 @@ export class Gameroom1 extends Component {
       var player_id = message.id;
       if (player_id != this.state.myId) {
         if (player_id == this.state.player1.id) {
-          console.log("The status changed gamer is player" + 1);
           this.change_client_status(1, message.status);
         } else if (player_id == this.state.player2.id) {
-          console.log("The status changed gamer is player" + 2);
           this.change_client_status(2, message.status);
         } else if (player_id == this.state.player3.id) {
-          console.log("The status changed gamer is player" + 3);
           this.change_client_status(3, message.status);
         }
       }
     });
 
     this.props.socket.on("new_player_join", player => {
-      console.log("New Player Joined with id: " + player.id);
       if (player.id != this.state.myId) {
         this.newUserWelcome(player);
       }
@@ -89,7 +88,6 @@ export class Gameroom1 extends Component {
 
     this.props.socket.on("if_all_ready", message => {
       if (message == "Yes") {
-        //Enable to start game button
         this.setState({ if_all_ready: true });
         console.log("All the players are ready in the room");
       } else if (message == "No") {
@@ -104,12 +102,20 @@ export class Gameroom1 extends Component {
     //Receives who the prompter is to
     this.props.socket.on("enter_game", message => {
       var prompter_id = message.prompter;
-      console.log("The prompter in this round has ID: " + prompter_id);
-      if (this.state.ifowner) {
-        this.ownerStartHandle();
-      } else {
-        this.playerStartHandle();
+      console.log(
+        "Game is starting ~!!!!~ The prompter in this round has ID: " +
+          prompter_id
+      );
+      //Missing: [IMPORTANT] dont forget to unset the ifprompter after every round !!!
+      if (prompter_id == this.state.myId) {
+        this.setState({ Ifprompter: true });
       }
+      this.StartHandle();
+      // if (this.state.ifowner) {
+      //   this.ownerStartHandle();
+      // } else {
+      //   this.playerStartHandle();
+      // }
     });
     this.props.socket.on("player_left", message => {
       console.log("A player left, his ID is " + message.id);
@@ -124,12 +130,10 @@ export class Gameroom1 extends Component {
       }
     });
   };
-  ownerStartHandle = () => {
-    window.location.hash = "#/Playgame/owner";
+  StartHandle = () => {
+    this.setState({ redirect: "/Playgame" });
   };
-  playerStartHandle = () => {
-    window.location.hash = "#/Playgame/player";
-  };
+
   RemoveUser = useNum => {
     if (useNum == 1) {
       this.setState({
@@ -215,6 +219,23 @@ export class Gameroom1 extends Component {
   };
 
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: this.state.redirect,
+            state: {
+              message: {
+                round_num: this.state.round_num,
+                room_id: 0,
+                playerid: this.state.myId,
+                role: this.state.Ifprompter ? "prompter" : "non-prompter"
+              }
+            }
+          }}
+        />
+      );
+    }
     return (
       <Gameroom_view
         {...this.state}

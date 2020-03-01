@@ -21,7 +21,7 @@ function App() {
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Landing" component={Landing} />
           <Route exact path="/Roundend" component={Roundend} />
-          <Route path="/Playgame/:role" component={Playgame} />
+          <Route path="/Playgame" component={Playgame} />
         </body>
       </HashRouter>
     </SocketContext.Provider>

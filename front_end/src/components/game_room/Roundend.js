@@ -3,8 +3,9 @@ import Countdown from "react-countdown-now";
 import { Redirect } from "react-router-dom";
 
 export class Roundend extends Component {
-  M = this.props.location.state.m;
-  Path = "/Playgame/" + this.M.role;
+  M = this.props.location.state.Message;
+  // Path = "/Playgame/" + this.M.role;
+  path = "/playgame";
   Completionist = () => {
     return (
       <Redirect
@@ -33,7 +34,7 @@ export class Roundend extends Component {
         <h1>Result is : {this.M.result}</h1>
         <h1>Your score is : 100</h1>
         <h1>A new round will start once the timer is off</h1>
-        <Countdown date={Date.now() + 5000} renderer={this.renderer} />
+        {/* <Countdown date={Date.now() + 5000} renderer={this.renderer} /> */}
       </div>
     );
   }
