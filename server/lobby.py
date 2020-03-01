@@ -110,7 +110,7 @@ def on_join(data):
                 #We have to build a list of users in the room to return to the new joiner
                 users=[]
                 for i in game_rooms[room]["clients"]: 
-                     users.append({'id':i, 'name':game_rooms[room]['names'][i], 'room':room, 'status':game_rooms[room]['names'][i]})
+                     users.append({'id':i, 'name':game_rooms[room]['names'][i], 'room':room, 'status':game_rooms[room]['status'][i]})
                 Message={'users':users, 'owner_id':game_rooms[room]['host']}
                 #Note: this is for the user who is joining the room 
                 emit("player_suc_join", Message, room=room)
