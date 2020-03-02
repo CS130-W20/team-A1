@@ -161,7 +161,8 @@ def on_gameStarted(data):
     room = data['room']
     id = data['id']
     #Add a new GameManager to the current room.
-    game_rooms[room]['game'] = GameManager.GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
+    if game_rooms[room]['game'] is None:
+        game_rooms[room]['game'] = GameManager.GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
     prompter_id = game_rooms[room]['host']
     Message = {"prompter":prompter_id}
     emit("enter_game", Message, room=room)
@@ -179,15 +180,10 @@ def on_submitPrompt(data):
     """
     room = data['room']
     prompt = data['prompt']
+    print(prompt)
     game = game_rooms[room]['game']
-    try:
-        suggestions = game.get_suggestions(prompt)
-    except (HTTPError, URLError):
-        Message = {'prompter': game_rooms[room]['game'].get_prompter()}
-        emit("bad_prompt", Message, room=room)
-    else:
-        Message = suggestions
-        emit('display_suggestions', Message, room=room)
+    suggestions = game.get_suggestions(prompt)
+    emit('display_suggestions', suggestions, room=room)
 
 @socketio.on('submit_answer')
 def on_submitAnswer(data):
@@ -204,15 +200,20 @@ def on_submitAnswer(data):
     id = data['id']
     game = game_rooms[room]['game']
     new_answer = {id: answers}
+    print(new_answer)
     game.add_new_answer(new_answer)
 
     #Check if this entry caused the answers to all be submitted.
     all_answers = game.get_current_answers()
+    print(all_answers)
     if len(all_answers) == MAX_RESPONDERS:
         #Get the scores for players this round, total scores, and correct answer order.
         correct_answers = game.get_real_answers()
         round_scores = game.get_all_scores(all_answers)
         total_scores = game.get_total_scores()
+
+        print(round_scores)
+        print(total_scores)
         
         #Create a list with the user results.
         user_results = []
@@ -313,8 +314,8 @@ def get_query():
         return "Error must add query param to request"
     # Submit request for query to AWS or Local API
     payload={'query':query}
-    # answers = requests.get('http://3.85.238.64/query/', params=payload)
-    answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
+    answers = requests.get('http://3.85.238.64/query/', params=payload)
+    #answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
     print('answers received: ', answers.json())
     return jsonify(answers.json())
 
