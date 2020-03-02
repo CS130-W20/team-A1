@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { ButtonToolbar, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 export class Leaderboard_ingame extends Component {
   state = {
@@ -27,19 +27,19 @@ export class Leaderboard_ingame extends Component {
         name: "Score",
         selector: "score"
         // sortable: true
-      },
-      {
-        name: "Challenge",
-        cell: () => (
-          <Button raised primary onClick={this.handleAction}>
-            Invite
-          </Button>
-        ),
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-        right: true
       }
+      //   {
+      //     name: "Challenge",
+      //     cell: () => (
+      //       <Button raised primary onClick={this.handleAction}>
+      //         Invite
+      //       </Button>
+      //     ),
+      //     ignoreRowClick: true,
+      //     allowOverflow: true,
+      //     button: true,
+      //     right: true
+      //   }
     ]
   };
   handleAction = () => {
@@ -48,7 +48,7 @@ export class Leaderboard_ingame extends Component {
   render() {
     return (
       <DataTable
-        title="Results"
+        title="Scores"
         columns={this.state.columns}
         data={this.state.data}
         defaultSortField="score"

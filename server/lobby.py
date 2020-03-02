@@ -180,9 +180,10 @@ def on_submitPrompt(data):
     """
     room = data['room']
     prompt = data['prompt']
-    print(prompt)
+    print('received prompt from the prompter:',prompt)
     game = game_rooms[room]['game']
     suggestions = game.get_suggestions(prompt)
+    # print('sending suggestions to the room:',suggestions)
     emit('display_suggestions', suggestions, room=room)
 
 @socketio.on('submit_answer')
@@ -200,7 +201,7 @@ def on_submitAnswer(data):
     id = data['id']
     game = game_rooms[room]['game']
     new_answer = {id: answers}
-    print(new_answer)
+    print("We received this new answer from a player: ",new_answer,"****\n")
     game.add_new_answer(new_answer)
 
     #Check if this entry caused the answers to all be submitted.
@@ -316,6 +317,7 @@ def get_query():
     payload={'query':query}
     answers = requests.get('http://3.85.238.64/query/', params=payload)
     #answers = requests.get('http://127.0.0.1:8000/query/', params=payload)
+  
     print('answers received: ', answers.json())
     return jsonify(answers.json())
 

@@ -3,6 +3,7 @@ import re
 from collections import defaultdict
 import random
 from urllib.error import HTTPError, URLError
+from urllib.parse import quote
 
 MAX_RESPONDERS = 3
 MAX_ROUNDS = 4
@@ -112,10 +113,11 @@ class GameManager:
 
         Returns:
             dup_answers -- Dict of string client keys, each accessing a string list with the order scrambled google suggestions for that player.
-        """
+        """ 
         
         self.query = query
-        query_address = 'http://3.85.238.64/query/?query=' + query
+        sanitized_query = quote(query)
+        query_address = 'http://3.85.238.64/query/?query=' + sanitized_query
 
         answers = ""
         #This simply uses the previous get_query code, but calls it from the game component instead.

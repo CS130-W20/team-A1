@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Player from "./Player";
 import Prompter from "./Prompter";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 import SocketContext from "../pre_gameroom/Context";
 
 export class Playgame1 extends Component {
@@ -15,7 +15,8 @@ export class Playgame1 extends Component {
     round_num: this.props.location.state.message.round_num,
     room_id: this.props.location.state.message.room_id,
     playerid: this.props.location.state.message.playerid,
-    role: this.props.location.state.message.role
+    role: this.props.location.state.message.role,
+    Redirect_Message: this.props.location.state.Redirect_Message
   };
 
   render() {
@@ -32,6 +33,7 @@ export class Playgame1 extends Component {
             if_round_over={this.state.if_round_over}
             room={this.state.room_id}
             myId={this.state.playerid}
+            Redirect_Message={this.state.Redirect_Message}
           />
         </div>
       );
@@ -47,6 +49,7 @@ export class Playgame1 extends Component {
             if_round_over={this.state.if_round_over}
             room={this.state.room_id}
             myId={this.state.playerid}
+            Redirect_Message={this.state.Redirect_Message}
           />
         </div>
       );

@@ -16,20 +16,14 @@ var currentAnswer = [
 ];
 export class Player1 extends Component {
   state = {
-    sentences: [
-      "My numb head is not working",
-      "My nap was too long to be a nap",
-      "My night was good",
-      "My name is Ghandi",
-      "My nephew won the jackpot",
-      "My nee hurts",
-      "My number is everywhere",
-      "My new phone is not working"
-    ],
-
+    sentences: [],
     roundNo: this.props.round_num,
     if_round_over: this.props.if_round_over,
-    myId: this.props.myId
+    myId: this.props.myId,
+    if_received_questions: false,
+    redirect: null,
+    Message: {},
+    Redirect_Message: this.props.Redirect_Message
   };
   componentDidMount() {
     this.receive_results_from_server();
@@ -37,11 +31,7 @@ export class Player1 extends Component {
   }
   getAnswers = answer => {
     currentAnswer = answer;
-    // console.log("New current answer is:\n" + currentAnswer);
   };
-  // Completionist = () => {
-  //   this.send_results_to_server();
-  // };
 
   send_results_to_server = () => {
     var data = {
@@ -53,91 +43,76 @@ export class Player1 extends Component {
     this.props.socket.emit("submit_answer", data);
   };
   receive_results_from_server = () => {
-    this.props.socket.on("send_answers", message => {
+    this.props.socket.on("send_scores", message => {
       console.log(
-        "Received results from back end : " + JSON.stringify(message)
+        "Received results from back end [player]: " + JSON.stringify(message)
       );
       var Message = {};
       Message = message;
       Message["round_num"] = this.state.roundNo;
       Message["role"] = this.state.role;
-      this.redirect_to_result_page(Message);
+
+      this.setState({ Message: Message, redirect: "/Roundend" });
     });
   };
 
   receive_questions_from_server = () => {
-    // . {‘user1’:[List of suggestions in order], ‘user2’:[List of suggestions in order], ‘user3’:[List of suggestions in order], ‘prompter’ [List of real suggestions in order]}
     this.props.socket.on("display_suggestions", message => {
-      alert("The questions received from the server is:", message);
-      // var my_questions =
-      // var my_questions = message[this.state.myId + ""];
-      // this.setState({ sentences: my_questions });
+      var my_questions = message[this.state.myId + ""];
+      this.setState({ sentences: my_questions, if_received_questions: true });
     });
   };
 
-  // user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
-
-  // #Get the game_status
-  // game_over = not game.get_game_status()
-
-  // #Make the message from these components.
-  // Message = {'correct_answer':correct_answers, 'user_results':user_results, 'if_game_over':game_over}
-  // {
-  //   result: 1,
-  //   round_num: this.state.roundNo,
-  //   role: this.state.role
-  // }
-
-  redirect_to_result_page = Message => {
-    return (
-      <Redirect
-        to={{
-          pathname: "/Roundend",
-          state: Message
-        }}
-      />
-    );
-  };
-  // Completionist = () => {
-  //   this.send_results_to_server();
-  // };
   // Renderer callback with condition
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
-      // Render a completed state
-      // return <this.Completionist />;
-      //this.send_results_to_server();
-      this.setState({ if_round_over: true });
+      this.send_results_to_server();
+      //this.setState({ if_round_over: true });
       return <h1>Time Is Up, Your Response Is Being Processed</h1>;
     } else {
       // Render a countdown
       return (
-        <p
-          style={{
-            color: "white",
-            backgroundColor: "grey",
-            width: "100px",
-            textAlign: "center"
-          }}
-        >
-          {minutes}:{seconds}
-        </p>
+        <div id="sort_list">
+          <p
+            style={{
+              color: "white",
+              backgroundColor: "grey",
+              width: "100px",
+              textAlign: "center"
+            }}
+          >
+            {minutes}:{seconds}
+          </p>
+          {/* <Countdown date={Date.now() + 5000} renderer={this.renderer} /> */}
+          <h1>You are a player, please sort the list!</h1>
+          <SortableList
+            items={this.state.sentences}
+            answerupdate={this.getAnswers}
+          />
+        </div>
       );
     }
   };
 
   render() {
-    if (this.state.if_round_over) {
-      return <Countdown date={Date.now() + 5000} renderer={this.renderer} />;
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/Roundend",
+            state: {
+              Message: this.state.Message,
+              Redirect_Message: this.state.Redirect_Message
+            }
+          }}
+        />
+      );
+    } else if (this.state.if_received_questions) {
+      return <Countdown date={Date.now() + 10000} renderer={this.renderer} />;
     } else {
       return (
         <div>
-          <h1>You are a player, please sort the list!</h1>
-          <Countdown date={Date.now() + 5000} renderer={this.renderer} />
-          <SortableList
-            items={this.state.sentences}
-            answerupdate={this.getAnswers}
-          />
+          <h1>Waiting For the Prompter!</h1>
         </div>
       );
     }

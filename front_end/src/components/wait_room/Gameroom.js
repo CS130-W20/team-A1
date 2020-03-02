@@ -230,7 +230,8 @@ export class Gameroom1 extends Component {
                 room_id: this.state.Message.room,
                 playerid: this.state.myId,
                 role: this.state.Ifprompter ? "prompter" : "non-prompter"
-              }
+              },
+              Redirect_Message: this.state.Message
             }
           }}
         />

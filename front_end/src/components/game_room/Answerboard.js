@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-import { ButtonToolbar, Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 
 export class Answerboard extends Component {
   handleAction = () => {
     console.log("Some action !");
   };
+  componentDidMount() {
+    let ans = this.answer_formatter();
+    this.setState({ answers: ans });
+  }
+  answer_formatter() {
+    var answers = this.props.correct_answer.map((val, index) => {
+      return { rank: index, sentence: val, myrank: index };
+    });
+    return answers;
+  }
   state = {
-    answers: [
-      { rank: 1, sentence: "Jack1", myrank: 2 },
-      { rank: 3, sentence: "Jack12", myrank: 1 },
-      { rank: 2, sentence: "Jack13", myrank: 3 },
-      { rank: 5, sentence: "Jack14", myrank: 5 },
-      { rank: 4, sentence: "Jack13", myrank: 4 }
-    ],
+    answers: [],
     columns: [
       {
         name: "Sentences",
@@ -29,7 +33,7 @@ export class Answerboard extends Component {
       },
       {
         name: "My Ranking",
-        selector: "score"
+        selector: "myrank"
         // sortable: true
       }
       //   {
@@ -49,11 +53,10 @@ export class Answerboard extends Component {
   render() {
     return (
       <DataTable
-        title="Results"
+        title="Answers"
         columns={this.state.columns}
-        data={this.state.data}
-        defaultSortField="rank"
-        defaultSortAsc="true"
+        data={this.state.answers}
+        theme="dark"
       />
     );
   }

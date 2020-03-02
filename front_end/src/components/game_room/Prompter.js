@@ -8,60 +8,32 @@ export class Prompter1 extends Component {
   state = {
     roundNo: this.props.round_num,
     redirect: null,
-    if_round_over: this.props.if_round_over
+    if_round_over: this.props.if_round_over,
+    Message: {},
+    Redirect_Message: this.props.Redirect_Message
   };
 
-  // Completionist = () => {
-  //   this.send_results_to_server();
-  // };
   componentDidMount() {
     this.receive_results_from_server();
   }
   receive_results_from_server = () => {
-    this.props.socket.on("send_answers", message => {
-      console.log("Received results fom back end : " + JSON.stringify(message));
+    this.props.socket.on("send_scores", message => {
+      console.log(
+        "Received results fom back end [prompter]: " + JSON.stringify(message)
+      );
       var Message = {};
       Message = message;
       Message["round_num"] = this.state.roundNo;
-      Message["role"] = this.state.role;
-      this.redirect_to_result_page(Message);
+
+      this.setState({ Message: Message, redirect: "/Roundend" });
     });
   };
-
-  redirect_to_result_page = Message => {
-    return (
-      <Redirect
-        to={{
-          pathname: "/Roundend",
-          state: Message
-        }}
-      />
-    );
-  };
-  // Completionist = () => {
-  //   return (
-  //     <Redirect
-  //       to={{
-  //         pathname: "/Roundend",
-  //         state: {
-  //           m: {
-  //             result: 1,
-  //             round_num: this.state.roundNo,
-  //             role: this.state.role
-  //           }
-  //         }
-  //       }}
-  //     />
-  //   );
-  // };
 
   // Renderer callback with condition
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
-      // return <this.Completionist />;
-      // this.send_results_to_server();
-      return <h1>Time Is Up, Peers' Responses Are Being Processed</h1>;
+      return <h1>Time Is Up! Dude! Are you f*cking serious?</h1>;
     } else {
       // Render a countdown
       return (
@@ -79,13 +51,27 @@ export class Prompter1 extends Component {
     }
   };
   render() {
-    return (
-      <div className="searchbox">
-        <h1>You are the prompter, please create a prompt!</h1>
-        <Countdown date={Date.now() + 1000000} renderer={this.renderer} />
-        <Searchbox></Searchbox>
-      </div>
-    );
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/Roundend",
+            state: {
+              Message: this.state.Message,
+              Redirect_Message: this.state.Redirect_Message
+            }
+          }}
+        />
+      );
+    } else {
+      return (
+        <div className="searchbox">
+          <h1>You are the prompter, please create a prompt!</h1>
+          <Countdown date={Date.now() + 100000} renderer={this.renderer} />
+          <Searchbox room={this.props.room} myId={this.props.myId}></Searchbox>
+        </div>
+      );
+    }
   }
 }
 
