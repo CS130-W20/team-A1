@@ -58,7 +58,6 @@ class Searchbox extends React.Component {
 
     return (
       <div>
-        <p>This data here searchbox 2.0</p>
         <form className="form" id="searchForm">
           <input
             type="text"

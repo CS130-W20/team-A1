@@ -33,14 +33,15 @@ export class Player1 extends Component {
   };
   componentDidMount() {
     this.receive_results_from_server();
+    this.receive_questions_from_server();
   }
   getAnswers = answer => {
     currentAnswer = answer;
     // console.log("New current answer is:\n" + currentAnswer);
   };
-  Completionist = () => {
-    this.send_results_to_server();
-  };
+  // Completionist = () => {
+  //   this.send_results_to_server();
+  // };
 
   send_results_to_server = () => {
     var data = {
@@ -105,7 +106,7 @@ export class Player1 extends Component {
     if (completed) {
       // Render a completed state
       // return <this.Completionist />;
-      this.send_results_to_server();
+      //this.send_results_to_server();
       this.setState({ if_round_over: true });
       return <h1>Time Is Up, Your Response Is Being Processed</h1>;
     } else {

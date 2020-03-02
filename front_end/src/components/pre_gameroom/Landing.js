@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Roomcreation from "./Roomcreation";
-import Leaderboard from "./Leaderboard";
+import Leaderboard_Global from "./Leaderboard_Global";
 const signIn = true;
 const leaderboard = [
   {
@@ -59,9 +59,9 @@ export class Landing extends Component {
       <div style={{ padding: "50px", margin: "50px" }}>
         <hi>You are authorized , please select from below actions</hi>
         <Roomcreation className="Roombuttons" />
-        <Leaderboard
+        <Leaderboard_Global
           style={{ marginBottom: "100px", paddingBottom: "50px" }}
-        ></Leaderboard>
+        ></Leaderboard_Global>
       </div>
     );
   }

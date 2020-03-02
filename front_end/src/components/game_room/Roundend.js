@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Countdown from "react-countdown-now";
 import { Redirect } from "react-router-dom";
+import Leaderboard_ingame from "./Leaderboard_ingame";
+import Answerboard from "./Answerboard";
 
 export class Roundend extends Component {
   M = this.props.location.state.Message;

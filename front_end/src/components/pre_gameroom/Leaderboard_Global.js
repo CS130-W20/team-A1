@@ -46,7 +46,7 @@ const columns = [
   }
 ];
 
-export class Leaderboard extends Component {
+export class Leaderboard_Global extends Component {
   render() {
     return (
       <DataTable
@@ -60,4 +60,4 @@ export class Leaderboard extends Component {
     );
   }
 }
-export default Leaderboard;
+export default Leaderboard_Global;
