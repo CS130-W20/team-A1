@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Route, NavLink, HashRouter, Link } from "react-router-dom";
+
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Bootstrap from "react-bootstrap";
 import SocketContext from "./Context";
 import axios from 'axios';
+import SocketContext from "../pre_gameroom/Context";
+
 
 
 // Autho0 make form for login
@@ -16,6 +19,7 @@ export class Login1 extends Component {
       email: "",
       password: ""
     };
+<<<<<<< HEAD:front_end/src/components/pre_game/Login.js
   }
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
@@ -24,6 +28,7 @@ export class Login1 extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
+
   }
   handleSubmit = event => {
     event.preventDefault();

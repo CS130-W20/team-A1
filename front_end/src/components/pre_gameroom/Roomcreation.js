@@ -18,25 +18,32 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("lobby_created", message => {
       Message = message;
       Message["ifowner"] = true;
-
-      // Message["clients"] = Message["clients"].filter(client => {
-      //   alert("processing client" + client.id);
-      //   return client.id !== this.props.socket.id;
-      // });
+      Message["room"] = message["users"][0].room;
+      Message["users"] = Message["users"].filter(client => {
+        return client.id !== this.props.socket.id;
+      });
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
       console.log(Message);
     });
+    //Missing: room error created !
     this.props.socket.on("lobby_destroyed", message => {
       console.log(message);
     });
     this.props.socket.on("player_error_join", message => {
-      console.log(message);
       this.setState({ ifWrongRoomName: true });
     });
     this.props.socket.on("player_suc_join", message => {
       Message = message;
       Message["ifowner"] = false;
+      Message["room"] = message["users"][0].room;
+      // alert(
+      //   "player joined successfully! the message is: " + JSON.stringify(Message)
+      // );
+
+      Message["users"] = Message["users"].filter(client => {
+        return client.id !== this.props.socket.id;
+      });
       this.setState({ ifWrongRoomName: false });
       this.setState({ redirect: "/Gameroom" });
 
@@ -50,7 +57,7 @@ export class Roomcreation1 extends Component {
 
   handleCREATE_Submit(e) {
     let data = {
-      username: this.props.socket.id
+      id: this.props.socket.id
     };
     this.props.socket.emit("create_room", data);
   }
@@ -58,7 +65,7 @@ export class Roomcreation1 extends Component {
     console.log(this.state.roomname);
     let data = {
       room: this.state.roomname,
-      username: this.props.socket.id
+      id: this.props.socket.id
     };
     this.props.socket.emit("join_room", data);
   }

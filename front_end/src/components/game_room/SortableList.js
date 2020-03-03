@@ -26,7 +26,7 @@ export class SortableList extends Component {
   render() {
     const { items } = this.state;
     var listItems = items.map((item, i) => {
-      console.log("id:" + i + "object:" + item);
+      //console.log("id:" + i + "object:" + item);
       return (
         <div>
           <SortableItem
@@ -49,7 +49,7 @@ export class SortableList extends Component {
         </div>
       );
     });
-    records = items.map((item, i) => [item, i]);
+    records = items.map((item, i) => [item]);
     console.log("THE RECORDS ARE: \n" + records);
     this.updatePlayer(records);
 
