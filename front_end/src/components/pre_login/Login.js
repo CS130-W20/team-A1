@@ -19,7 +19,7 @@ export class Login1 extends Component {
       email: "",
       password: ""
     };
-<<<<<<< HEAD:front_end/src/components/pre_game/Login.js
+
   }
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
