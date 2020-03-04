@@ -26,7 +26,7 @@ lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling"
 game_rooms = {}
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://omar:jiggy123@localhost/autoc_db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:/db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 with app.app_context():
