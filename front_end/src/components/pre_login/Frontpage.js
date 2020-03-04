@@ -40,6 +40,20 @@ class Frontpage extends Component {
         >
           Jump in!
         </Button>
+
+        <Button
+          variant="primary"
+          href="#Landing"
+          size="lg"
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "100px"
+          }}
+          block
+        >
+          DEV ONLY!! jump to landing
+        </Button>
       </div>
     );
   }

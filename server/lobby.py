@@ -133,7 +133,9 @@ def on_playerReady(data):
     #This function needs to tell everyone in the same room with the player, 
     # who just sent message saying he's ready, about this player's status change
     #for everyplayer in the same room :
-    if all(value == 'Ready' for value in game_rooms[room]['status'].values()):
+    ############Modified by Salekh #################################################################################### Added the second condition to check for there are 4 ppl in the room 
+    if all(value == 'Ready' for value in game_rooms[room]['status'].values()) and len(game_rooms[room]['status'])==4:
+    ########################################################################################################################################################################
         emit("if_all_ready", "Yes", room=room)
     
 @socketio.on("player_UNDOready")
@@ -206,7 +208,6 @@ def on_submitAnswer(data):
 
     #Check if this entry caused the answers to all be submitted.
     all_answers = game.get_current_answers()
-    print(all_answers)
     if len(all_answers) == MAX_RESPONDERS:
         #Get the scores for players this round, total scores, and correct answer order.
         correct_answers = game.get_real_answers()
@@ -225,20 +226,26 @@ def on_submitAnswer(data):
         game_over = not game.get_game_status()
 
         #Make the message from these components.
-        Message = {'correct_answer':correct_answers, 'user_results':user_results, 'if_game_over':game_over}
+        Message = {'correct_answer':correct_answers, 'user_results':user_results,'round_num':1}
         emit('send_scores', Message, room=room)
+    #######################################################################################################################################
+    ###################################################MODIFIED CODE BY SALEKH############################################################
+    #######################################################################################################################################
+    #Temporarily commented out for easy testing puposes ::NOTe!!!!
+        # if game_over:
+        #     #Reset the status of all players to not ready, let front end know they aren't ready,
+        #     #let front end know that all players are no longer ready.
+        #     for i in game_rooms[room]['clients']:
+        #         game_rooms[room]['status'][i] = 'Not-Ready'
+        #         emit("player_status_changed", {'id':i, 'status':"Not-Ready"}, room=room)
+        #     emit("if_all_ready", "No",room=room)
 
-        if game_over:
-            #Reset the status of all players to not ready, let front end know they aren't ready,
-            #let front end know that all players are no longer ready.
-            for i in game_rooms[room]['clients']:
-                game_rooms[room]['status'][i] = 'Not-Ready'
-                emit("player_status_changed", {'id':i, 'status':"Not-Ready"}, room=room)
-            emit("if_all_ready", "No",room=room)
+        #     #Get rid of GameManager object.
+        #     game_rooms[room]['game'] = None
+    ######################################################################################################################################
+    #######################################################################################################################################
 
-            #Get rid of GameManager object.
-            game_rooms[room]['game'] = None
-
+answered_clients=[]
 @socketio.on("start_new_round")
 def on_newRound(data):
     """
@@ -251,15 +258,35 @@ def on_newRound(data):
     room = data['room']
     id = data['id']
     game = game_rooms[room]['game']
+    answered_clients.append(id)
+
 
     #Add the ready status for this player to the GameManager list.
     game.add_new_ready_status({id:True})
 
+    #######################################################################################################################################
+    ###################################################MODIFIED CODE BY SALEKH############################################################
+    #######################################################################################################################################
+    ###ADDED PORTION---- I think the game over message should be sent by this end point, when the clients ask if they can start a new game
+    game_over = not game.get_game_status()
+    #Note: if the game is over , the user needs this information to recreate the waitroom, of course the status info needs to changed here to make sure everyone is not ready
+    Message={}
+    users=[]
+    for i in game_rooms[room]["clients"]: 
+            users.append({'id':i, 'name':game_rooms[room]['names'][i], 'room':room, 'status':game_rooms[room]['status'][i]})
+    Message={'users':users, 'owner_id':game_rooms[room]['host']}
+    #Reset the status of all players to not ready, let front end know they aren't ready,
+    #let front end know that all players are no longer ready.
+
+   
     ready_statuses = game.get_new_round_ready_status()
-    if len(ready_statuses) == 4:
+    if len(ready_statuses)==4 and len(answered_clients)== 4:
+        answered_clients.clear()
         game.update_round()
-        Message = {'prompter':game.get_prompter()}
-        emit('new_round_started', Message, room=room)
+        Message = {'prompter':game.get_prompter(),'if_game_over':game_over,'room_creation_info':Message}
+        emit('new_round_permission', Message, room=room)
+    #######################################################################################################################################
+    #######################################################################################################################################
 
 
 @socketio.on('destroy_room')
