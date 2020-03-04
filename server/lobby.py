@@ -10,7 +10,6 @@ from collections import defaultdict
 from werkzeug.security import generate_password_hash
 import random
 from flask_sqlalchemy import SQLAlchemy
-from models import db
 # from models import User
 from urllib.error import HTTPError, URLError
 
@@ -27,9 +26,11 @@ lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling"
 game_rooms = {}
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://<tbd>"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://omar:jiggy123@localhost/autoc_db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+db = SQLAlchemy(app)
+with app.app_context():
+    db.init_app(app)
 
 socketio = SocketIO(app, cors_allowed_origins='*')
 
