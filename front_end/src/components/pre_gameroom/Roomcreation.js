@@ -30,6 +30,7 @@ export class Roomcreation1 extends Component {
     this.props.socket.on("lobby_destroyed", message => {
       console.log(message);
     });
+<<<<<<< HEAD:front_end/src/components/pre_gameroom/Roomcreation.js
     this.props.socket.on("player_error_join", message => {
       this.setState({ ifWrongRoomName: true });
     });
@@ -49,6 +50,9 @@ export class Roomcreation1 extends Component {
 
       console.log(message);
     });
+=======
+    
+>>>>>>> 3cecb5bb44243ceb2fc4b1cea5db7d16d304a20e:front_end/src/components/Roomcreation.js
   }
 
   updateInput(evt) {
