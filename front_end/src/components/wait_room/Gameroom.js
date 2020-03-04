@@ -111,11 +111,6 @@ export class Gameroom1 extends Component {
         this.setState({ Ifprompter: true });
       }
       this.StartHandle();
-      // if (this.state.ifowner) {
-      //   this.ownerStartHandle();
-      // } else {
-      //   this.playerStartHandle();
-      // }
     });
     this.props.socket.on("player_left", message => {
       console.log("A player left, his ID is " + message.id);
@@ -217,7 +212,10 @@ export class Gameroom1 extends Component {
       this.setState({ player3: newplayer });
     }
   };
-
+  //Prepares the redirect message such that we can come back to this page correctly once the game is over
+  prepareRedirectMessage(Message) {
+    return Message;
+  }
   render() {
     if (this.state.redirect) {
       return (
@@ -231,7 +229,7 @@ export class Gameroom1 extends Component {
                 playerid: this.state.myId,
                 role: this.state.Ifprompter ? "prompter" : "non-prompter"
               },
-              Redirect_Message: this.state.Message
+              Redirect_Message: this.prepareRedirectMessage(this.state.Message)
             }
           }}
         />

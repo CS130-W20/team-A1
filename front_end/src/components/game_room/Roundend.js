@@ -9,25 +9,44 @@ export class Roundend extends Component {
   path = "/Gameroom";
   state = {
     Message: this.props.location.state.Message,
-    Redirect_Message: this.props.location.state.Redirect_Message
+    Redirect_Message_Gameover: this.props.location.state.Redirect_Message,
+    Redirect_Message_Continue: {},
+    if_game_over: false
   };
-  Completionist = () => {
+  Completionist_continue = () => {
+    return (
+      <Redirect
+        to={{
+          pathname: "/Playgame",
+          state: {
+            message: this.state.Redirect_Message_Continue,
+            Redirect_Message: this.state.Redirect_Message_Gameover
+          }
+        }}
+      />
+    );
+  };
+  Completionist_gameover = () => {
     return (
       <Redirect
         to={{
           pathname: "/Gameroom",
-          state: { m: this.state.Redirect_Message }
+          state: {
+            m: this.state.Redirect_Message_Continue,
+            Redirect_Message: this.state.Redirect_Message_Gameover
+          }
         }}
       />
     );
   };
   renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
+    if (completed && !this.state.if_game_over) {
       // Render a completed state
-      return <this.Completionist />;
-    } else {
+      return <this.Completionist_continue />;
+    } else if (this.state.if_game_over) {
       // Render a countdown
-      return <p>No Time No Fun</p>;
+      //return <p>No Time No Fun</p>;
+      return <this.Completionist_gameover />;
     }
   };
   render() {
