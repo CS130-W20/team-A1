@@ -18,12 +18,15 @@ export class Player1 extends Component {
   state = {
     sentences: [],
     roundNo: this.props.round_num,
-    if_round_over: this.props.if_round_over,
+
+    // if_game_over: false,
     myId: this.props.myId,
-    if_received_questions: false,
+    if_received_questions: this.props.if_received_questions,
+    if_submitted_answer: false,
     redirect: null,
     Message: {},
-    Redirect_Message: this.props.Redirect_Message
+    Redirect_Message: this.props.Redirect_Message,
+    room: this.props.room
   };
   componentDidMount() {
     this.receive_results_from_server();
@@ -39,25 +42,33 @@ export class Player1 extends Component {
       answers: currentAnswer,
       id: this.state.myId
     };
-    //alert("Sending answers to the server: " + JSON.stringify(data));
     this.props.socket.emit("submit_answer", data);
+    this.setState({ if_submitted_answer: true });
   };
   receive_results_from_server = () => {
     this.props.socket.on("send_scores", message => {
-      console.log(
-        "Received results from back end [player]: " + JSON.stringify(message)
-      );
       var Message = {};
       Message = message;
-      Message["round_num"] = this.state.roundNo;
-      Message["role"] = this.state.role;
+      Message["room"] = this.state.room;
+      Message["myId"] = this.state.myId;
+      // this.setState({ if_game_over: Message["if_game_over"] });
 
-      this.setState({ Message: Message, redirect: "/Roundend" });
+      if (this.state.if_submitted_answer) {
+        this.setState({
+          Message: Message,
+          redirect: "/Roundend"
+        });
+      } else {
+        alert("invalid route after round!");
+      }
     });
   };
 
   receive_questions_from_server = () => {
     this.props.socket.on("display_suggestions", message => {
+      console.log(
+        "Received questions from the server:" + JSON.stringify(message)
+      );
       var my_questions = message[this.state.myId + ""];
       this.setState({ sentences: my_questions, if_received_questions: true });
     });
@@ -83,7 +94,6 @@ export class Player1 extends Component {
           >
             {minutes}:{seconds}
           </p>
-          {/* <Countdown date={Date.now() + 5000} renderer={this.renderer} /> */}
           <h1>You are a player, please sort the list!</h1>
           <SortableList
             items={this.state.sentences}
@@ -96,18 +106,20 @@ export class Player1 extends Component {
 
   render() {
     if (this.state.redirect) {
+      // console.log("Redirecting to " + this.state.redirect);
       return (
         <Redirect
           to={{
-            pathname: "/Roundend",
+            pathname: this.state.redirect,
             state: {
-              Message: this.state.Message,
-              Redirect_Message: this.state.Redirect_Message
+              Message: this.state.Message
+              // Redirect_Message: this.state.Redirect_Message
             }
           }}
         />
       );
-    } else if (this.state.if_received_questions) {
+    } else if (this.state.if_received_questions && !this.if_submitted_answer) {
+      // console.log("we received qustions ! countdown starts now!");
       return <Countdown date={Date.now() + 10000} renderer={this.renderer} />;
     } else {
       return (

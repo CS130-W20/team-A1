@@ -6,17 +6,11 @@ import SocketContext from "../pre_gameroom/Context";
 
 export class Playgame1 extends Component {
   state = {
-    clients: [
-      { id: 1, role: "non-prompter", name: "Joker1" },
-      { id: 2, role: "non-prompter", name: "Joker2" },
-      { id: 3, role: "non-prompter", name: "Joker3" }
-    ],
-    if_round_over: false,
     round_num: this.props.location.state.message.round_num,
     room_id: this.props.location.state.message.room_id,
     playerid: this.props.location.state.message.playerid,
-    role: this.props.location.state.message.role,
-    Redirect_Message: this.props.location.state.Redirect_Message
+    role: this.props.location.state.message.role
+    // Redirect_Message: this.props.location.state.Redirect_Message
   };
 
   render() {
@@ -30,10 +24,10 @@ export class Playgame1 extends Component {
           <Player
             clients={this.state.clients}
             round_num={this.state.round_num}
-            if_round_over={this.state.if_round_over}
             room={this.state.room_id}
             myId={this.state.playerid}
-            Redirect_Message={this.state.Redirect_Message}
+            if_received_questions={false}
+            // Redirect_Message={this.state.Redirect_Message}
           />
         </div>
       );
@@ -46,10 +40,9 @@ export class Playgame1 extends Component {
           <Prompter
             clients={this.state.clients}
             round_num={this.state.round_num}
-            if_round_over={this.state.if_round_over}
             room={this.state.room_id}
             myId={this.state.playerid}
-            Redirect_Message={this.state.Redirect_Message}
+            // Redirect_Message={this.state.Redirect_Message}
           />
         </div>
       );

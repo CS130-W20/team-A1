@@ -1,7 +1,7 @@
 import React from "react";
 // import axios from "axios";
 import SocketContext from "../pre_gameroom/Context";
-import { ButtonToolbar, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class Searchbox1 extends React.Component {

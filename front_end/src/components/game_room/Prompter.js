@@ -8,9 +8,12 @@ export class Prompter1 extends Component {
   state = {
     roundNo: this.props.round_num,
     redirect: null,
-    if_round_over: this.props.if_round_over,
+
+    // if_game_over: false,
     Message: {},
-    Redirect_Message: this.props.Redirect_Message
+    Redirect_Message: this.props.Redirect_Message,
+    myId: this.props.myId,
+    room: this.props.room
   };
 
   componentDidMount() {
@@ -23,9 +26,24 @@ export class Prompter1 extends Component {
       );
       var Message = {};
       Message = message;
-      Message["round_num"] = this.state.roundNo;
+      Message["room"] = this.state.room;
+      Message["myId"] = this.state.myId;
 
-      this.setState({ Message: Message, redirect: "/Roundend" });
+      // this.setState({ if_game_over: Message["if_game_over"] });
+      // if (!this.state.if_game_over) {
+      this.setState({
+        Message: Message,
+        redirect: "/Roundend"
+      });
+      // } else if (this.state.if_game_over) {
+      //   console.log("GAME OVER!");
+      //   this.setState({
+      //     Message: Message,
+      //     redirect: "/Gameroom"
+      //   });
+      // } else {
+      //   alert("invalid route after one round!");
+      // }
     });
   };
 
@@ -33,7 +51,7 @@ export class Prompter1 extends Component {
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
-      return <h1>Time Is Up! Dude! Are you f*cking serious?</h1>;
+      return <h1>Time Is Up! Dude! Are you serious?</h1>;
     } else {
       // Render a countdown
       return (
@@ -55,10 +73,10 @@ export class Prompter1 extends Component {
       return (
         <Redirect
           to={{
-            pathname: "/Roundend",
+            pathname: this.state.redirect,
             state: {
-              Message: this.state.Message,
-              Redirect_Message: this.state.Redirect_Message
+              Message: this.state.Message
+              // Redirect_Message: this.state.Redirect_Message
             }
           }}
         />

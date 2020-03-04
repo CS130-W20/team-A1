@@ -50,7 +50,7 @@ export class SortableList extends Component {
       );
     });
     records = items.map((item, i) => [item]);
-    console.log("THE RECORDS ARE: \n" + records);
+    //console.log("THE RECORDS ARE: \n" + records);
     this.updatePlayer(records);
 
     return (
