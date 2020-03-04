@@ -323,6 +323,25 @@ def get_query():
 
 
 
+# Login route
+# If login fails then send them back to the slash...
+@app.route('/login', methods=['GET','POST'])
+def do_admin_login():
+    if request.method == 'POST':
+        print('method post')
+        print('request: ', request)
+        print('request type: ', type(request))
+        print('request form: ', request.form)
+        print('request form keys: ', request.form.keys())
+        return jsonify({"hello": "hello"})
+    if request.form['password'] == "password" and request.form['username'] == "admin@ucla.edu":
+        session['logged_in'] = True
+        print('Session logged in: ', request.form)
+        # Send back to front end.
+    else:
+        flash('wrong password!')
+    return index() # returns back to index
+    # If you are logged in 
 
 if __name__ == '__main__':
     socketio.run(app,debug=True)
