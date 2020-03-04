@@ -7,7 +7,11 @@ from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_socketio import send, emit
 from collections import defaultdict
+from werkzeug.security import generate_password_hash
 import random
+from flask_sqlalchemy import SQLAlchemy
+from models import db
+# from models import User
 from urllib.error import HTTPError, URLError
 
 import requests
@@ -23,6 +27,10 @@ lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling"
 game_rooms = {}
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://<tbd>"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 @socketio.on('my event')
@@ -328,19 +336,22 @@ def get_query():
 @app.route('/login', methods=['GET','POST'])
 def do_admin_login():
     if request.method == 'POST':
+        
+   
         print('method post')
         print('request: ', request)
         print('request type: ', type(request))
         print('request form: ', request.form)
         print('request form keys: ', request.form.keys())
         return jsonify({"hello": "hello"})
-    if request.form['password'] == "password" and request.form['username'] == "admin@ucla.edu":
-        session['logged_in'] = True
-        print('Session logged in: ', request.form)
-        # Send back to front end.
+        if request.form['password'] == "password" and request.form['username'] == "admin@ucla.edu":
+            session['logged_in'] = True
+            print('Session logged in: ', request.form)
+            # Send back to front end.
+        else:
+            flash('wrong password!')
     else:
-        flash('wrong password!')
-    return index() # returns back to index
+        return index() # returns back to index
     # If you are logged in 
 
 if __name__ == '__main__':
