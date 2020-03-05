@@ -75,6 +75,7 @@ def test_GameManagerQueryGet():
 
     q = gameManager.get_suggestions("dogfish")
     # Check that the keys() of answers received correspond to the respondents
+    del q['Jonathan']
     assert(sorted(q.keys()) == sorted(gameManager.get_respondents()))
 
     # Check to see if suggestions are shuffled:
