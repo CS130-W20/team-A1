@@ -51,7 +51,6 @@ export class Player1 extends Component {
       Message = message;
       Message["room"] = this.state.room;
       Message["myId"] = this.state.myId;
-      // this.setState({ if_game_over: Message["if_game_over"] });
 
       if (this.state.if_submitted_answer) {
         this.setState({
@@ -120,7 +119,7 @@ export class Player1 extends Component {
       );
     } else if (this.state.if_received_questions && !this.if_submitted_answer) {
       // console.log("we received qustions ! countdown starts now!");
-      return <Countdown date={Date.now() + 10000} renderer={this.renderer} />;
+      return <Countdown date={Date.now() + 3000} renderer={this.renderer} />;
     } else {
       return (
         <div>

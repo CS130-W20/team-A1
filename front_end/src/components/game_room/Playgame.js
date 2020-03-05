@@ -10,7 +10,6 @@ export class Playgame1 extends Component {
     room_id: this.props.location.state.message.room_id,
     playerid: this.props.location.state.message.playerid,
     role: this.props.location.state.message.role
-    // Redirect_Message: this.props.location.state.Redirect_Message
   };
 
   render() {
@@ -18,7 +17,7 @@ export class Playgame1 extends Component {
       return (
         <div>
           <h1 style={{ margin: "5px", padding: "5px" }}>
-            Round {this.state.round_num}/5
+            Round {this.state.round_num}/4
           </h1>
 
           <Player
@@ -27,7 +26,6 @@ export class Playgame1 extends Component {
             room={this.state.room_id}
             myId={this.state.playerid}
             if_received_questions={false}
-            // Redirect_Message={this.state.Redirect_Message}
           />
         </div>
       );
@@ -35,14 +33,13 @@ export class Playgame1 extends Component {
       return (
         <div>
           <h1 style={{ margin: "5px", padding: "5px" }}>
-            Round {this.state.round_num}/5
+            Round {this.state.round_num}/4
           </h1>
           <Prompter
             clients={this.state.clients}
             round_num={this.state.round_num}
             room={this.state.room_id}
             myId={this.state.playerid}
-            // Redirect_Message={this.state.Redirect_Message}
           />
         </div>
       );

@@ -8,8 +8,6 @@ export class Prompter1 extends Component {
   state = {
     roundNo: this.props.round_num,
     redirect: null,
-
-    // if_game_over: false,
     Message: {},
     Redirect_Message: this.props.Redirect_Message,
     myId: this.props.myId,
@@ -28,22 +26,10 @@ export class Prompter1 extends Component {
       Message = message;
       Message["room"] = this.state.room;
       Message["myId"] = this.state.myId;
-
-      // this.setState({ if_game_over: Message["if_game_over"] });
-      // if (!this.state.if_game_over) {
       this.setState({
         Message: Message,
         redirect: "/Roundend"
       });
-      // } else if (this.state.if_game_over) {
-      //   console.log("GAME OVER!");
-      //   this.setState({
-      //     Message: Message,
-      //     redirect: "/Gameroom"
-      //   });
-      // } else {
-      //   alert("invalid route after one round!");
-      // }
     });
   };
 

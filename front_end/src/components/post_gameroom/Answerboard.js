@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import DataTable from "react-data-table-component";
-// import { Button } from "react-bootstrap";
 
 export class Answerboard extends Component {
   handleAction = () => {
@@ -22,32 +21,17 @@ export class Answerboard extends Component {
       {
         name: "Sentences",
         selector: "sentence",
-        //sortable: true,
         right: true
       },
       {
-        name: "Actual Ranking",
+        name: "Correct Order",
         selector: "rank",
-        // sortable: true,
         center: true
       },
       {
-        name: "My Ranking",
+        name: "My Answer",
         selector: "myrank"
-        // sortable: true
       }
-      //   {
-      //     name: "Challenge",
-      //     cell: () => (
-      //       <Button raised primary onClick={handleAction}>
-      //         Invite
-      //       </Button>
-      //     ),
-      //     ignoreRowClick: true,
-      //     allowOverflow: true,
-      //     button: true,
-      //     right: true
-      //   }
     ]
   };
   render() {
