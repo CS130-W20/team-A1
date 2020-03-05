@@ -103,8 +103,8 @@ export class Gameroom1 extends Component {
     this.props.socket.on("enter_game", message => {
       var prompter_id = message.prompter;
       console.log(
-        "Game is starting ~!!!!~ The prompter in this round has ID: " +
-          prompter_id
+        // "Game is starting ~!!!!~ The prompter in this round has ID: " +
+        prompter_id
       );
       //Missing: [IMPORTANT] dont forget to unset the ifprompter after every round !!!
       if (prompter_id == this.state.myId) {

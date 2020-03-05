@@ -21,12 +21,6 @@ class Searchbox1 extends React.Component {
       );
       var ans = message[this.props.myId + ""];
       this.setState({ answers: ans, showAnswers: true });
-
-      // var Message = {};
-      // Message = message;
-      // Message["round_num"] = this.state.roundNo;
-      // Message["role"] = this.state.role;
-      // this.redirect_to_result_page(Message);
     });
   };
 

@@ -8,28 +8,18 @@ var message;
 export class Roundend1 extends Component {
   state = {
     Message: this.props.location.state.Message, //This message is passed in from the player or the prompter to use in this page
-    Redirect_Message: this.props.location.state.Redirect_Message, //This is the redirect message will be passed down to the next page
+    // Redirect_Message: this.props.location.state.Redirect_Message, //This is the redirect message will be passed down to the next page
     // Redirect_Message_Continue: this.props.location.state.Redirect_Message,
     if_game_over: false,
     if_prompter: false,
-    redirect: null
+    redirect: null,
+    round_num: 1
     // round_num:this.props.location.state.Message['round_no']
   };
   componentDidMount() {
     this.game_startCommand_listener();
   }
-  redirect_to_game_over = () => {
-    return (
-      <Redirect
-        to={{
-          pathname: "/Gameroom",
-          state: {
-            m: this.state.Redirect_Message
-          }
-        }}
-      />
-    );
-  };
+
   start_newround_request = () => {
     let data = {
       room: this.props.location.state.Message["room"],
@@ -58,18 +48,20 @@ export class Roundend1 extends Component {
         if (data["prompter"] == this.props.location.state.Message["myId"]) {
           this.setState({ if_prompter: true });
         }
-        this.setState({ redirect: "/Playgame" });
+        this.setState({
+          round_num: data["round_number"],
+          redirect: "/Playgame"
+        });
       }
     });
   };
 
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed && !this.state.if_game_over) {
-      // console.log("display time is up and game is not over!");
       this.start_newround_request();
     } else if (this.state.if_game_over) {
       // Render a countdown
-      // return <this.redirect_to_game_over />;
+      return <h1>Game Over</h1>;
     } else {
       return <h1>game completion error occurred </h1>;
     }
@@ -94,7 +86,7 @@ export class Roundend1 extends Component {
             pathname: this.state.redirect,
             state: {
               message: {
-                round_num: this.props.location.state.Message["round_num"],
+                round_num: this.state.round_num,
                 room_id: this.props.location.state.Message["room"],
                 playerid: this.props.location.state.Message["myId"],
                 role: this.state.if_prompter ? "prompter" : "non-prompter"
@@ -106,16 +98,26 @@ export class Roundend1 extends Component {
     }
     return (
       <div>
-        <h1>Round {this.state.Message.round_num} is Over</h1>
-        <h1>Your score is : 100</h1>
+        <h1>Round {this.state.round_num} is Over</h1>
+        <h1>
+          Your Score Is --{" "}
+          {this.state.Message["user_results"][this.state.myId + ""]}
+        </h1>
         <Answerboard
           correct_answer={this.state.Message["correct_answer"]}
+          //Missing: the current user's orderings should be passed in as well
+          // my_results={}
         ></Answerboard>
 
         <h1>LeaderBoard</h1>
-        <h1>You Will Be Redirected Soon!</h1>
-        <Leaderboard_ingame></Leaderboard_ingame>
-        <Countdown date={Date.now() + 9000} onComplete={this.renderer} />
+        <Leaderboard_ingame>
+          {/* We need to pass in [{id:0,name:"ha",current_score:1,total_score:2},{id:1,name:"ha",current_score:1,total_score:2},{id:2,name:"ha",current_score:1,total_score:2}] */}
+        </Leaderboard_ingame>
+        <Countdown
+          date={Date.now() + 3000}
+          onComplete={this.renderer}
+          style={{ display: "none" }}
+        />
       </div>
     );
   }
@@ -126,3 +128,14 @@ const Roundend = props => (
   </SocketContext.Consumer>
 );
 export default Roundend;
+
+// #Create a list with the user results.
+// user_results = []
+// for i in game_rooms[room]['clients']:
+//     user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
+
+// #Get the game_status
+// game_over = not game.get_game_status()
+
+// #Make the message from these components.
+// Message = {'correct_answer':correct_answers, 'user_results':user_results}

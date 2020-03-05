@@ -44,7 +44,13 @@ class GameManager:
 
         self.current_answers = {}
         self.ready_for_new_round = {}
-
+   ###################################################ADDED BY SALEKH ######################################################
+    def get_current_round_number(self):
+        """ returns the current round number """
+        return self.round
+    def reset_game_to_fresh_state(self):
+        self.round =1
+    ############################################################################################################
     def get_prompter(self):
         """ Returns current prompter to lobby.
         

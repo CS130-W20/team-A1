@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Route, NavLink, HashRouter, Link } from "react-router-dom";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Bootstrap from "react-bootstrap";
+import FacebookLogin from "./Facebooklogin";
 import axios from "axios";
 import SocketContext from "../pre_gameroom/Context";
 
@@ -97,6 +96,8 @@ export class Login1 extends Component {
             Login1
           </Button>
         </Form>
+
+        <FacebookLogin></FacebookLogin>
       </div>
     );
   }

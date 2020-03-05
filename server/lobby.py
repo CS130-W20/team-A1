@@ -203,7 +203,7 @@ def on_submitAnswer(data):
     id = data['id']
     game = game_rooms[room]['game']
     new_answer = {id: answers}
-    print("We received this new answer from a player: ",new_answer,"****\n")
+    # print("We received this new answer from a player: ",new_answer,"****\n")
     game.add_new_answer(new_answer)
 
     #Check if this entry caused the answers to all be submitted.
@@ -226,7 +226,7 @@ def on_submitAnswer(data):
         game_over = not game.get_game_status()
 
         #Make the message from these components.
-        Message = {'correct_answer':correct_answers, 'user_results':user_results,'round_num':1}
+        Message = {'correct_answer':correct_answers, 'user_results':user_results}
         emit('send_scores', Message, room=room)
     #######################################################################################################################################
     ###################################################MODIFIED CODE BY SALEKH############################################################
@@ -269,6 +269,10 @@ def on_newRound(data):
     #######################################################################################################################################
     ###ADDED PORTION---- I think the game over message should be sent by this end point, when the clients ask if they can start a new game
     game_over = not game.get_game_status()
+    if game_over:
+        for i in game_rooms[room]['clients']:
+            game_rooms[room]['status'][i] = 'Not-Ready'
+        
     #Note: if the game is over , the user needs this information to recreate the waitroom, of course the status info needs to changed here to make sure everyone is not ready
     Message={}
     users=[]
@@ -280,11 +284,15 @@ def on_newRound(data):
 
    
     ready_statuses = game.get_new_round_ready_status()
+
     if len(ready_statuses)==4 and len(answered_clients)== 4:
         answered_clients.clear()
         game.update_round()
-        Message = {'prompter':game.get_prompter(),'if_game_over':game_over,'room_creation_info':Message}
+        round_number =game.get_current_round_number()
+        Message = {'prompter':game.get_prompter(),'if_game_over':game_over,'room_creation_info':Message,'round_number':round_number}
         emit('new_round_permission', Message, room=room)
+        if game_over:
+            game.reset_game_to_fresh_state()
     #######################################################################################################################################
     #######################################################################################################################################
 
