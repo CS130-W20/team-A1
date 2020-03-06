@@ -6,7 +6,7 @@ import Login from "./components/pre_login/Login";
 import Playgame from "./components/game_room/Playgame";
 import Landing from "./components/pre_gameroom/Landing";
 import Roundend from "./components/post_gameroom/Roundend";
-import { Route, NavLink, HashRouter } from "react-router-dom";
+import { Route, HashRouter } from "react-router-dom";
 import io from "socket.io-client";
 import SocketContext from "./components/pre_gameroom/Context";
 const socket = io("http://localhost:5000");
