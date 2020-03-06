@@ -4,11 +4,11 @@ os:
 python:
   - 3.5.4
 
-matrix:
-  include:
-        - python: 3.5
-          dist: trusty
-          sudo: false
+# matrix:
+#   include:
+#         - python: 3.5
+#           dist: trusty
+#           sudo: false
 install:
   - pip install -r requirements.txt
 script:
