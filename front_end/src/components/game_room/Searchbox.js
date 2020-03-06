@@ -19,8 +19,12 @@ class Searchbox1 extends React.Component {
       console.log(
         "Received results fom back end (prompter): " + JSON.stringify(message)
       );
-      var ans = message[this.props.myId + ""];
-      this.setState({ answers: ans, showAnswers: true });
+      if (message["if_valid"]) {
+        var ans = message[this.props.myId + ""];
+        this.setState({ answers: ans, showAnswers: true });
+      } else {
+        alert("bad query try it again");
+      }
     });
   };
 
