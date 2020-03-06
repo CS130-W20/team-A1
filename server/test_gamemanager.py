@@ -69,7 +69,7 @@ def test_GameManagerQueryGet():
 
     # Check to see if suggestions are shuffled:
     p1, p2, p3 = q.keys()
-    assert(q[p1] != q[p2] != q[p3])
+    assert(q[p1] != q[p2] != q[p3]) 
 
 
 

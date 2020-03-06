@@ -2,7 +2,7 @@ from unittest import TestCase
 from GameManager import GameManager
 
 class GameManagerTest (TestCase):
-    def test_inputs_mul(self):
+    def test_inputs_mul(self): 
         gameManager = GameManager("Jonathan", ["Omar", "Joey", "Salekh"])
         self.assertEqual(str, type(gameManager.get_prompter()[0]))
         self.assertEqual(list, type(gameManager.get_respondents()))
