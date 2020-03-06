@@ -134,12 +134,20 @@ class GameManager:
         else:
             #Decode our answers, and use regex to convert them into a list of strings, in order.
             self.real_answers = re.findall(r'"([^"]*)"', answers.decode('utf-8'))
-            print(self.real_answers)
+            
+
             dup_answers = {}
+            if len(self.real_answers) < 5:
+                dup_answers["if_valid"] = False
+            else:
+                dup_answers["if_valid"] = True
+            self.real_answers = self.real_answers[:5]
             for i in range(0,MAX_RESPONDERS):
                 dup_answers[self.respondents[i]] = random.sample(self.real_answers, len(self.real_answers))
             dup_answers[self.prompter] = self.real_answers
+            print(dup_answers)
             return dup_answers
+
 
     def get_score(self, answer):
         """ Gets score for the given answer order.
@@ -150,11 +158,15 @@ class GameManager:
         Returns:
             score -- Score for the given answer, using real_answe. Uses length of current query * # of position matches.
         """
+        POINTS_PER_ROUND = 100
+        POINTS_PER_MATCH = 20
+        POINTS_OFF_BY_ONE = 14
+        POINTS_OFF_BY_TWO = 7
 
         positions_match = 0
+        print(answer)
         if self.real_answers is not None:
             #Get matching position number in answer.
-            print(self.real_answers)
             for i, suggestion in enumerate(answer):
                 if self.real_answers[i] == suggestion:
                     positions_match += 1
