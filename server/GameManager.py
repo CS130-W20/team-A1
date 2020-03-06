@@ -4,6 +4,7 @@ from collections import defaultdict
 import random
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
+import math
 
 MAX_RESPONDERS = 3
 MAX_ROUNDS = 4
@@ -148,6 +149,8 @@ class GameManager:
             print(dup_answers)
             return dup_answers
 
+    def in_bounds(self, i, length):
+        return i >= 0 and i < length
 
     def get_score(self, answer):
         """ Gets score for the given answer order.
@@ -158,21 +161,32 @@ class GameManager:
         Returns:
             score -- Score for the given answer, using real_answe. Uses length of current query * # of position matches.
         """
+        real_answer_dict = {}
+        for i, ans in enumerate(self.real_answers):
+            real_answer_dict[ans] = i
         POINTS_PER_ROUND = 100
-        POINTS_PER_MATCH = 20
-        POINTS_OFF_BY_ONE = 14
-        POINTS_OFF_BY_TWO = 7
-
+        POINTS_PER_SUGGESTION = 20
+        POINTS_OFF_BY_ONE = 13
+        POINTS_OFF_BY_TWO = 5
+        score = 0
         positions_match = 0
-        print(answer)
         if self.real_answers is not None:
             #Get matching position number in answer.
             for i, suggestion in enumerate(answer):
-                if self.real_answers[i] == suggestion:
-                    positions_match += 1
-            return (20 - len(self.query)) * positions_match
-        else:
-            return 0
+                res = suggestion[0]
+                off_by = abs(i - real_answer_dict[res])
+                if off_by == 0:
+                    score += POINTS_PER_SUGGESTION
+                elif off_by == 1:
+                    score += POINTS_OFF_BY_ONE
+                elif off_by == 2: 
+                    score += POINTS_OFF_BY_TWO
+        print(score)
+        return score
+
+
+
+        
 
     def get_all_scores(self, answers):
         """ Gets and returns to lobby the scores for each respondent given the order they input to the game.
@@ -186,10 +200,13 @@ class GameManager:
 
         round_scores = {}
         #Get score for each respondent, and add it to their total.
+        print(answers)
+
         for i in self.respondents:
             if i in answers:
+                print(answers[i])
                 round_scores[i] = self.get_score(answers[i])
-                #Check this player has already gotton one score.
+                # Check this player has already gotton one score.
                 if i in self.scores:
                     self.scores[i] += round_scores[i]
                 #Initialize their total score.
