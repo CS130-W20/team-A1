@@ -13,4 +13,4 @@ install:
   - pip install -r requirements.txt
 script:
 
-  pytest server/test_query.py 
+  pytest server/test_gamemanager.py 
