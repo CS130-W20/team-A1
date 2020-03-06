@@ -1,5 +1,11 @@
 language: python
-os:
-  osx
+matrix:
+  include:
+        - python: 3.6
+          dist: trusty
+          sudo: false
 install:
   - pip install -r requirements.txt
+script:
+
+  pytest server/test_query.py 
