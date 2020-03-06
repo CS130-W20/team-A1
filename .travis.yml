@@ -14,3 +14,4 @@ install:
 script:
 
   pytest server/test_gamemanager.py 
+  cd server && mut.py --target GameManager --unit-test test_mutation -m && cd ..
