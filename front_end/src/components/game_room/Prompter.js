@@ -62,7 +62,6 @@ export class Prompter1 extends Component {
             pathname: this.state.redirect,
             state: {
               Message: this.state.Message
-              // Redirect_Message: this.state.Redirect_Message
             }
           }}
         />

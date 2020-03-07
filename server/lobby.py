@@ -83,6 +83,7 @@ def on_create(data):
         join_room(lobby)
         print(game_rooms)
         print(rooms())
+        print('lobby creation message is being sent:',Message)
         emit('lobby_created', Message, room=lobby)
 
 #for one room.
@@ -155,7 +156,8 @@ def on_playerUnready(data):
 def on_playerLeft(data):
     id = data['id']
     room = data['room']
-    emit("player_left", {"player_id":id}, room=room)
+    ###Note this part needs to be implemented !!!!
+    emit("player_left", {"id":id}, room=room)
 
 
 @socketio.on("start_game")

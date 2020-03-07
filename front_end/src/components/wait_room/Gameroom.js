@@ -172,10 +172,10 @@ export class Gameroom1 extends Component {
         };
         if (this.state.ifready) {
           this.props.socket.emit("player_ready", data);
-          console.log("my status has changed! " + "READY!");
+          // console.log("my status has changed! " + "READY!");
         } else {
           this.props.socket.emit("player_UNDOready", data);
-          console.log("my status has changed! " + "NO READY!");
+          // console.log("my status has changed! " + "NO READY!");
         }
       }
     );
