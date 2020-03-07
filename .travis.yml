@@ -1,6 +1,13 @@
 language: python
 python:
-  - 3.5.4
+  - 3.7.5
 install:
   - pip install -r requirements.txt
-script: pytest server
+
+jobs:
+  include:
+      - stage: test
+        script: pytest server/test_gamemanager.py
+      - stage: mutation
+        script: cd server && mut.py --target GameManager --unit-test test_mutation -m && cd ..
+
