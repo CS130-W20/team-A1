@@ -47,8 +47,8 @@ def on_create(data):
     id = data['id']
     lobby_num = random.randint(50,8000)
     lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
+    player_name = data['name']
     if lobby not in game_rooms:
-        player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
         game_rooms[lobby] = {
             "room_name": lobby,
             "host": id,
@@ -79,6 +79,7 @@ def on_create(data):
         #This section actually generates message.
         users = [{'id':id, 'name':game_rooms[lobby]['names'][id], 'room':lobby, 'status':'Not-Ready'}]
         Message={"users":users}
+        print(users)
         
         join_room(lobby)
         print(game_rooms)
@@ -99,6 +100,7 @@ def on_join(data):
 
     '''
     id = data['id']
+    player_name = data['name']
     room = data['room']
     if room in game_rooms:
         if id not in game_rooms[room]["clients"]:
@@ -107,7 +109,6 @@ def on_join(data):
                 emit("player_error_join", "Too many players", room=room)
             else:
                 join_room(room)
-                player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
                 game_rooms[room]["clients"].append(id)
                 game_rooms[room]['status'].update({id: 'Not-Ready'})
                 game_rooms[room]['names'].update({id: player_name})
@@ -121,6 +122,7 @@ def on_join(data):
                 emit("player_suc_join", Message, room=room)
                 #Note: this message is meant for other users already  in the room
                 emit("new_player_join", {"id":id, "name":player_name, "status":game_rooms[room]['status'][id]}, room=room)
+                print(users)
     else:
         emit("player_error_join", "Room does not exist")
 
@@ -222,8 +224,8 @@ def on_submitAnswer(data):
         #Create a list with the user results.
         user_results = []
         for i in game_rooms[room]['clients']:
-            user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
-        
+            user_results.append({'id':i, "name": game_rooms[room]['names'][i], 'total_score':total_scores[i], 'current_score':round_scores[i]})
+        print(user_results)
         #Get the game_status
         game_over = not game.get_game_status()
 
