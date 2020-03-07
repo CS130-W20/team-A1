@@ -16,10 +16,6 @@ export class Playgame1 extends Component {
     if (this.state.role == "non-prompter") {
       return (
         <div>
-          <h1 style={{ margin: "5px", padding: "5px" }}>
-            Round {this.state.round_num}/4
-          </h1>
-
           <Player
             clients={this.state.clients}
             round_num={this.state.round_num}
