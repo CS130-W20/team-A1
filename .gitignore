@@ -8,6 +8,7 @@ lerna-debug.log*
 
 server/static/*
 
+.*
 server/__pycache__
 server/templates/*
 # Diagnostic reports (https://nodejs.org/api/report.html)

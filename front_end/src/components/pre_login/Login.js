@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import FacebookLogin from "./Facebooklogin";
+import Facebooklogin from "./FacebookLogin";
 import axios from "axios";
 import SocketContext from "../pre_gameroom/Context";
 
@@ -97,7 +97,7 @@ export class Login1 extends Component {
           </Button>
         </Form>
 
-        <FacebookLogin></FacebookLogin>
+        <Facebooklogin></Facebooklogin>
       </div>
     );
   }
