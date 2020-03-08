@@ -114,6 +114,13 @@ export class Gameroom1 extends Component {
     });
     this.props.socket.on("player_left", message => {
       console.log("A player left, his ID is " + message.id);
+      if (
+        message.if_owner_left &&
+        message.new_owner_id == this.props.socket.id
+      ) {
+        this.setState({ ifowner: true });
+      }
+
       if (message.id != this.props.socket.id) {
         if (message.id == this.state.player1.id) {
           this.RemoveUser(1);
