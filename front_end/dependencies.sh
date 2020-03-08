@@ -10,3 +10,5 @@ npm install bootstrap
 npm install react-data-table-component styled-components
 npm install --save react-social-login
 npm install @auth0/auth0-spa-js
+npm install react-anime -S
+npm install mdbreact

@@ -3,6 +3,7 @@ import Player from "./Player";
 import Prompter from "./Prompter";
 // import ReactDOM from "react-dom";
 import SocketContext from "../pre_gameroom/Context";
+import Footbar from "../pre_login/Footbar";
 
 export class Playgame1 extends Component {
   state = {
@@ -23,6 +24,7 @@ export class Playgame1 extends Component {
             myId={this.state.playerid}
             if_received_questions={false}
           />
+          <Footbar></Footbar>
         </div>
       );
     } else if (this.state.role == "prompter") {
@@ -37,6 +39,7 @@ export class Playgame1 extends Component {
             room={this.state.room_id}
             myId={this.state.playerid}
           />
+          <Footbar></Footbar>
         </div>
       );
     } else {
