@@ -47,8 +47,8 @@ def on_create(data):
     id = data['id']
     lobby_num = random.randint(50,8000)
     lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
+    player_name = data['name']
     if lobby not in game_rooms:
-        player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
         game_rooms[lobby] = {
             "room_name": lobby,
             "host": id,
@@ -79,10 +79,12 @@ def on_create(data):
         #This section actually generates message.
         users = [{'id':id, 'name':game_rooms[lobby]['names'][id], 'room':lobby, 'status':'Not-Ready'}]
         Message={"users":users}
+        print(users)
         
         join_room(lobby)
         print(game_rooms)
         print(rooms())
+        print('lobby creation message is being sent:',Message)
         emit('lobby_created', Message, room=lobby)
 
 #for one room.
@@ -98,6 +100,7 @@ def on_join(data):
 
     '''
     id = data['id']
+    player_name = data['name']
     room = data['room']
     if room in game_rooms:
         if id not in game_rooms[room]["clients"]:
@@ -106,7 +109,6 @@ def on_join(data):
                 emit("player_error_join", "Too many players", room=room)
             else:
                 join_room(room)
-                player_name = "{0}{1}".format(random.choice(player_names), random.randint(50,8000))
                 game_rooms[room]["clients"].append(id)
                 game_rooms[room]['status'].update({id: 'Not-Ready'})
                 game_rooms[room]['names'].update({id: player_name})
@@ -120,6 +122,7 @@ def on_join(data):
                 emit("player_suc_join", Message, room=room)
                 #Note: this message is meant for other users already  in the room
                 emit("new_player_join", {"id":id, "name":player_name, "status":game_rooms[room]['status'][id]}, room=room)
+                print(users)
     else:
         emit("player_error_join", "Room does not exist")
 
@@ -128,6 +131,7 @@ def on_join(data):
 def on_playerReady(data):
     id = data['id']
     room = data['room']
+
     game_rooms[room]['status'][id] = 'Ready'
     emit("player_status_changed", {'id':id, 'status':"Ready"}, room=room)
     #This function needs to tell everyone in the same room with the player, 
@@ -155,7 +159,28 @@ def on_playerUnready(data):
 def on_playerLeft(data):
     id = data['id']
     room = data['room']
-    emit("player_left", {"player_id":id}, room=room)
+    print(id)
+    print (game_rooms[room])
+    leave_room(room)
+    del game_rooms[room]['names'][id]
+    del game_rooms[room]['status'][id]
+    game_rooms[room]['clients'].remove(id)
+    host = game_rooms[room]['host']
+    owner = host == id
+
+    if len(game_rooms[room]['clients']) == 0 and host == id:
+        del game_rooms[room]
+        emit("player_left", {"id":id, "if_owner": True, "new_owner": None}, room=room)
+
+
+    
+    else:
+        next_owner = None
+        if owner:
+            next_owner = game_rooms[room]['clients'][0]
+            game_rooms[room]['host'] = next_owner
+        emit("player_left", {"id":id, "if_owner": owner, "new_owner": next_owner}, room=room)
+    print(game_rooms)
 
 
 @socketio.on("start_game")
@@ -220,8 +245,8 @@ def on_submitAnswer(data):
         #Create a list with the user results.
         user_results = []
         for i in game_rooms[room]['clients']:
-            user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
-        
+            user_results.append({'id':i, "name": game_rooms[room]['names'][i], 'total_score':total_scores[i], 'current_score':round_scores[i]})
+        print(user_results)
         #Get the game_status
         game_over = not game.get_game_status()
 

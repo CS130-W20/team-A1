@@ -26,7 +26,9 @@ export class Player1 extends Component {
     redirect: null,
     Message: {},
     Redirect_Message: this.props.Redirect_Message,
-    room: this.props.room
+    room: this.props.room,
+    displayTimer: "",
+    displayProcess: "none"
   };
   componentDidMount() {
     this.receive_results_from_server();
@@ -51,7 +53,9 @@ export class Player1 extends Component {
       Message = message;
       Message["room"] = this.state.room;
       Message["myId"] = this.state.myId;
-
+      console.log(
+        "Player Received results from the server:" + JSON.stringify(Message)
+      );
       if (this.state.if_submitted_answer) {
         this.setState({
           Message: Message,
@@ -76,29 +80,40 @@ export class Player1 extends Component {
   // Renderer callback with condition
   renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
+      this.setState({ displayTimer: "none", displayProcess: "" });
       this.send_results_to_server();
       //this.setState({ if_round_over: true });
-      return <h1>Time Is Up, Your Response Is Being Processed</h1>;
+      return <div></div>;
     } else {
-      // Render a countdown
       return (
-        <div id="sort_list">
-          <p
-            style={{
-              color: "white",
-              backgroundColor: "grey",
-              width: "100px",
-              textAlign: "center"
-            }}
+        <>
+          <h1
+            id="response_process"
+            style={{ display: this.state.displayProcess }}
           >
-            {minutes}:{seconds}
-          </p>
-          <h1>You are a player, please sort the list!</h1>
-          <SortableList
-            items={this.state.sentences}
-            answerupdate={this.getAnswers}
-          />
-        </div>
+            Time Is Up, Your Response Is Being Processed
+          </h1>
+          <div id="sort_list" style={{ display: this.state.displayTimer }}>
+            <h1 style={{ margin: "5px", padding: "5px" }}>
+              Round {this.state.round_num}/4
+            </h1>
+            <p
+              style={{
+                color: "white",
+                backgroundColor: "grey",
+                width: "100px",
+                textAlign: "center"
+              }}
+            >
+              {minutes}:{seconds}
+            </p>
+            <h1>You are a player, please sort the list!</h1>
+            <SortableList
+              items={this.state.sentences}
+              answerupdate={this.getAnswers}
+            />
+          </div>
+        </>
       );
     }
   };

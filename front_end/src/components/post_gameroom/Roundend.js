@@ -67,6 +67,9 @@ export class Roundend1 extends Component {
     }
   };
   render() {
+    // console.log(
+    //   "The message passed in is:" + JSON.stringify(this.state.Message)
+    // );
     if (this.state.if_game_over) {
       return (
         <Redirect
@@ -100,8 +103,15 @@ export class Roundend1 extends Component {
       <div>
         <h1>Round {this.state.round_num} is Over</h1>
         <h1>
-          Your Score Is --{" "}
-          {this.state.Message["user_results"][this.state.myId + ""]}
+          Your Round Score Is --
+          {this.state.Message["user_results"].find(
+            userResult => userResult["id"] === this.props.socket.id + ""
+          )
+            ? this.state.Message["user_results"].find(
+                userResult => userResult["id"] === this.props.socket.id + ""
+              )["current_score"]
+            : "000"}
+          /100
         </h1>
         <Answerboard
           correct_answer={this.state.Message["correct_answer"]}
@@ -110,11 +120,11 @@ export class Roundend1 extends Component {
         ></Answerboard>
 
         <h1>LeaderBoard</h1>
-        <Leaderboard_ingame>
+        <Leaderboard_ingame results={this.state.Message["user_results"]}>
           {/* We need to pass in [{id:0,name:"ha",current_score:1,total_score:2},{id:1,name:"ha",current_score:1,total_score:2},{id:2,name:"ha",current_score:1,total_score:2}] */}
         </Leaderboard_ingame>
         <Countdown
-          date={Date.now() + 3000}
+          date={Date.now() + 60000}
           onComplete={this.renderer}
           style={{ display: "none" }}
         />
