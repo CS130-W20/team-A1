@@ -202,16 +202,16 @@ class GameManager:
         #Get score for each respondent, and add it to their total.
         print(answers)
 
-        for i in self.respondents:
-            if i in answers:
-                print(answers[i])
-                round_scores[i] = self.get_score(answers[i])
+        for userId in self.respondents:
+            if userId in answers:
+                print(answers[userId])
+                round_scores[userId] = self.get_score(answers[userId])
                 # Check this player has already gotton one score.
-                if i in self.scores:
-                    self.scores[i] += round_scores[i]
+                if userId in self.scores:
+                    self.scores[userId] += round_scores[userId]
                 #Initialize their total score.
                 else:
-                    self.scores[i] = round_scores[i]
+                    self.scores[userId] = round_scores[userId]
             else:
                 print("This should not happen!!!!! Only people in lobby should play this game!")
 
