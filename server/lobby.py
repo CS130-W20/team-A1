@@ -131,6 +131,7 @@ def on_join(data):
 def on_playerReady(data):
     id = data['id']
     room = data['room']
+
     game_rooms[room]['status'][id] = 'Ready'
     emit("player_status_changed", {'id':id, 'status':"Ready"}, room=room)
     #This function needs to tell everyone in the same room with the player, 
@@ -158,8 +159,28 @@ def on_playerUnready(data):
 def on_playerLeft(data):
     id = data['id']
     room = data['room']
-    ###Note this part needs to be implemented !!!!
-    emit("player_left", {"id":id}, room=room)
+    print(id)
+    print (game_rooms[room])
+    leave_room(room)
+    del game_rooms[room]['names'][id]
+    del game_rooms[room]['status'][id]
+    game_rooms[room]['clients'].remove(id)
+    host = game_rooms[room]['host']
+    owner = host == id
+
+    if len(game_rooms[room]['clients']) == 0 and host == id:
+        del game_rooms[room]
+        emit("player_left", {"id":id, "if_owner": True, "new_owner": None}, room=room)
+
+
+    
+    else:
+        next_owner = None
+        if owner:
+            next_owner = game_rooms[room]['clients'][0]
+            game_rooms[room]['host'] = next_owner
+        emit("player_left", {"id":id, "if_owner": owner, "new_owner": next_owner}, room=room)
+    print(game_rooms)
 
 
 @socketio.on("start_game")
