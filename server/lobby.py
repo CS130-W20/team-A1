@@ -9,6 +9,7 @@ from flask_socketio import send, emit
 from collections import defaultdict
 import random
 from urllib.error import HTTPError, URLError
+from flask_sqlalchemy import SQLAlchemy
 
 import requests
 import GameManager
@@ -23,6 +24,12 @@ lobby_names = ["Dwarf", "Bree", "Dale", "Drúedain", "Dunlendings", "Easterling"
 game_rooms = {}
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:/{user}:{password}@{host}/{db}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+with app.app_context():
+    db.init_app(app)
+
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 @socketio.on('my event')
