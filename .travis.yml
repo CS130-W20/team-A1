@@ -1,19 +1,8 @@
 language: python
 python:
   - 3.7.5
-# python:
-#   - 3.5.4
-
-# matrix:
-#   include:
-#         - python: 3.5
-#           dist: trusty
-#           sudo: false
 install:
   - pip install -r requirements.txt
-# script:
-
-#   pytest server/test_gamemanager.py
 
 jobs:
   include:
@@ -22,4 +11,3 @@ jobs:
       - stage: mutation
         script: cd server && mut.py --target GameManager --unit-test test_mutation -m && cd ..
 
-  
