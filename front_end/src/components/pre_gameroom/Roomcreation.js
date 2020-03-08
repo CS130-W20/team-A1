@@ -57,8 +57,11 @@ export class Roomcreation1 extends Component {
   }
 
   handleCREATE_Submit(e) {
+    console.log(this.props.userInfo);
+
     let data = {
-      id: this.props.socket.id
+      id: this.props.socket.id,
+      name: this.props.userInfo['name']
     };
     this.props.socket.emit("create_room", data);
     console.log(
@@ -67,9 +70,12 @@ export class Roomcreation1 extends Component {
   }
   handleJOIN_Submit(e) {
     console.log(this.state.roomname);
+    console.log(this.props.userInfo);
     let data = {
       room: this.state.roomname,
-      id: this.props.socket.id
+      id: this.props.socket.id,
+      name: this.props.userInfo['name']
+
     };
     this.props.socket.emit("join_room", data);
   }

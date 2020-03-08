@@ -143,7 +143,7 @@ class GameManager:
             else:
                 dup_answers["if_valid"] = True
             self.real_answers = self.real_answers[:5]
-            for i in range(0,MAX_RESPONDERS):
+            for i in range(0, MAX_RESPONDERS):
                 dup_answers[self.respondents[i]] = random.sample(self.real_answers, len(self.real_answers))
             dup_answers[self.prompter] = self.real_answers
             print(dup_answers)
