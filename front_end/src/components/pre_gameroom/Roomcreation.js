@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import SocketContext from "./Context";
 import { Redirect } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
+import Leaderboard_Global from "./Leaderboard_Global";
 let Message;
+
 export class Roomcreation1 extends Component {
   constructor(props) {
     super(props);
@@ -61,7 +64,7 @@ export class Roomcreation1 extends Component {
 
     let data = {
       id: this.props.socket.id,
-      name: this.props.userInfo['name']
+      name: this.props.userInfo["name"]
     };
     this.props.socket.emit("create_room", data);
     console.log(
@@ -74,8 +77,7 @@ export class Roomcreation1 extends Component {
     let data = {
       room: this.state.roomname,
       id: this.props.socket.id,
-      name: this.props.userInfo['name']
-
+      name: this.props.userInfo["name"]
     };
     this.props.socket.emit("join_room", data);
   }
@@ -109,24 +111,97 @@ export class Roomcreation1 extends Component {
       );
     }
     return (
-      <div style={this.buttonStyle}>
-        <button onClick={this.handleCREATE_Submit}>Create Room</button>
-        <br />
-        <h4>Enter Room Name:</h4>
+      <div
+        style={{
+          paddingTop: "100px",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
         {!this.state.ifWrongRoomName ? (
           <p></p>
         ) : (
-          <h2>Invalid Room Name , Try Again!</h2>
+          <h5 style={{ backgroundColor: "red", textAlign: "center" }}>
+            Invalid Room Name , Try Again!
+          </h5>
         )}
-        <input
-          name="roomnumber_join"
-          type="text"
-          onChange={this.updateInput}
-        ></input>
-        <button placeholder="room number" onClick={this.handleJOIN_Submit}>
-          Join Room
-        </button>
+        <div
+          id="actions"
+          style={{
+            width: "300px",
+            height: "400px",
+            textAlign: "center",
+            display: "inline-block",
+            padding: "60px",
+            backgroundColor: "red",
+            marginRight: "120px",
+            marginBottom: "300px",
+            paddingTop: "60px"
+          }}
+        >
+          <div id="create_room">
+            <Form>
+              <Form.Label>Create Room</Form.Label>
+              <Form.Control type="email" placeholder="Room name" />
+              {/* <Form.Text className="text-muted">
+                Please enter a room name of your choice
+              </Form.Text> */}
+
+              <Button variant="primary" onClick={this.handleCREATE_Submit}>
+                Create
+              </Button>
+            </Form>
+          </div>
+
+          <div id="join_room">
+            <Form>
+              <Form.Label>Join Room</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Room name"
+                onChange={this.updateInput}
+              />
+              {/* <Form.Text className="text-muted">
+                Please enter a room name you wanna join
+              </Form.Text> */}
+
+              <Button variant="primary" onClick={this.handleJOIN_Submit}>
+                Join
+              </Button>
+            </Form>
+          </div>
+        </div>
+        <div
+          style={{
+            display: "inline-block",
+            padding: "60px",
+            backgroundColor: "silver",
+            marginLeft: "120px"
+          }}
+        >
+          <Leaderboard_Global
+          // style={{ marginBottom: "100px", paddingBottom: "50px" }}
+          ></Leaderboard_Global>
+        </div>
       </div>
+      // <div style={this.buttonStyle}>
+      //   <button onClick={this.handleCREATE_Submit}>Create Room</button>
+      //   <br />
+      //   <h4>Enter Room Name:</h4>
+      //   {!this.state.ifWrongRoomName ? (
+      //     <p></p>
+      //   ) : (
+      //     <h2>Invalid Room Name , Try Again!</h2>
+      //   )}
+      //   <input
+      //     name="roomnumber_join"
+      //     type="text"
+      //     onChange={this.updateInput}
+      //   ></input>
+      //   <button placeholder="room number" onClick={this.handleJOIN_Submit}>
+      //     Join Room
+      //   </button>
+      // </div>
     );
   }
 }

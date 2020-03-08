@@ -4,6 +4,7 @@ import { Route, NavLink, HashRouter, Link, useHistory } from "react-router-dom";
 import SocketContext from "../pre_gameroom/Context";
 import { Playerwait } from "./Playerwait";
 import Gameroom_view from "./Gameroom_view";
+import Particles from "react-particles-js";
 
 export class Gameroom1 extends Component {
   constructor(props) {
@@ -114,6 +115,13 @@ export class Gameroom1 extends Component {
     });
     this.props.socket.on("player_left", message => {
       console.log("A player left, his ID is " + message.id);
+      if (
+        message.if_owner_left &&
+        message.new_owner_id == this.props.socket.id
+      ) {
+        this.setState({ ifowner: true });
+      }
+
       if (message.id != this.props.socket.id) {
         if (message.id == this.state.player1.id) {
           this.RemoveUser(1);
@@ -236,12 +244,43 @@ export class Gameroom1 extends Component {
       );
     }
     return (
-      <Gameroom_view
-        {...this.state}
-        LeaveRoomHandle={this.LeaveRoomHandle}
-        startPermission={this.startGame}
-        ToggleReady={this.ToggleReady}
-      />
+      <>
+        {/* <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            zIndex: "-100"
+          }}
+        >
+          <Particles
+            params={{
+              particles: {
+                number: {
+                  value: 2000,
+                  density: {
+                    enable: true,
+                    value_area: 10000
+                  }
+                }
+              }
+            }}
+          />
+        </div> */}
+        {/* <div
+          style={{
+            top: "0",
+            left: "0",
+            zIndex: "100"
+          }}
+        > */}
+        <Gameroom_view
+          {...this.state}
+          LeaveRoomHandle={this.LeaveRoomHandle}
+          startPermission={this.startGame}
+          ToggleReady={this.ToggleReady}
+        />
+      </>
     );
   }
 }
