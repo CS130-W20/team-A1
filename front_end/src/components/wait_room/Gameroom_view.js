@@ -1,94 +1,56 @@
 import React, { Component } from "react";
 import { Link, NavLink, Redirect } from "react-router-dom";
 import Playerwait from "./Playerwait";
-import { ButtonToolbar, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import NavbarWaitRoom from "./NavbarWaitRoom";
+import BootstrapSwitchButton from "bootstrap-switch-button-react";
+import Footbar from "./../pre_login/Footbar";
+
+const my_name = "Salek";
 export class Otherplayers extends Component {
   LeaveRoomHandle = this.props.LeaveRoomHandle;
   startPermission = this.props.startPermission;
   ToggleReady = this.props.ToggleReady;
 
-  toggle_style_Notready = {
-    backgroundColor: "red",
-    color: "white",
-    width: "90px",
-    height: "30px",
-    margin: "10px"
-  };
-  toggle_style_Ready = {
-    backgroundColor: "Green",
-    color: "white",
-    width: "90px",
-    height: "30px",
-    margin: "10px"
-  };
-
-  componentWillReceiveProps() {
-    this.setState({ ifready: this.props.ifready });
-    this.setState({ Message: this.props.Message });
-    this.setState({ player1: this.props.player1 });
-    this.setState({ player2: this.props.player2 });
-    this.setState({ player2: this.props.player3 });
-  }
   render() {
-    const toggle_style = this.props.ifready
-      ? this.toggle_style_Notready
-      : this.toggle_style_Ready;
     const toggle_word = this.props.ifready ? "Not Ready" : "Ready";
-
-    if (this.props.Ifowner)
-      return (
+    return (
+      <>
         <div>
-          <h1> Room name: {this.props.Message.room}</h1>
-          <h2>Player name:{this.props.myId}</h2>
-          <h3>You own the room </h3>
+          <NavbarWaitRoom
+            ready_button_style={!this.props.ifready ? "success" : "danger"}
+            ready_button_text={toggle_word}
+            room={this.props.Message.room}
+            leave_room_handle={this.LeaveRoomHandle}
+            toggle_handle={this.ToggleReady}
+            user_name={my_name}
+            style={{ marginTop: "10px", marginBottom: "30px" }}
+          ></NavbarWaitRoom>
+          <br />
+          <br />
           <div
-            id="buttons_own"
-            style={{
-              backgroundColor: "#f4897b",
-              height: "300px",
-              width: "300px",
-              padding: "40px",
-              margin: "40px"
-            }}
+            id="owner_button"
+            style={{ display: this.props.Ifowner ? "block" : "none" }}
           >
-            <NavLink exact to="/">
-              Home
-            </NavLink>
+            <h3>
+              You own the room, you can start the game once all the players are
+              ready!{" "}
+            </h3>
             <br />
             <Button
               variant={this.props.if_all_ready ? "success" : "secondary"}
               size="lg"
               disabled={!this.props.if_all_ready}
               onClick={this.startPermission}
+              block
             >
               Start Game
             </Button>{" "}
-            <Button variant="primary" size="lg" onClick={this.LeaveRoomHandle}>
-              Leave Room
-            </Button>{" "}
-            <Button
-              variant={!this.props.ifready ? "success" : "danger"}
-              size="lg"
-              onClick={this.ToggleReady}
-            >
-              {" "}
-              {toggle_word}
-            </Button>
           </div>
-          <div
-            id="currentUser"
-            style={{
-              backgroundColor: "grey",
-              height: "110px",
-              width: "210px",
-              padding: "10px",
-              margin: "10px"
-            }}
-          >
-            <p style={{ color: "white" }}>My Name: Eminem</p>
-            <p style={{ color: "white" }}>Drop Down Menu</p>
-          </div>
+
+          <br />
+
           <Playerwait
             id={1}
             name={this.props.player1.name}
@@ -108,74 +70,34 @@ export class Otherplayers extends Component {
             ifPlayerExists={this.props.player3.ifexists}
           />
         </div>
-      );
-
-    return (
-      <div id="gameRoom_player">
-        <h1>Room name: {this.props.Message.room}</h1>
-        <h2>Player name:{this.props.myId}</h2>
-        <h3>Happy Gaming</h3>
         <div
-          id="buttons"
           style={{
-            backgroundColor: "#f4897b",
-            height: "300px",
-            width: "300px",
-            padding: "40px",
-            margin: "40px"
+            margin: "auto"
           }}
         >
-          <Link to="/">
-            <button>Home</button>
-          </Link>
-          <br />
-          <Button variant="primary" size="lg" onClick={this.LeaveRoomHandle}>
-            Leave Room
-          </Button>{" "}
-          <br />
-          <Button
-            variant={!this.props.ifready ? "success" : "danger"}
-            size="lg"
-            onClick={this.ToggleReady}
-          >
-            {" "}
-            {toggle_word}
-          </Button>
+          {" "}
+          {!this.props.ifready ? (
+            <p>Please get ready to enter the game</p>
+          ) : (
+            <p>Cool ! You're ready for the game !</p>
+          )}
+          <div style={{ margin: "0 auto", paddingLeft: "130px" }}>
+            <BootstrapSwitchButton
+              onlabel="Ready"
+              s
+              offlabel="Unready"
+              onstyle="success"
+              // offstyle="info"
+              // style="w-100 mx-3"
+              width={120}
+              height={75}
+              onChange={this.ToggleReady}
+            />
+          </div>
         </div>
-        <div
-          id="currentUser1"
-          style={{
-            backgroundColor: "grey",
-            height: "200px",
-            width: "200px",
-            padding: "30px",
-            margin: "30px"
-          }}
-        >
-          <p style={{ color: "white" }}>My Name: Eminem</p>
-          <p style={{ color: "white" }}>Drop Down Menu</p>
-        </div>
-        <Playerwait
-          id={1}
-          name={this.props.player1.name}
-          status={this.props.player1.status}
-          ifPlayerExists={this.props.player1.ifexists}
-        />
-        <Playerwait
-          id={2}
-          name={this.props.player2.name}
-          status={this.props.player2.status}
-          ifPlayerExists={this.props.player2.ifexists}
-        />
-        <Playerwait
-          id={3}
-          name={this.props.player3.name}
-          status={this.props.player3.status}
-          ifPlayerExists={this.props.player3.ifexists}
-        />
-      </div>
+        <Footbar></Footbar>
+      </>
     );
   }
 }
-
 export default Otherplayers;

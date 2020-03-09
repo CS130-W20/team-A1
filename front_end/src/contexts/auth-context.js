@@ -5,7 +5,8 @@ require("dotenv").config();
 // create the context
 export const Auth0Context = createContext();
 export const useAuth0 = () => useContext(Auth0Context);
-
+const redirect_url_upon_authentication = "https://18.208.153.149/#/Landing";
+const redirect_url_upon_logout = "http://localhost:5000/";
 // create a provider
 export class Auth0Provider extends Component {
   // state = { message: "testing message here!" };
@@ -13,14 +14,14 @@ export class Auth0Provider extends Component {
     auth0Client: null,
     isLoading: true,
     isAuthenticated: false,
-    user: null
+    user: null,
+    login_uri: redirect_url_upon_authentication,
+    logout_uri: redirect_url_upon_logout
   };
   config = {
-    //domain: process.env.REACT_APP_AUTH0_DOMAIN,
-    domain: "dev-8b1qvmuz.auth0.com",
-    //client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-    client_id: "Um5MRF3nrB4VDaESH8jPtulGYFTR47kd",
-    redirect_uri: "https://18.208.153.149/#/Landing"
+    domain: process.env.REACT_APP_AUTH0_DOMAIN,
+    client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    redirect_uri: redirect_url_upon_authentication
   };
   componentDidMount() {
     this.initializeAuth0();
@@ -51,13 +52,22 @@ export class Auth0Provider extends Component {
   };
 
   render() {
-    const { auth0Client, isLoading, isAuthenticated, user } = this.state;
+    const {
+      auth0Client,
+      isLoading,
+      isAuthenticated,
+      user,
+      login_uri,
+      logout_uri
+    } = this.state;
     const { children } = this.props;
 
     const configObject = {
       isLoading,
       isAuthenticated,
       user,
+      login_uri,
+      logout_uri,
       loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
       getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
       getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
