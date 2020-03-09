@@ -124,7 +124,7 @@ export class Roundend1 extends Component {
           {/* We need to pass in [{id:0,name:"ha",current_score:1,total_score:2},{id:1,name:"ha",current_score:1,total_score:2},{id:2,name:"ha",current_score:1,total_score:2}] */}
         </Leaderboard_ingame>
         <Countdown
-          date={Date.now() + 60000}
+          date={Date.now() + 10000}
           onComplete={this.renderer}
           style={{ display: "none" }}
         />

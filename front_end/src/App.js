@@ -9,7 +9,7 @@ import Roundend from "./components/post_gameroom/Roundend";
 import { Route, HashRouter } from "react-router-dom";
 import io from "socket.io-client";
 import SocketContext from "./components/pre_gameroom/Context";
-const socket = io("http://localhost:5000");
+const socket = io("https://18.208.153.149");
 
 function App() {
   return (

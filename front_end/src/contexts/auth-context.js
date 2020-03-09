@@ -16,11 +16,11 @@ export class Auth0Provider extends Component {
     user: null
   };
   config = {
-    domain: process.env.REACT_APP_AUTH0_DOMAIN,
-    // domain: "dev-8b1qvmuz.auth0.com",
-    client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-    // client_id: "Um5MRF3nrB4VDaESH8jPtulGYFTR47kd",
-    redirect_uri: "http://localhost:5000/#/Landing"
+    //domain: process.env.REACT_APP_AUTH0_DOMAIN,
+    domain: "dev-8b1qvmuz.auth0.com",
+    //client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    client_id: "Um5MRF3nrB4VDaESH8jPtulGYFTR47kd",
+    redirect_uri: "https://18.208.153.149/#/Landing"
   };
   componentDidMount() {
     this.initializeAuth0();

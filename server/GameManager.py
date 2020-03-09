@@ -38,6 +38,7 @@ class GameManager:
         self.real_answers = None
         self.query = None
         #Set initial total scores for everyone to be zero.
+        self.flag = False
         self.scores = {}
         for i in respondents:
             self.scores.update({i:0})
@@ -71,7 +72,8 @@ class GameManager:
             List of strings, each a name of a current respondent.
         """
         return self.respondents
-
+    def get_flag(self):
+        return self.flag
     def get_game_status(self):
         """ Returns current game status to lobby.
         
@@ -214,7 +216,8 @@ class GameManager:
                     self.scores[i] = round_scores[i]
             else:
                 print("This should not happen!!!!! Only people in lobby should play this game!")
-
+        print(self.scores)
+        self.flag = True
         #Add the score of zero for the prompter to the scores for this round and return
         round_scores[self.prompter] = 0
         return round_scores
@@ -227,6 +230,7 @@ class GameManager:
         self.respondents = self.respondents[1:3]
         self.respondents.append(new_respondent)
         self.current_answers = {}
+        self.flag = False
         self.ready_for_new_round = {}
         self.query = ""
 

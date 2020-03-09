@@ -134,7 +134,7 @@ export class Player1 extends Component {
       );
     } else if (this.state.if_received_questions && !this.if_submitted_answer) {
       // console.log("we received qustions ! countdown starts now!");
-      return <Countdown date={Date.now() + 3000} renderer={this.renderer} />;
+      return <Countdown date={Date.now() + 13000} renderer={this.renderer} />;
     } else {
       return (
         <div>
