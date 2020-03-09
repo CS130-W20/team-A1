@@ -136,6 +136,7 @@ export class Roundend1 extends Component {
           >
             <Answerboard
               correct_answer={this.state.Message["correct_answer"]}
+              my_answer={this.state.Message["currentAnswer"]}
               //Missing: the current user's orderings should be passed in as well
               // my_results={}
             ></Answerboard>

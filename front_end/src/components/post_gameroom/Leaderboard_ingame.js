@@ -5,11 +5,11 @@ export class Leaderboard_ingame extends Component {
   state = {
     data: this.props.results,
     columns: [
-      {
-        name: "ID",
-        selector: "id",
-        left: true
-      },
+      // {
+      //   name: "ID",
+      //   selector: "id",
+      //   left: true
+      // },
       {
         name: "Name",
         selector: "name",

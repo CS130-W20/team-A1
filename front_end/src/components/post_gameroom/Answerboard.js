@@ -7,14 +7,36 @@ export class Answerboard extends Component {
   };
   componentDidMount() {
     let ans = this.answer_formatter();
-    this.setState({ answers: ans });
+    let answer = this.rank_formatter(ans);
+    this.setState({ answers: answer });
   }
   answer_formatter() {
     var answers = this.props.correct_answer.map((val, index) => {
-      return { rank: index, sentence: val, myrank: index };
+      return { rank: index + 1, sentence: val, myrank: index + 1 };
     });
     return answers;
   }
+  rank_formatter(ans) {
+    var my_rank_list = [];
+    var answers = this.props.correct_answer;
+    var my_rank = this.props.my_answer;
+    var i;
+    for (i = 0; i < answers.length; i++) {
+      var j;
+      for (j = 0; j < my_rank.length; j++) {
+        if (answers[i] == my_rank[j]) {
+          // my_rank_list.push(j + 1);
+          ans[i]["myrank"] = j + 1;
+        }
+      }
+    }
+    console.log("current_answers " + answers);
+    console.log("my_answer_list : " + my_rank);
+    console.log("my_ranks " + my_rank_list);
+    console.log("table is :" + ans);
+    return ans;
+  }
+
   state = {
     answers: [],
     columns: [

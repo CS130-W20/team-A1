@@ -15,17 +15,17 @@ const handleAction = () => {
   console.log("Some action !");
 };
 const columns = [
-  {
-    name: "Cool Avatar",
-    selector: "avatar",
-    //sortable: true,
-    left: true
-  },
+  // {
+  //   name: "Cool Avatar",
+  //   selector: "avatar",
+  //   //sortable: true,
+  //   left: true
+  // },
   {
     name: "Name",
     selector: "name",
-    sortable: true,
-    center: true
+    // sortable: true,
+    left: true
   },
   {
     name: "Score",

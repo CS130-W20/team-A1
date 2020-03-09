@@ -7,7 +7,7 @@ import NavbarWaitRoom from "./NavbarWaitRoom";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
 import Footbar from "./../pre_login/Footbar";
 
-const my_name = "Salek";
+const my_name = "";
 export class Otherplayers extends Component {
   LeaveRoomHandle = this.props.LeaveRoomHandle;
   startPermission = this.props.startPermission;

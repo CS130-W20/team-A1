@@ -57,6 +57,7 @@ export class Player1 extends Component {
       Message = message;
       Message["room"] = this.state.room;
       Message["myId"] = this.state.myId;
+      Message["currentAnswer"] = currentAnswer;
       console.log(
         "Player Received results from the server:" + JSON.stringify(Message)
       );
@@ -146,7 +147,6 @@ export class Player1 extends Component {
             pathname: this.state.redirect,
             state: {
               Message: this.state.Message
-              // Redirect_Message: this.state.Redirect_Message
             }
           }}
         />
