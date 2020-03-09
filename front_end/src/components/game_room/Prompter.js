@@ -27,6 +27,7 @@ export class Prompter1 extends Component {
       Message["room"] = this.state.room;
       Message["myId"] = this.state.myId;
       Message["currentAnswer"] = [];
+      Message["round_number"] = this.state.roundNo;
       this.setState({
         Message: Message,
         redirect: "/Roundend"

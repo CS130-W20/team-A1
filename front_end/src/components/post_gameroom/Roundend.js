@@ -13,7 +13,8 @@ export class Roundend1 extends Component {
     if_game_over: false,
     if_prompter: false,
     redirect: null,
-    round_num: 1
+    round_num: this.props.location.state.Message["round_number"]
+
     // round_num:this.props.location.state.Message['round_no']
   };
   componentDidMount() {

@@ -58,6 +58,7 @@ export class Player1 extends Component {
       Message["room"] = this.state.room;
       Message["myId"] = this.state.myId;
       Message["currentAnswer"] = currentAnswer;
+      Message["round_number"] = this.state.roundNo;
       console.log(
         "Player Received results from the server:" + JSON.stringify(Message)
       );
