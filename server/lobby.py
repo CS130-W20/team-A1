@@ -45,8 +45,11 @@ def on_create(data):
     be expecting 'lobby_created' with the details of the lobby sent through the socket
     '''
     id = data['id']
-    lobby_num = random.randint(50,8000)
-    lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
+    if data['room_name'] == "Empty":
+        lobby_num = random.randint(50,8000)
+        lobby = "{0}{1}".format(random.choice(lobby_names), lobby_num)
+    else:
+        lobby = data['room_name']
     player_name = data['name']
     if lobby not in game_rooms:
         game_rooms[lobby] = {
