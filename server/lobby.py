@@ -235,7 +235,7 @@ def on_submitAnswer(data):
     all_answers = game.get_current_answers()
     if len(all_answers) == MAX_RESPONDERS:
         #Get the scores for players this round, total scores, and correct answer order.
-        print('sending answers and result!'+all_answers)
+        # print('sending answers and result!'+all_answers)
         correct_answers = game.get_real_answers()
         round_scores = game.get_all_scores(all_answers)
         total_scores = game.get_total_scores()
