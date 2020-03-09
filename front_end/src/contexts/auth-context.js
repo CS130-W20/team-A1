@@ -6,7 +6,11 @@ require("dotenv").config();
 export const Auth0Context = createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 const redirect_url_upon_authentication = "http://localhost:5000/#/Landing";
+<<<<<<< HEAD
+const redirect_url_upon_logout = "http://localhost:5000";
+=======
 const redirect_url_upon_logout = "http://localhost:5000/";
+>>>>>>> master
 // create a provider
 export class Auth0Provider extends Component {
   // state = { message: "testing message here!" };

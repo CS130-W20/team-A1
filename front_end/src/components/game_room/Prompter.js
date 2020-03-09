@@ -68,10 +68,13 @@ export class Prompter1 extends Component {
       );
     } else {
       return (
-        <div className="searchbox">
-          <h1>You are the prompter, please create a prompt!</h1>
-          <Countdown date={Date.now() + 100000} renderer={this.renderer} />
-          <Searchbox room={this.props.room} myId={this.props.myId}></Searchbox>
+        <div className="searchbox" style={{ maginTop: "450px" }}>
+          {/* <Countdown date={Date.now() + 100000} renderer={this.renderer} /> */}
+          <Searchbox
+            room={this.props.room}
+            myId={this.props.myId}
+            style={{ textAlign: "center" }}
+          ></Searchbox>
         </div>
       );
     }

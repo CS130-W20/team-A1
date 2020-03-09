@@ -12,3 +12,8 @@ npm install --save react-social-login
 npm install @auth0/auth0-spa-js
 npm install react-anime -S
 npm install mdbreact
+
+npm install babel-runtime --save
+npm install prop-types --save
+npm install react-loader-spinner --save
+

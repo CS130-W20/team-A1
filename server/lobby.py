@@ -227,32 +227,38 @@ def on_submitAnswer(data):
     answers = data['answers']
     id = data['id']
     game = game_rooms[room]['game']
+    
     new_answer = {id: answers}
     # print("We received this new answer from a player: ",new_answer,"****\n")
-    game.add_new_answer(new_answer)
+    if id in game.get_respondents():
+        game.add_new_answer(new_answer)
 
     #Check if this entry caused the answers to all be submitted.
     all_answers = game.get_current_answers()
+    print(len(all_answers))
+    print(MAX_RESPONDERS)
+    respondents = game.get_respondents()
     if len(all_answers) == MAX_RESPONDERS:
         #Get the scores for players this round, total scores, and correct answer order.
-        correct_answers = game.get_real_answers()
-        round_scores = game.get_all_scores(all_answers)
-        total_scores = game.get_total_scores()
+        if not game.get_flag():
+            correct_answers = game.get_real_answers()
+            round_scores = game.get_all_scores(all_answers)
+            total_scores = game.get_total_scores()
 
-        print(round_scores)
-        print(total_scores)
+            print(round_scores)
+            print(total_scores)
         
-        #Create a list with the user results.
-        user_results = []
-        for i in game_rooms[room]['clients']:
-            user_results.append({'id':i, "name": game_rooms[room]['names'][i], 'total_score':total_scores[i], 'current_score':round_scores[i]})
-        print(user_results)
-        #Get the game_status
-        game_over = not game.get_game_status()
+            #Create a list with the user results.
+            user_results = []
+            for i in game_rooms[room]['clients']:
+                user_results.append({'id':i, "name": game_rooms[room]['names'][i], 'total_score':total_scores[i], 'current_score':round_scores[i]})
+            print(user_results)
+            #Get the game_status
+            game_over = not game.get_game_status()
 
         #Make the message from these components.
-        Message = {'correct_answer':correct_answers, 'user_results':user_results}
-        emit('send_scores', Message, room=room)
+            Message = {'correct_answer':correct_answers, 'user_results':user_results}
+            emit('send_scores', Message, room=room)
     #######################################################################################################################################
     ###################################################MODIFIED CODE BY SALEKH############################################################
     #######################################################################################################################################
@@ -404,4 +410,4 @@ def do_admin_login():
     # If you are logged in 
 
 if __name__ == '__main__':
-    socketio.run(app,debug=True)
+    socketio.run(app)

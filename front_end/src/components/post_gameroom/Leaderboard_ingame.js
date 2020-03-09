@@ -33,7 +33,7 @@ export class Leaderboard_ingame extends Component {
   render() {
     return (
       <DataTable
-        title="Scores"
+        title="Leaderboard"
         columns={this.state.columns}
         data={this.state.data}
         defaultSortField="score"

@@ -17,6 +17,7 @@
     "babel-loader": "8.0.6",
     "babel-plugin-named-asset-import": "^0.3.6",
     "babel-preset-react-app": "^9.1.1",
+    "babel-runtime": "^6.26.0",
     "bootstrap": "^4.4.1",
     "bootstrap-switch-button-react": "^1.2.0",
     "camelcase": "^5.3.1",
@@ -57,6 +58,7 @@
     "react-countdown-now": "^2.1.2",
     "react-data-table-component": "^6.3.1",
     "react-dom": "^16.12.0",
+    "react-loader-spinner": "^3.1.5",
     "react-native-leaderboard": "^1.0.6",
     "react-native-shimmer": "^0.5.0",
     "react-particles-js": "^2.7.1",
@@ -64,6 +66,10 @@
     "react-scripts": "^3.4.0",
     "react-shimmer": "^2.0.1",
     "react-sortable": "^2.0.0",
+<<<<<<< HEAD
+    "react-spinners": "^0.8.1",
+=======
+>>>>>>> master
     "react-sticky-footer": "0.1.0-rc3",
     "resolve": "1.15.0",
     "resolve-url-loader": "3.1.1",

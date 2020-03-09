@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import SocketContext from "./Context";
 import { Redirect } from "react-router-dom";
+<<<<<<< HEAD
+import { Form, Button, Table } from "react-bootstrap";
+=======
 import { Form, Button } from "react-bootstrap";
+>>>>>>> master
 import Leaderboard_Global from "./Leaderboard_Global";
 let Message;
 
@@ -111,6 +115,120 @@ export class Roomcreation1 extends Component {
       );
     }
     return (
+<<<<<<< HEAD
+      <>
+        <div
+          style={{
+            paddingTop: "100px",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          {!this.state.ifWrongRoomName ? (
+            <p></p>
+          ) : (
+            <h5 style={{ backgroundColor: "red", textAlign: "center" }}>
+              Invalid Room Name , Try Again!
+            </h5>
+          )}
+        </div>
+        <table class="table">
+          {/* <tr>
+            <th
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                textAlign: "center"
+              }}
+            >
+              Choose An Action
+            </th>
+          </tr> */}
+
+          <tr>
+            <td>
+              <h3
+                style={{
+                  backgroundColor: "#810413",
+                  color: "white",
+                  textAlign: "center",
+                  width: "300px",
+                  paddingTop: "30px",
+                  marginTop: "20px"
+                }}
+              >
+                Choose An Action
+              </h3>
+              <div
+                id="actions"
+                style={{
+                  width: "300px",
+                  height: "400px",
+                  textAlign: "center",
+                  display: "inline-block",
+                  padding: "60px",
+                  backgroundColor: "#810413",
+                  marginRight: "80px"
+
+                  // marginBottom: "300px",
+                  // paddingTop: "60px"
+                }}
+              >
+                <div id="create_room">
+                  <Form>
+                    <Form.Label style={{ color: "white" }}>
+                      Create Room
+                    </Form.Label>
+                    <Form.Control type="email" placeholder="Room name" />
+
+                    <Button
+                      variant="primary"
+                      onClick={this.handleCREATE_Submit}
+                    >
+                      Create
+                    </Button>
+                  </Form>
+                </div>
+
+                <div id="join_room">
+                  <Form>
+                    <Form.Label style={{ color: "white" }}>
+                      Join Room
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Room name"
+                      onChange={this.updateInput}
+                    />
+                    {/* <Form.Text className="text-muted">
+                Please enter a room name you wanna join
+              </Form.Text> */}
+
+                    <Button variant="primary" onClick={this.handleJOIN_Submit}>
+                      Join
+                    </Button>
+                  </Form>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                style={{
+                  display: "inline-block",
+                  padding: "60px",
+                  backgroundColor: "#810413",
+                  marginLeft: "120px"
+                }}
+              >
+                <Leaderboard_Global
+                // style={{ marginBottom: "100px", paddingBottom: "50px" }}
+                ></Leaderboard_Global>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </>
+=======
       <div
         style={{
           paddingTop: "100px",
@@ -202,6 +320,7 @@ export class Roomcreation1 extends Component {
       //     Join Room
       //   </button>
       // </div>
+>>>>>>> master
     );
   }
 }

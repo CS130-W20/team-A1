@@ -1,5 +1,21 @@
 {
   "files": {
+<<<<<<< HEAD
+    "main.css": "/static/react/css/main.28d9bd32.chunk.css",
+    "main.js": "/static/react/js/main.d087cc9a.chunk.js",
+    "main.js.map": "/static/react/js/main.d087cc9a.chunk.js.map",
+    "runtime-main.js": "/static/react/js/runtime-main.13e3bd9a.js",
+    "runtime-main.js.map": "/static/react/js/runtime-main.13e3bd9a.js.map",
+    "css/2.a3108762.chunk.css": "/static/react/css/2.a3108762.chunk.css",
+    "js/2.208cbc11.chunk.js": "/static/react/js/2.208cbc11.chunk.js",
+    "js/2.208cbc11.chunk.js.map": "/static/react/js/2.208cbc11.chunk.js.map",
+    "../../templates/index.html": "/static/react/../../templates/index.html",
+    "css/2.a3108762.chunk.css.map": "/static/react/css/2.a3108762.chunk.css.map",
+    "css/main.28d9bd32.chunk.css.map": "/static/react/css/main.28d9bd32.chunk.css.map",
+    "js/2.208cbc11.chunk.js.LICENSE.txt": "/static/react/js/2.208cbc11.chunk.js.LICENSE.txt",
+    "media/logo2.png": "/static/react/media/logo2.b74e0d31.png",
+    "precache-manifest.40f4221d512777aae884122194429672.js": "/static/react/precache-manifest.40f4221d512777aae884122194429672.js",
+=======
     "main.css": "/static/react/css/main.2d6ceb79.chunk.css",
     "main.js": "/static/react/js/main.98e22bf9.chunk.js",
     "main.js.map": "/static/react/js/main.98e22bf9.chunk.js.map",
@@ -14,13 +30,21 @@
     "js/2.af7b335b.chunk.js.LICENSE.txt": "/static/react/js/2.af7b335b.chunk.js.LICENSE.txt",
     "media/logo2.png": "/static/react/media/logo2.b74e0d31.png",
     "precache-manifest.e3cec9ba7912ebfcaba8d3859accc3cd.js": "/static/react/precache-manifest.e3cec9ba7912ebfcaba8d3859accc3cd.js",
+>>>>>>> master
     "service-worker.js": "/static/react/service-worker.js"
   },
   "entrypoints": [
     "js/runtime-main.13e3bd9a.js",
+<<<<<<< HEAD
+    "css/2.a3108762.chunk.css",
+    "js/2.208cbc11.chunk.js",
+    "css/main.28d9bd32.chunk.css",
+    "js/main.d087cc9a.chunk.js"
+=======
     "css/2.47e06e2e.chunk.css",
     "js/2.af7b335b.chunk.js",
     "css/main.2d6ceb79.chunk.css",
     "js/main.98e22bf9.chunk.js"
+>>>>>>> master
   ]
 }

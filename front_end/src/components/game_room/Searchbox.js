@@ -1,7 +1,7 @@
 import React from "react";
 // import axios from "axios";
 import SocketContext from "../pre_gameroom/Context";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class Searchbox1 extends React.Component {
@@ -53,23 +53,58 @@ class Searchbox1 extends React.Component {
       var items = this.state.answers.map((item, index) => {
         return (
           <li>
-            {index + 1}---{item}
+            {index + 1} -- {item}
           </li>
         );
       });
       return (
-        <div id="results" style={{ backgroundColor: "#51067b" }}>
+        <div
+          id="results"
+          style={{
+            backgroundColor: "#0066ff",
+            height: "500px",
+            width: "800px",
+            border: "solid 40px white",
+            padding: "20px"
+          }}
+        >
           <h1 style={{ textAlign: "center" }}>Correct Results</h1>
-          <ul style={{ listStyleType: "none" }}>{items}</ul>
-          <h2 style={{ textAlign: "center" }}>
+          <ul style={{ listStyleType: "none", padding: "5px" }}>{items}</ul>
+          <h2
+            style={{
+              textAlign: "center",
+              fontStyle: "italic",
+              marginTop: "20px",
+              color: "white"
+            }}
+          >
             Other Players Are Guessing , Please Wait!
           </h2>
+          <div style={{ textAlign: "center", marginLeft: "60px" }}>
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+            <Spinner animation="grow" variant="light" />
+          </div>
         </div>
       );
     } else {
       return (
         <div>
-          <form className="form" id="searchForm">
+          <h2 style={{ textAlign: "center" }}>Enter a Prompt </h2>
+          <br />
+          <form
+            className="form"
+            id="searchForm"
+            style={{ textAlign: "center" }}
+          >
             <input
               type="text"
               className="input"
@@ -78,8 +113,16 @@ class Searchbox1 extends React.Component {
               onChange={this.handleChange}
             ></input>
           </form>
-          <Button className="button search-button" onClick={this.onFormSubmit}>
-            Clickme
+
+          <br />
+          <br />
+          <Button
+            className="button search-button"
+            onClick={this.onFormSubmit}
+            size="lg"
+            block
+          >
+            Submit Prompt
           </Button>
         </div>
       );

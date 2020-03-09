@@ -101,33 +101,61 @@ export class Roundend1 extends Component {
     }
     return (
       <div>
-        <h1>Round {this.state.round_num} is Over</h1>
-        <h1>
-          Your Round Score Is --
-          {this.state.Message["user_results"].find(
-            userResult => userResult["id"] === this.props.socket.id + ""
-          )
-            ? this.state.Message["user_results"].find(
-                userResult => userResult["id"] === this.props.socket.id + ""
-              )["current_score"]
-            : "000"}
-          /100
-        </h1>
-        <Answerboard
-          correct_answer={this.state.Message["correct_answer"]}
-          //Missing: the current user's orderings should be passed in as well
-          // my_results={}
-        ></Answerboard>
-
-        <h1>LeaderBoard</h1>
-        <Leaderboard_ingame results={this.state.Message["user_results"]}>
-          {/* We need to pass in [{id:0,name:"ha",current_score:1,total_score:2},{id:1,name:"ha",current_score:1,total_score:2},{id:2,name:"ha",current_score:1,total_score:2}] */}
-        </Leaderboard_ingame>
-        <Countdown
-          date={Date.now() + 60000}
-          onComplete={this.renderer}
-          style={{ display: "none" }}
-        />
+        <div
+          style={{
+            backgroundColor: "grey",
+            padding: "10px",
+            borderRadius: "20px",
+            border: "dashed darkblue",
+            marginTop: "50px"
+          }}
+        >
+          <h1 style={{ textAlign: "center" }}>
+            Round {this.state.round_num} is Over{" "}
+          </h1>
+          <h1 style={{ textAlign: "center" }}>
+            Your Round Score Is{" "}
+            {this.state.Message["user_results"].find(
+              userResult => userResult["id"] === this.props.socket.id + ""
+            )
+              ? this.state.Message["user_results"].find(
+                  userResult => userResult["id"] === this.props.socket.id + ""
+                )["current_score"]
+              : "000"}
+            /100
+          </h1>
+        </div>
+        <div style={{ marginTop: "100px" }}>
+          <div
+            style={{
+              float: "left",
+              paddingRight: "50px",
+              height: "500px",
+              width: "600px"
+            }}
+          >
+            <Answerboard
+              correct_answer={this.state.Message["correct_answer"]}
+              //Missing: the current user's orderings should be passed in as well
+              // my_results={}
+            ></Answerboard>
+          </div>
+          <div
+            style={{
+              float: "right",
+              paddingLeft: "50px",
+              height: "500px",
+              width: "600px"
+            }}
+          >
+            <Leaderboard_ingame results={this.state.Message["user_results"]}>
+              {/* We need to pass in [{id:0,name:"ha",current_score:1,total_score:2},{id:1,name:"ha",current_score:1,total_score:2},{id:2,name:"ha",current_score:1,total_score:2}] */}
+            </Leaderboard_ingame>
+          </div>
+        </div>
+        <div style={{ display: "none" }}>
+          <Countdown date={Date.now() + 10000} onComplete={this.renderer} />
+        </div>
       </div>
     );
   }
@@ -138,14 +166,3 @@ const Roundend = props => (
   </SocketContext.Consumer>
 );
 export default Roundend;
-
-// #Create a list with the user results.
-// user_results = []
-// for i in game_rooms[room]['clients']:
-//     user_results.append({'id':i, 'total_score':total_scores[i], 'current_score':round_scores[i]})
-
-// #Get the game_status
-// game_over = not game.get_game_status()
-
-// #Make the message from these components.
-// Message = {'correct_answer':correct_answers, 'user_results':user_results}
