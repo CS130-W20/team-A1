@@ -4,7 +4,10 @@ import Prompter from "./Prompter";
 // import ReactDOM from "react-dom";
 import SocketContext from "../pre_gameroom/Context";
 import Footbar from "../pre_login/Footbar";
+<<<<<<< HEAD
 import GameroomNavbar from "./GameroomNavbar";
+=======
+>>>>>>> master
 
 export class Playgame1 extends Component {
   state = {
@@ -24,6 +27,7 @@ export class Playgame1 extends Component {
             round={this.state.round_num}
             style={{ marginBottom: "50px" }}
           />
+<<<<<<< HEAD
           <div style={{ marginTop: "100px" }}>
             <Player
               clients={this.state.clients}
@@ -34,6 +38,8 @@ export class Playgame1 extends Component {
               style={{ marginTop: "100px" }}
             />
           </div>
+=======
+>>>>>>> master
           <Footbar></Footbar>
         </div>
       );
@@ -46,6 +52,7 @@ export class Playgame1 extends Component {
             round={this.state.round_num}
             style={{ marginBottom: "50px" }}
           />
+<<<<<<< HEAD
           <div style={{ marginTop: "200px" }}>
             <Prompter
               clients={this.state.clients}
@@ -55,6 +62,8 @@ export class Playgame1 extends Component {
               style={{ marginTop: "100px" }}
             />
           </div>
+=======
+>>>>>>> master
           <Footbar></Footbar>
         </div>
       );

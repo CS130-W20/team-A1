@@ -17,7 +17,6 @@ selenium        == 3.141.0
 pytest          == 5.3.5
 MutPy           == 0.6.1       
 
-
 Flask-Migrate == 2.5.2
 Flask-Script == 2.0.6
 Flask-SQLAlchemy == 2.4.1

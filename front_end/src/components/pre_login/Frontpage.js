@@ -26,6 +26,7 @@ function Frontpage() {
         >
           Welcome to HI-FI Games !
         </h1>
+<<<<<<< HEAD
         <div
           style={{
             display: "flex",
@@ -45,6 +46,19 @@ function Frontpage() {
             alt="My Avatar"
           />
         </div>
+=======
+        <img
+          src={logo}
+          width={300}
+          height={300}
+          style={{
+            textAlign: "center",
+            alignItems: "center",
+            display: "block"
+          }}
+          alt="My Avatar"
+        />
+>>>>>>> master
         <h4
           style={{
             textAlign: "center",
@@ -72,6 +86,7 @@ function Frontpage() {
             </Button>
           </>
         )}
+<<<<<<< HEAD
         {!isLoading && user && (
           <Button
             variant="primary"
@@ -87,6 +102,22 @@ function Frontpage() {
             Go to Game Room
           </Button>
         )}
+=======
+
+        <Button
+          variant="primary"
+          href="#Landing"
+          size="lg"
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "100px"
+          }}
+          block
+        >
+          DEV ONLY!! jump to landing
+        </Button>
+>>>>>>> master
       </div>
       <Footbar></Footbar>
     </>
