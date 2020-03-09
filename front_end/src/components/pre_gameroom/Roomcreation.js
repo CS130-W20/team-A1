@@ -10,6 +10,7 @@ export class Roomcreation1 extends Component {
     super(props);
     this.state = {
       roomname: "Empty",
+      crroomname: "Empty",
       redirect: null,
       ifWrongRoomName: false
     };
@@ -18,6 +19,7 @@ export class Roomcreation1 extends Component {
     this.handleJOIN_Submit = this.handleJOIN_Submit.bind(this);
     this.handleDESTROY_Submit = this.handleDESTROY_Submit.bind(this);
     this.updateInput = this.updateInput.bind(this);
+    this.updateCreateInput = this.updateCreateInput.bind(this);
 
     this.props.socket.on("lobby_created", message => {
       Message = JSON.parse(JSON.stringify(message));
@@ -58,13 +60,18 @@ export class Roomcreation1 extends Component {
   updateInput(evt) {
     this.state = { roomname: evt.target.value };
   }
+  updateCreateInput(evt) {
+    this.state = { crroomname: evt.target.value };
+  }
 
   handleCREATE_Submit(e) {
+    console.log(this.state.crroomname);
     console.log(this.props.userInfo);
 
     let data = {
       id: this.props.socket.id,
-      name: this.props.userInfo["name"]
+      name: this.props.userInfo["name"],
+      room_name: this.state.crroomname
     };
     this.props.socket.emit("create_room", data);
     console.log(
@@ -171,10 +178,14 @@ export class Roomcreation1 extends Component {
               >
                 <div id="create_room">
                   <Form>
+
+
                     <Form.Label style={{ color: "white" }}>
                       Create Room
+
+
                     </Form.Label>
-                    <Form.Control type="email" placeholder="Room name" />
+                    <Form.Control type="text" onChange={this.updateCreateInput} placeholder="Room name" />
 
                     <Button
                       variant="primary"
