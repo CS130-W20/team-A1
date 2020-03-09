@@ -26,17 +26,25 @@ function Frontpage() {
         >
           Welcome to HI-FI Games !
         </h1>
-        <img
-          src={logo}
-          width={300}
-          height={300}
+        <div
           style={{
-            textAlign: "center",
-            alignItems: "center",
-            display: "block"
+            display: "flex",
+            justifyContent: "center"
+            // backgroundColor: "green"
           }}
-          alt="My Avatar"
-        />
+        >
+          <img
+            src={logo}
+            width={300}
+            height={300}
+            // style={{
+            //   textAlign: "center",
+            //   alignItems: "center",
+            //   display: "block"
+            // }}
+            alt="My Avatar"
+          />
+        </div>
         <h4
           style={{
             textAlign: "center",
@@ -64,20 +72,21 @@ function Frontpage() {
             </Button>
           </>
         )}
-
-        <Button
-          variant="primary"
-          href="#Landing"
-          size="lg"
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginBottom: "100px"
-          }}
-          block
-        >
-          DEV ONLY!! jump to landing
-        </Button>
+        {!isLoading && user && (
+          <Button
+            variant="primary"
+            href="#Landing"
+            size="lg"
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "100px"
+            }}
+            block
+          >
+            Go to Game Room
+          </Button>
+        )}
       </div>
       <Footbar></Footbar>
     </>

@@ -36,10 +36,12 @@ export class SortableList extends Component {
           >
             <div
               style={{
-                backgroundColor: "#4c8c92",
-                border: "2px solid blue",
-                padding: "5px",
-                margin: "3px"
+                backgroundColor: "#0066ff",
+                border: "2px solid white",
+                borderRadius: "20px",
+
+                margin: "3px",
+                padding: "20px"
               }}
             >
               {item}
@@ -49,16 +51,18 @@ export class SortableList extends Component {
       );
     });
     records = items.map((item, i) => [item]);
-    //console.log("THE RECORDS ARE: \n" + records);
+
     this.updatePlayer(records);
 
     return (
       <ul
         style={{
           listStyleType: "upper-roman",
-          backgroundColor: "cyan",
-          color: "#9f0606",
-          textAlign: "center"
+          backgroundColor: "silver",
+          color: "white",
+          textAlign: "center",
+          padding: "80px",
+          borderRadius: "20px"
         }}
         className="sortable-list"
       >

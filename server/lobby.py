@@ -410,4 +410,4 @@ def do_admin_login():
     # If you are logged in 
 
 if __name__ == '__main__':
-    socketio.run(app,host="0.0.0.0", port=443, ssl_context='adhoc')
+    socketio.run(app)

@@ -4,6 +4,7 @@ import Prompter from "./Prompter";
 // import ReactDOM from "react-dom";
 import SocketContext from "../pre_gameroom/Context";
 import Footbar from "../pre_login/Footbar";
+import GameroomNavbar from "./GameroomNavbar";
 
 export class Playgame1 extends Component {
   state = {
@@ -17,28 +18,43 @@ export class Playgame1 extends Component {
     if (this.state.role == "non-prompter") {
       return (
         <div>
-          <Player
-            clients={this.state.clients}
-            round_num={this.state.round_num}
+          <GameroomNavbar
             room={this.state.room_id}
-            myId={this.state.playerid}
-            if_received_questions={false}
+            role={"Guesser"}
+            round={this.state.round_num}
+            style={{ marginBottom: "50px" }}
           />
+          <div style={{ marginTop: "100px" }}>
+            <Player
+              clients={this.state.clients}
+              round_num={this.state.round_num}
+              room={this.state.room_id}
+              myId={this.state.playerid}
+              if_received_questions={false}
+              style={{ marginTop: "100px" }}
+            />
+          </div>
           <Footbar></Footbar>
         </div>
       );
     } else if (this.state.role == "prompter") {
       return (
         <div>
-          <h1 style={{ margin: "5px", padding: "5px" }}>
-            Round {this.state.round_num}/4
-          </h1>
-          <Prompter
-            clients={this.state.clients}
-            round_num={this.state.round_num}
+          <GameroomNavbar
             room={this.state.room_id}
-            myId={this.state.playerid}
+            role={"Prompter"}
+            round={this.state.round_num}
+            style={{ marginBottom: "50px" }}
           />
+          <div style={{ marginTop: "200px" }}>
+            <Prompter
+              clients={this.state.clients}
+              round_num={this.state.round_num}
+              room={this.state.room_id}
+              myId={this.state.playerid}
+              style={{ marginTop: "100px" }}
+            />
+          </div>
           <Footbar></Footbar>
         </div>
       );
