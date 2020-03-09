@@ -111,20 +111,22 @@ export class Player1 extends Component {
           </div>
 
           <div id="sort_list" style={{ display: this.state.displayTimer }}>
+            <h1 style={{ textAlign: "center" }}>Please Sort the List!</h1>
             <p
               style={{
                 color: "white",
                 backgroundColor: "darkBlue",
-                width: "110px",
+                width: "130px",
                 textAlign: "center",
-                marginLeft: "100px",
+                margin: "auto",
+                // marginLeft: "100px",
                 borderRadius: "20px",
                 borderColor: "darkBlue"
               }}
             >
               {minutes}:{seconds}
             </p>
-            <h1 style={{ textAlign: "center" }}>Please Sort the List!</h1>
+
             <SortableList
               items={this.state.sentences}
               answerupdate={this.getAnswers}
@@ -180,7 +182,7 @@ export class Player1 extends Component {
               color="White"
               height={400}
               width={400}
-              timeout={80000} //3 secs
+              timeout={100000} //3 secs
             />
           </div>
         </div>

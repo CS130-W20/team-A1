@@ -61,7 +61,7 @@ export class SortableList extends Component {
           backgroundColor: "silver",
           color: "white",
           textAlign: "center",
-          padding: "80px",
+          padding: "60px",
           borderRadius: "20px"
         }}
         className="sortable-list"
