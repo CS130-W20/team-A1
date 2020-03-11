@@ -8,6 +8,7 @@ export const useAuth0 = () => useContext(Auth0Context);
 const redirect_url_upon_authentication = "http://localhost:5000/#/Landing";
 const redirect_url_upon_logout = "http://localhost:5000";
 // create a provider
+const ifEnabled = false;
 export class Auth0Provider extends Component {
   // state = { message: "testing message here!" };
   state = {
@@ -19,8 +20,8 @@ export class Auth0Provider extends Component {
     logout_uri: redirect_url_upon_logout
   };
   config = {
-    domain: process.env.REACT_APP_AUTH0_DOMAIN,
-    client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    domain: "dev-8b1qvmuz.auth0.com",
+    client_id: "Um5MRF3nrB4VDaESH8jPtulGYFTR47kd",
     redirect_uri: redirect_url_upon_authentication
   };
   componentDidMount() {
@@ -61,18 +62,31 @@ export class Auth0Provider extends Component {
       logout_uri
     } = this.state;
     const { children } = this.props;
-
-    const configObject = {
-      isLoading,
-      isAuthenticated,
-      user,
-      login_uri,
-      logout_uri,
-      loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
-      getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
-      getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
-      logout: (...p) => auth0Client.logout(...p)
-    };
+    let configObject = {};
+    if (ifEnabled) {
+      configObject = {
+        isLoading,
+        isAuthenticated,
+        user,
+        login_uri,
+        logout_uri,
+        loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
+        getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
+        getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
+        logout: (...p) => auth0Client.logout(...p)
+      };
+    } else {
+      configObject = {
+        isLoading: false,
+        isAuthenticated: true,
+        user: { nickname: "jonathon", sub: "12345", picture: "/" },
+        login_uri,
+        logout_uri,
+        loginWithRedirect: () => {
+          console.log("logged in fake!");
+        }
+      };
+    }
 
     return (
       <Auth0Context.Provider value={configObject}>
