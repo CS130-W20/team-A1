@@ -31,5 +31,7 @@ We have unit tests that test the internal QueryApi that is not exposed to the us
 * Checks to see that query object contains unique answers for each participant 
 * If all the cases pass then we are able to receive data from the gameManager `get_suggestions(query)` method and that data is valid.
 
-## 4. (Future) Socket io testing (explained inside report)
+## 4. Mutation Testing
+* Mutation testing is implemented inside `test_mutation.py`. This tests the GameManagers's `get_suggestions()` function as well as instantiation of GameManager instances.
+* TestGetSuggest() places in many different query types and checks to see if there is an accurate response. This is meaningful because it shows us how robust our system is to faulty queries that prompter might present. If a query doesn't make sense, then google's knowledge engine may not provide adequate results or enough results for that matter which will result in an error in our system. The mutation test clearly exposes this.
 ## 5. (Future) React component testing (explained inside report)
