@@ -18,3 +18,11 @@ class GameManagerTest (TestCase):
         # Check to see if suggestions are shuffled:
         p1, p2, p3 = q.keys()
         self.assertEqual( (q[p1] != q[p2] != q[p3]), True)
+
+    def test_GameManagerInputs(self):
+        """
+        Tests GameManager input data prompter and respondents and GET abilities of those props
+        """
+        gameManager = GameManager("Jonathan", ["Omar", "Joey", "Salekh"])
+        self.assertEqual((str==type(gameManager.get_prompter()[0])), True)
+        self.assertEqual((list==type(gameManager.get_respondents())), True)
