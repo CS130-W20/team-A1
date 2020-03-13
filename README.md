@@ -25,6 +25,8 @@ Then go to the local host server emitting from `lobby`.
 - To perform mutation testing you can type `cd server && mut.py --target GameManager --unit-test test_mutation -m && cd ..`.
 - Mutation and Unit tests on GameManager will be performed automatically using TravisCI. 
 
+### Documentation
+- Your can refer to [docs](https://github.com/CS130-W20/team-A1/tree/master/server/docs) to see our documentation for GameManager and Lobby backend services.
 
 ## Relevant Links 
 - Documentation link
