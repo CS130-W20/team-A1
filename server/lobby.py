@@ -140,20 +140,20 @@ def on_playerReady(data):
     @param data - a dict containing the id and room of the player readying up.
     @return - emits an event back to the front-end client, the front-end client should
     be expecting "player_status_changed" if successful and "if_all_ready" with "Yes" if all players ready.
+	
+	'''
+	id = data['id']
+	room = data['room']
 
-    '''
-    id = data['id']
-    room = data['room']
-
-    game_rooms[room]['status'][id] = 'Ready'
-    emit("player_status_changed", {'id':id, 'status':"Ready"}, room=room)
-    #This function needs to tell everyone in the same room with the player, 
-    # who just sent message saying he's ready, about this player's status change
-    #for everyplayer in the same room :
-    ############Modified by Salekh #################################################################################### Added the second condition to check for there are 4 ppl in the room 
-    if all(value == 'Ready' for value in game_rooms[room]['status'].values()) and len(game_rooms[room]['status'])==4:
-    ########################################################################################################################################################################
-        emit("if_all_ready", "Yes", room=room)
+	game_rooms[room]['status'][id] = 'Ready'
+	emit("player_status_changed", {'id':id, 'status':"Ready"}, room=room)
+	#This function needs to tell everyone in the same room with the player, 
+	# who just sent message saying he's ready, about this player's status change
+	#for everyplayer in the same room :
+	############Modified by Salekh #################################################################################### Added the second condition to check for there are 4 ppl in the room 
+	if all(value == 'Ready' for value in game_rooms[room]['status'].values()) and len(game_rooms[room]['status'])==4:
+   ###############################################################################################################################################################
+		emit("if_all_ready", "Yes", room=room)
     
 @socketio.on("player_UNDOready")
 def on_playerUnready(data):
@@ -165,17 +165,17 @@ def on_playerUnready(data):
     @param data - a dict containing the id and room of the player unreadying.
     @return - emits an event back to the front-end client, the front-end client should
     be expecting "player_status_changed" if successful and "if_all_ready" with "No" if all players are no longer ready.
-
-    '''
-    room = data['room']
-    id = data['id']
-    unreadied = False
-    if all(value == 'Ready' for value in game_rooms[room]['status'].values()):
-        unreadied = True
-    game_rooms[room]['status'][id] = 'Not-Ready'
-    emit("player_status_changed", {'id':id, 'status':"Not-Ready"}, room=room)
-    if unreadied:
-        emit("if_all_ready", "No", room=room)
+	
+	'''
+	room = data['room']
+	id = data['id']
+	unreadied = False
+	if all(value == 'Ready' for value in game_rooms[room]['status'].values()):
+		unreadied = True
+	game_rooms[room]['status'][id] = 'Not-Ready'
+	emit("player_status_changed", {'id':id, 'status':"Not-Ready"}, room=room)
+	if unreadied:
+		emit("if_all_ready", "No", room=room)
 
 
 @socketio.on("player_left_room")
@@ -188,32 +188,29 @@ def on_playerLeft(data):
 	@param data - dict containing id and room name of player leaving
 	@returns - emits an event back to the front end of "player_left", letting it know
 	if the host changed or not
-	
 	'''
-    id = data['id']
-    room = data['room']
-    print(id)
-    print (game_rooms[room])
-    leave_room(room)
-    del game_rooms[room]['names'][id]
-    del game_rooms[room]['status'][id]
-    game_rooms[room]['clients'].remove(id)
-    host = game_rooms[room]['host']
-    owner = host == id
-
-    if len(game_rooms[room]['clients']) == 0 and host == id:
-        del game_rooms[room]
-        emit("player_left", {"id":id, "if_owner": True, "new_owner": None}, room=room)
-
-
-    
-    else:
-        next_owner = None
-        if owner:
-            next_owner = game_rooms[room]['clients'][0]
-            game_rooms[room]['host'] = next_owner
-        emit("player_left", {"id":id, "if_owner": owner, "new_owner": next_owner}, room=room)
-    print(game_rooms)
+	id = data['id']
+	room = data['room']
+	print(id)
+	print (game_rooms[room])
+	leave_room(room)
+	del game_rooms[room]['names'][id]
+	del game_rooms[room]['status'][id]
+	game_rooms[room]['clients'].remove(id)
+	host = game_rooms[room]['host']
+	owner = host == id
+	
+	if len(game_rooms[room]['clients']) == 0 and host == id:
+		del game_rooms[room]
+		emit("player_left", {"id":id, "if_owner": True, "new_owner": None}, room=room)
+		
+	else:
+		next_owner = None
+		if owner:
+			next_owner = game_rooms[room]['clients'][0]
+			game_rooms[room]['host'] = next_owner
+		emit("player_left", {"id":id, "if_owner": owner, "new_owner": next_owner}, room=room)
+	print(game_rooms)
 
 
 @socketio.on("start_game")
@@ -225,26 +222,26 @@ def on_gameStarted(data):
 	@return - emits the prompter id in a message "enter_game" giving the front end room permission to start the game.
 	
 	'''
-    room = data['room']
-    id = data['id']
-    #Add a new GameManager to the current room.
-    if game_rooms[room]['game'] is None:
-        game_rooms[room]['game'] = GameManager.GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
-    prompter_id = game_rooms[room]['host']
-    Message = {"prompter":prompter_id}
-    emit("enter_game", Message, room=room)
-    #send all the users in the room(including the owner) a message containing{}
-    #
+	room = data['room']
+	id = data['id']
+	#Add a new GameManager to the current room.
+	if game_rooms[room]['game'] is None:
+		game_rooms[room]['game'] = GameManager.GameManager(game_rooms[room]['host'], game_rooms[room]['clients'])
+	prompter_id = game_rooms[room]['host']
+	Message = {"prompter":prompter_id}
+	emit("enter_game", Message, room=room)
+	#send all the users in the room(including the owner) a message containing{}
+	#
 
 @socketio.on("submit_prompt")
 def on_submitPrompt(data):
-    """ 
+    '''
     This is the event the server listens to for getting the prompt from the prompter. It sends
     the prompt to the game_manager, who gets the results and returns 3 shuffled versions to
     display to the non-host clients, and ther real order to displa
     @param data - Dict with a query field, containing string for query (i.e. 'how to'), and room field, containing string with name of room.
     @return - emits the player key answer value dict of scrambled orders back to the client (real order for prompter).
-    """
+    '''
     room = data['room']
     prompt = data['prompt']
     print('received prompt from the prompter:',prompt)
@@ -255,14 +252,14 @@ def on_submitPrompt(data):
 
 @socketio.on('submit_answer')
 def on_submitAnswer(data):
-    """
+    '''
     This is the event the server listens to for getting an answer from one of the players. It sends the
     answer to the game manager, who adds the answers to its list. It then checks if all answers
     have been submitted, and if so, asks the game for the round and total score for each player.
     Emits scores, correct answer, and whether or not this is final round back to the front end.
     @param data - Dict with a room field, with a string of room name, and an answer field, a dict with a key of the username and value of their answer order.
     @return - Emits a dict with correct answers, answers for each player, and boolean telling front end if game is over.
-    """
+    '''
     room = data['room']
     answers = data['answers']
     id = data['id']
@@ -319,13 +316,13 @@ def on_submitAnswer(data):
 answered_clients=[]
 @socketio.on("start_new_round")
 def on_newRound(data):
-    """
+    '''
     This is the event the server listens to for starting a new round, once client informs it that it has properly displayed the data.
     It updates the internals of the game state and then messages the front end the new prompter and responders, so that it can
     display the right page to them.
     @param data - Dict with a 'room' key specifying room name string.
     @return - Emits a message with the new prompter string , as a dict with keywords 'prompter'.
-    """
+    '''
     room = data['room']
     id = data['id']
     game = game_rooms[room]['game']
