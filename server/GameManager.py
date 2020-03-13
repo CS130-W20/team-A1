@@ -72,8 +72,11 @@ class GameManager:
             List of strings, each a name of a current respondent.
         """
         return self.respondents
+		
     def get_flag(self):
-        return self.flag
+	    """ Returns the current boolean flag indicating if we have scored all the answers yet this round. """
+	    return self.flag
+		
     def get_game_status(self):
         """ Returns current game status to lobby.
         
@@ -152,7 +155,8 @@ class GameManager:
             return dup_answers
 
     def in_bounds(self, i, length):
-        return i >= 0 and i < length
+	    """Checks to see that a value is in bounds, returns true if it is."""
+	    return i >= 0 and i < length
 
     def get_score(self, answer):
         """ Gets score for the given answer order.
