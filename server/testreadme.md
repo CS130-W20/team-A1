@@ -1,6 +1,7 @@
 #### Testing cases
 
 ### 1. Internal Query Testing
+[file](https://github.com/CS130-W20/team-A1/blob/master/server/test_query.py)
 We have unit tests that test the internal QueryApi that is not exposed to the user. We test the endpoint with GET request and verify that we are able to extract good meaningful data with valid GET request urls with Selenium. 
 `test_query_internal`
 * Test query internal
@@ -9,6 +10,8 @@ We have unit tests that test the internal QueryApi that is not exposed to the us
 * calls `get_query_from_goog(query)` which is Internal Query API function.
 
 ## 2. Lobby API Query Proxy Testing
+[file](https://github.com/CS130-W20/team-A1/blob/master/server/test_gamemanager.py)
+
 * `test_query_proxy(client)`
 *  Tests lobby proxy server and its ability to ping query and extract 
     * answers from query using the endpoint
@@ -17,7 +20,8 @@ We have unit tests that test the internal QueryApi that is not exposed to the us
     * Expected Response converted to ArrayList with length greater than 4
     * Expects `client` to be a fixture based on testable flask app
 
-## 3. GameManager testing
+## 3. GameManager testing 
+[file](https://github.com/CS130-W20/team-A1/blob/master/server/test_gamemanager.py)
 #### 3A Input testing
 * `test_GameManagerInputs` 
 * Tests gameManager GET methods including `getPrompter` and `getRespondents`
@@ -32,6 +36,7 @@ We have unit tests that test the internal QueryApi that is not exposed to the us
 * If all the cases pass then we are able to receive data from the gameManager `get_suggestions(query)` method and that data is valid.
 
 ## 4. Mutation Testing
+[file](https://github.com/CS130-W20/team-A1/blob/master/server/test_mutation.py)
 * Mutation testing is implemented inside `test_mutation.py`. This tests the GameManagers's `get_suggestions()` function as well as instantiation of GameManager instances.
 * TestGetSuggest() places in many different query types and checks to see if there is an accurate response. This is meaningful because it shows us how robust our system is to faulty queries that prompter might present. If a query doesn't make sense, then google's knowledge engine may not provide adequate results or enough results for that matter which will result in an error in our system. The mutation test clearly exposes this.
 * test_GameManagerInputs() tests the creation of GameManager instances to make sure the input (String Prompter, ArrayList<String> Players[3]) are handled correctly. 
