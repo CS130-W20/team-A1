@@ -6,8 +6,10 @@ Explanations on how the code is structures can be seen in our report part C
 ## Installation/Run instructions
 #### First install dependencies
 `npm install` from front_end/package.json and fron /package.json
+Note: Then install any Yarn packages prompted. 
 #### Then install requirements for python dependencies
 `pip3 install flask flask-socketio requests`
+`pip3 install -r requirements.txt`
 #### To build react app
 `npm run build`
 #### To start python server(flask)
@@ -16,9 +18,18 @@ Explanations on how the code is structures can be seen in our report part C
 Then go to the local host server emitting from `lobby`. 
 
 
+### Testing instructions
+- To unit test the backend type `cd server && pytest`. Note you must install `pytest` beforehand. 
+- To unit test the Internal Query API type `pytest server/test_query.py`. However this will only test your local and not our remote.
+- To perform mutation testing you can type `cd server && mut.py --target GameManager --unit-test test_mutation -m && cd ..`.
+- Mutation and Unit tests on GameManager will be performed automatically using TravisCI. 
+
+
 ## Relevant Links 
 - Documentation link
-- Working URL (if any)
+- [GameManager Docs](https://github.com/CS130-W20/team-A1/blob/master/server/docs/GameManager.md)
+- [Lobby docs](https://github.com/CS130-W20/team-A1/blob/master/server/docs/lobby.md)
+- [Working url](https://18.208.153.149/)
 - anything else
 
 
