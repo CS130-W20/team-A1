@@ -25,5 +25,4 @@ class GameManagerTest (TestCase):
         """
         gameManager = GameManager("Jonathan", ["Omar", "Joey", "Salekh"])
         self.assertEqual((str==type(gameManager.get_prompter()[0])), True)
-        self.assertEqual((list==type(gameManager.get_respondents()))), True)
-        
+        self.assertEqual((list==type(gameManager.get_respondents())), True)
