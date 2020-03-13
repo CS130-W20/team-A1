@@ -8,7 +8,7 @@ Explanations on how the code is structures can be seen in our report part C
 `npm install` from front_end/package.json and fron /package.json
 Note: Then install any Yarn packages prompted. 
 #### Then install requirements for python dependencies
-`pip3 install flask flask-socketio requests`
+`pip3 install flask flask-socketio requests` AND
 `pip3 install -r requirements.txt`
 #### To build react app
 `npm run build`
