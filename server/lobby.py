@@ -132,6 +132,16 @@ def on_join(data):
 
 @socketio.on("player_ready")
 def on_playerReady(data):
+	'''
+    This is the event the server is listening to for when players ready up.
+    The lobby manager will change the ready status of this player to ready.
+    The lobby manager will update the instance of status in memory as ready for this player,
+	and send a signal to the fornt end if all players are ready.
+    @param data - a dict containing the id and room of the player readying up.
+    @return - emits an event back to the front-end client, the front-end client should
+    be expecting "player_status_changed" if successful and "if_all_ready" with "Yes" if all players ready.
+
+    '''
     id = data['id']
     room = data['room']
 
@@ -147,6 +157,16 @@ def on_playerReady(data):
     
 @socketio.on("player_UNDOready")
 def on_playerUnready(data):
+	'''
+    This is the event the server is listening to for when players unready.
+    The lobby manager will change the ready status of this player to unready.
+    The lobby manager will update the instance of status in memory as unready for this player,
+	and send a signal to the fornt end if all players were ready and now they are not.
+    @param data - a dict containing the id and room of the player unreadying.
+    @return - emits an event back to the front-end client, the front-end client should
+    be expecting "player_status_changed" if successful and "if_all_ready" with "No" if all players are no longer ready.
+
+    '''
     room = data['room']
     id = data['id']
     unreadied = False
@@ -160,6 +180,16 @@ def on_playerUnready(data):
 
 @socketio.on("player_left_room")
 def on_playerLeft(data):
+	''' 
+	This is the event the server is listening for when a players leaves the room.
+	The lobby manager will have that player leave the room, and delete their data.
+	If they were the host, then it will either delete the room if they were the last
+	player, or transfer host status to another player for this room.
+	@param data - dict containing id and room name of player leaving
+	@returns - emits an event back to the front end of "player_left", letting it know
+	if the host changed or not
+	
+	'''
     id = data['id']
     room = data['room']
     print(id)
@@ -188,6 +218,13 @@ def on_playerLeft(data):
 
 @socketio.on("start_game")
 def on_gameStarted(data):
+	'''
+	This is the event the server listens to for starting the game. It creates a new GameManager
+	object, and then tells the front end that who the prompter for the games is.
+	@param data - dict with the id of the player sending the mssage and the game room they are in
+	@return - emits the prompter id in a message "enter_game" giving the front end room permission to start the game.
+	
+	'''
     room = data['room']
     id = data['id']
     #Add a new GameManager to the current room.
