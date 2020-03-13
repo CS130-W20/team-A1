@@ -19,6 +19,7 @@ Then go to the local host server emitting from `lobby`.
 
 
 ### Testing instructions
+- You can refer to our [testreadme](https://github.com/CS130-W20/team-A1/blob/master/server/testreadme.md) for a complete list of testing scenarios and specific details
 - To unit test the backend type `cd server && pytest`. Note you must install `pytest` beforehand. 
 - To unit test the Internal Query API type `pytest server/test_query.py`. However this will only test your local and not our remote.
 - To perform mutation testing you can type `cd server && mut.py --target GameManager --unit-test test_mutation -m && cd ..`.
